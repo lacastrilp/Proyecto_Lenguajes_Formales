@@ -204,6 +204,25 @@ chmod +x run_tests.sh
 
 ---
 
+### 4.4 Visualizador Web Interactivo HTML/SVG (`index.html`)
+
+Implementamos un visualizador grafico interactivo aplicando el sistema de diseno editorial de Taller 2 (tarjetas tactiles, bordes oscuros de 2px, sombras duras `4px 4px 0px #0f172a` y grafos SVG). Para generarlo o actualizarlo:
+
+```bash
+python3 main.py --html
+# o
+python3 sdd_main.py --html
+```
+
+Al abrir `index.html` en cualquier navegador se visualiza:
+1. Conjuntos FIRST y FOLLOW con justificaciones de calculo.
+2. Diagrama SVG interactivo del automata LR(0) (7 estados) y tablas SLR(1)/LL(1).
+3. Trazas de parseo paso a paso en tarjetas de dos columnas (Pila/Entrada vs Justificacion formal).
+4. Evaluador SDD con arbol sintactico concreto decorado y Grafo de Dependencias (DAG) en SVG.
+5. Probador interactivo en vivo para evaluar cadenas personalizadas.
+
+---
+
 ## 5. Item 3: Gramatica, Atributos y Reglas Semanticas
 
 ### 5.1 Gramatica Seleccionada

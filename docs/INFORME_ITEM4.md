@@ -28,6 +28,9 @@ En `src/slr1_parser.py` aumentamos la gramatica con $S' \rightarrow S$. Represen
 5. Evaluador de Definiciones Dirigidas por la Sintaxis (Secciones 5.1 y 5.2):
 En `src/sdd.py` y `src/sdd_evaluator.py` separamos las reglas semanticas del motor de calculo. Representamos cada regla como un objeto `SemanticRule` con indices de simbolos relativos y funciones de evaluacion. La clase `SDDEvaluator` recorre el arbol concreto generado por cualquiera de los dos parsers, instancia los vertices $(node\_id, attribute)$ y agrega aristas dirigidas desde los atributos requeridos hacia los atributos calculados. Aplicamos el algoritmo de Kahn con una cola `collections.deque` para obtener el orden topologico. Si la cola se vacia antes de procesar todos los vertices, ejecutamos una busqueda en profundidad (DFS) con marcas de tres estados (blanco, gris y negro) para aislar y reportar el ciclo exacto.
 
+6. Visualizador Web Grafico e Interactivo (Seccion Opcional de la Guia):
+En `src/html_formatter.py` implementamos un generador de interfaz grafica web que compila en `index.html` los diagramas SVG del automata LR(0) y del grafo de dependencias de la SDD, junto con tarjetas de traza paso a paso que alinean la derivacion formal con la regla aplicada, tomando como referencia el diseno editorial de Taller 2.
+
 ### 1.2 Estructuras de Datos Empleadas
 
 - Tablas de parseo y conjuntos: Diccionarios hash (`dict`) combinados con `set` y `frozenset` para indexar celdas $(estado, terminal)$ y calcular uniones e intersecciones en tiempo promedio $O(1)$.

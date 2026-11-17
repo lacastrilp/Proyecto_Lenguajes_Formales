@@ -32,10 +32,18 @@ def main():
     parser_arg = argparse.ArgumentParser(description="Evaluador de SDD con Grafo de Dependencias (Item 3)")
     parser_arg.add_argument("--interactive", action="store_true", help="Activa el visualizador interactivo paso a paso")
     parser_arg.add_argument("--circular", action="store_true", help="Usa una regla circular para demostrar detección de ciclos")
+    parser_arg.add_argument("--html", action="store_true", help="Genera el visualizador web interactivo (index.html)")
     parser_arg.add_argument("--parser", choices=["ll1", "slr1"], default="slr1", help="Parser a utilizar para construir el árbol (por defecto: slr1)")
     parser_arg.add_argument("input_file", nargs="?", default=None, help="Archivo opcional con cadenas a evaluar")
 
     args = parser_arg.parse_args()
+
+    if args.html:
+        from src.html_formatter import generate_html_visualizer
+        out = generate_html_visualizer("index.html")
+        print(f"Visualizador HTML interactivo generado en: {out}")
+        if not args.input_file and not args.interactive and not args.circular:
+            return
 
     # 1. Cargar la SDD (normal o circular según el flag)
     sdd = create_circular_sdd() if args.circular else create_project_sdd()

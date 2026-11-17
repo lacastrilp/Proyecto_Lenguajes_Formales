@@ -206,6 +206,25 @@ chmod +x run_tests.sh
 
 ---
 
+### 4.4 Interactive HTML/SVG Web Visualizer (`index.html`)
+
+We built an interactive web visualizer following the light editorial design system from Taller 2 (tactile cards, 2px borders, hard shadows `4px 4px 0px #0f172a`, and SVG diagrams). To generate or update it:
+
+```bash
+python3 main.py --html
+# or
+python3 sdd_main.py --html
+```
+
+Open `index.html` in any browser to inspect:
+1. FIRST and FOLLOW sets with formal calculation justifications.
+2. Interactive SVG diagram of the LR(0) Automaton (7 canonical states) and SLR(1)/LL(1) tables.
+3. Step-by-step parse trace cards with two-column alignment (Stack/Input vs Formal Justification).
+4. Concrete annotated parse tree and interactive SVG Dependency Graph (DAG) for the SDD.
+5. Live expression tester for typing and analyzing custom strings.
+
+---
+
 ## 5. Item 3: Grammar, Attributes, and Semantic Rules
 
 ### 5.1 Grammar

@@ -81,9 +81,17 @@ def run_parsing_loop(parser, stream):
 def main():
     parser_arg = argparse.ArgumentParser(description="Analizador de Gramáticas LL(1) y SLR(1)")
     parser_arg.add_argument("--sets", action="store_true", help="Imprime los conjuntos First y Follow")
+    parser_arg.add_argument("--html", action="store_true", help="Genera el visualizador web interactivo (index.html)")
     parser_arg.add_argument("grammar_file", nargs="?", default=None, help="Archivo opcional con la gramática")
 
     args = parser_arg.parse_args()
+
+    if args.html:
+        from src.html_formatter import generate_html_visualizer
+        out = generate_html_visualizer("index.html")
+        print(f"Visualizador HTML interactivo generado en: {out}")
+        if not args.grammar_file and not args.sets:
+            return
 
     # Abrir stream de archivo si se pasó como argumento, o usar sys.stdin
     if args.grammar_file:

@@ -69,4 +69,10 @@ i+i
 EOF
 
 echo ""
+echo "================================================================="
+echo "   8. VERIFICANDO GENERACIÓN DEL VISUALIZADOR HTML (index.html)"
+echo "================================================================="
+python3 main.py --html
+
+echo ""
 echo ">>> TODAS LAS PRUEBAS Y CASOS DE PRUEBA FINALIZARON EXITOSAMENTE <<<"

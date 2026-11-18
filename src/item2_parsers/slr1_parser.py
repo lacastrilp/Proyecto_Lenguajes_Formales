@@ -12,8 +12,8 @@ Implementa:
 
 from typing import Dict, Tuple, Set, Optional, List, FrozenSet
 from collections import defaultdict
-from src.grammar import Grammar
-from src.parse_tree import ParseTreeNode
+from src.common.grammar import Grammar
+from src.common.parse_tree import ParseTreeNode
 
 
 # Tipo de Ítem LR(0): (cabeza, cuerpo_como_string, posicion_del_punto)

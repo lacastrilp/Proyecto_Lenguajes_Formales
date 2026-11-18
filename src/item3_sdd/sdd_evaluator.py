@@ -12,8 +12,8 @@ las Secciones 5.1 y 5.2 de Aho et al. (Dragón Book):
 
 from typing import Dict, List, Tuple, Set, Any, Optional
 from collections import defaultdict, deque
-from src.parse_tree import ParseTreeNode
-from src.sdd import SDDDefinition, SemanticRule
+from src.common.parse_tree import ParseTreeNode
+from src.item3_sdd.sdd import SDDDefinition, SemanticRule
 
 
 # Identificador único de instancia de atributo: (id_nodo, nombre_atributo)

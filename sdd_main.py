@@ -19,13 +19,13 @@ Especificaciones de Entrada y Salida (Sección 3 de LF_project_2026_2.pdf):
 import os
 import sys
 import argparse
-from src.grammar import Grammar
-from src.first_follow import compute_first, compute_follow
-from src.ll1_parser import LL1Parser
-from src.slr1_parser import SLR1Parser
-from src.sdd import create_project_sdd, create_circular_sdd
-from src.sdd_evaluator import SDDEvaluator, SDDCircularDefinitionError
-from src.visualizer import SDDVisualizer, render_tree_ascii
+from src.common.grammar import Grammar
+from src.item1_first_follow.first_follow import compute_first, compute_follow
+from src.item2_parsers.ll1_parser import LL1Parser
+from src.item2_parsers.slr1_parser import SLR1Parser
+from src.item3_sdd.sdd import create_project_sdd, create_circular_sdd
+from src.item3_sdd.sdd_evaluator import SDDEvaluator, SDDCircularDefinitionError
+from src.item3_sdd.visualizer import SDDVisualizer, render_tree_ascii
 
 
 def main():
@@ -39,7 +39,7 @@ def main():
     args = parser_arg.parse_args()
 
     if args.html:
-        from src.html_formatter import generate_html_visualizer
+        from src.common.html_formatter import generate_html_visualizer
         out = generate_html_visualizer("index.html")
         print(f"Visualizador HTML interactivo generado en: {out}")
         if not args.input_file and not args.interactive and not args.circular:

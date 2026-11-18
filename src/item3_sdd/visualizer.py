@@ -9,9 +9,9 @@ Ofrece una interfaz en terminal clara, elegante y paso a paso para:
 
 import sys
 from typing import List, Dict, Set, Any
-from src.parse_tree import ParseTreeNode
-from src.sdd import SDDDefinition
-from src.sdd_evaluator import SDDEvaluator, AttrInstance, SDDCircularDefinitionError
+from src.common.parse_tree import ParseTreeNode
+from src.item3_sdd.sdd import SDDDefinition
+from src.item3_sdd.sdd_evaluator import SDDEvaluator, AttrInstance, SDDCircularDefinitionError
 
 
 def render_tree_ascii(node: ParseTreeNode, prefix: str = "", is_last: bool = True) -> List[str]:

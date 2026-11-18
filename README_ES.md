@@ -29,28 +29,39 @@ Utilizamos Gemini y ChatGPT exclusivamente para resolver dudas puntuales de sint
 
 ## 2. Estructura del Repositorio
 
-Distribuimos el proyecto en modulos de codigo, pruebas unitarias, ejemplos y documentos:
+Distribuimos el proyecto en modulos de codigo organizados por items de entrega, pruebas unitarias, ejemplos y documentos:
 
 ```text
 Proyecto_Lenguajes_Formales/
 ├── .gitignore
-├── README.md                 # Documentacion en ingles (Seccion 4.2)
-├── README_ES.md              # Documentacion en espanol
-├── INFORME_ITEM4.pdf         # Informe tecnico compilado en PDF (carpeta raiz)
+├── README.md                 # Documentacion oficial en ingles (Seccion 4.2)
+├── README_ES.md              # Documentacion detallada en espanol
+├── report.pdf                # Informe academico obligatorio compilado en PDF (raiz)
+├── INFORME_ITEM4.pdf         # Copia del informe tecnico Item 4
+├── index.html                # Visualizador interactivo web HTML/SVG
 ├── main.py                   # Ejecutable CLI para Items 1 y 2 (LL(1) y SLR(1))
 ├── sdd_main.py               # Ejecutable CLI para Item 3 (Evaluador de SDD)
-├── run_tests.sh              # Script Bash para ejecucion de pruebas
+├── run_tests.sh              # Script Bash para ejecucion y verificacion integral
 │
-├── src/                      # Codigo fuente de la libreria
+├── src/                      # Codigo fuente modularizado por items de la rubrica
 │   ├── __init__.py
-│   ├── grammar.py            # Lectura y modelado de gramaticas
-│   ├── first_follow.py       # Calculo de FIRST, FOLLOW y salida --sets
-│   ├── parse_tree.py         # Nodos del arbol de derivacion y render ASCII
-│   ├── ll1_parser.py         # Algoritmos 4.31 (tabla) y 4.34 (parser LL(1))
-│   ├── slr1_parser.py        # Algoritmos 4.46 (automata/tablas) y 4.44 (parser LR)
-│   ├── sdd.py                # Definicion de datos de la SDD y reglas semanticas
-│   ├── sdd_evaluator.py      # Grafo de dependencias, orden topologico y ciclos
-│   └── visualizer.py         # Visualizador interactivo en terminal
+│   ├── common/               # Modulos comunes compartidos
+│   │   ├── __init__.py
+│   │   ├── grammar.py        # Lectura y modelado de gramaticas CFG
+│   │   ├── parse_tree.py     # Nodos del arbol de derivacion y render
+│   │   └── html_formatter.py # Generador del visualizador web interactivo
+│   ├── item1_first_follow/   # Item 1: Calculo de FIRST y FOLLOW
+│   │   ├── __init__.py
+│   │   └── first_follow.py   # Algoritmos de punto fijo y formateador --sets
+│   ├── item2_parsers/        # Item 2: Analizadores sintacticos
+│   │   ├── __init__.py
+│   │   ├── ll1_parser.py     # Tabla predictiva y parser LL(1) no recursivo
+│   │   └── slr1_parser.py    # Coleccion LR(0), tablas ACTION/GOTO y parser SLR(1)
+│   └── item3_sdd/            # Item 3: Evaluacion dirigida por sintaxis
+│       ├── __init__.py
+│       ├── sdd.py            # Representacion pura de datos de la SDD
+│       ├── sdd_evaluator.py  # Grafo de dependencias, orden topologico y ciclos
+│       └── visualizer.py     # Visualizador interactivo en terminal
 │
 ├── tests/                    # Pruebas automatizadas
 │   ├── __init__.py
@@ -64,7 +75,7 @@ Proyecto_Lenguajes_Formales/
 │   ├── grammar_sdd.txt       # Gramatica seleccionada para el Item 3
 │   └── test_strings_sdd.txt  # Cadenas de prueba para el Item 3
 │
-└── docs/                     # Enunciados e informes
+└── docs/                     # Enunciados, informes y teoria
     ├── LF_project_2026_2.pdf # Enunciado oficial
     ├── LecturesLeng.pdf      # Diapositivas de clase
     ├── INFORME_ITEM4.md      # Informe tecnico en Markdown

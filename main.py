@@ -17,10 +17,10 @@ import os
 import sys
 import argparse
 from typing import List
-from src.grammar import Grammar
-from src.first_follow import compute_first, compute_follow, format_sets_output
-from src.ll1_parser import LL1Parser
-from src.slr1_parser import SLR1Parser
+from src.common.grammar import Grammar
+from src.item1_first_follow.first_follow import compute_first, compute_follow, format_sets_output
+from src.item2_parsers.ll1_parser import LL1Parser
+from src.item2_parsers.slr1_parser import SLR1Parser
 
 
 def read_grammar_from_stream(stream) -> Grammar:
@@ -87,7 +87,7 @@ def main():
     args = parser_arg.parse_args()
 
     if args.html:
-        from src.html_formatter import generate_html_visualizer
+        from src.common.html_formatter import generate_html_visualizer
         out = generate_html_visualizer("index.html")
         print(f"Visualizador HTML interactivo generado en: {out}")
         if not args.grammar_file and not args.sets:

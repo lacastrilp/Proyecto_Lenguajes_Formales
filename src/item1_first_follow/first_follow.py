@@ -8,7 +8,7 @@ Soporta de manera rigurosa y correcta gramáticas con producciones épsilon (e).
 """
 
 from typing import Dict, Set, List
-from src.grammar import Grammar
+from src.common.grammar import Grammar
 
 
 def compute_first(grammar: Grammar) -> Dict[str, Set[str]]:

@@ -10,9 +10,9 @@ Implementa:
 
 from typing import Dict, Tuple, Set, Optional, List
 from collections import defaultdict
-from src.grammar import Grammar
-from src.first_follow import first_of_string
-from src.parse_tree import ParseTreeNode
+from src.common.grammar import Grammar
+from src.item1_first_follow.first_follow import first_of_string
+from src.common.parse_tree import ParseTreeNode
 
 
 class LL1Parser:

@@ -14,12 +14,12 @@ Verifica:
 """
 
 import unittest
-from src.grammar import Grammar
-from src.first_follow import compute_first, compute_follow, format_sets_output
-from src.ll1_parser import LL1Parser
-from src.slr1_parser import SLR1Parser
-from src.sdd import create_project_sdd, create_circular_sdd
-from src.sdd_evaluator import SDDEvaluator, SDDCircularDefinitionError
+from src.common.grammar import Grammar
+from src.item1_first_follow.first_follow import compute_first, compute_follow, format_sets_output
+from src.item2_parsers.ll1_parser import LL1Parser
+from src.item2_parsers.slr1_parser import SLR1Parser
+from src.item3_sdd.sdd import create_project_sdd, create_circular_sdd
+from src.item3_sdd.sdd_evaluator import SDDEvaluator, SDDCircularDefinitionError
 
 
 class TestProjectExamples(unittest.TestCase):

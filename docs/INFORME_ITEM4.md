@@ -1,9 +1,9 @@
 # Informe Tecnico: Analizadores Sintacticos LL(1), SLR(1) y Evaluador SDD
 ## Curso: Lenguajes Formales y Compiladores (2026-2)
 ### Integrantes del Grupo:
-- Estudiante 1: lacastrilp (lacastrilp@eafit.edu.co)
-- Estudiante 2: [Nombre Completo del Estudiante 2]
-- Estudiante 3: [Nombre Completo del Estudiante 3 (si aplica)]
+- Luis Alejandro Castrillón Piedrahita (lacastrilp@eafit.edu.co)
+- Manuela Buriticá Guzmán (mburiticg1@eafit.edu.co)
+- Maria Juliana Henao Rua (mjhenaor@eafit.edu.co)
 
 ---
 

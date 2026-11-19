@@ -68,7 +68,7 @@ Proyecto_Lenguajes_Formales/
 │   ├── test_examples.py      # Ejemplos del enunciado y pruebas de SDD
 │   ├── test_first_follow.py  # Pruebas adicionales de FIRST, FOLLOW y formato
 │   ├── test_item2_libro.py   # Clasificación y parsers con casos del libro
-│   └── test_ll1_conditions.py # Verificación de las condiciones LL(1)
+│   └── test_ll1_conditions.py# Verificación de las condiciones LL(1)
 │
 ├── examples/                 # Gramaticas y cadenas de prueba
 │   ├── README.md             # Guia de ejemplos

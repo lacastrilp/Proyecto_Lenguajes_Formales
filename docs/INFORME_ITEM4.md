@@ -33,7 +33,7 @@ En `src/common/html_formatter.py` implementamos un generador de interfaz grafica
 
 ### 1.2 Estructuras de Datos Empleadas
 
-- Tablas de parseo y conjuntos: Diccionarios hash (`dict`) combinados con `set` y `frozenset` para indexar celdas $(estado, terminal)$ y calcular uniones e intersecciones en tiempo promedio $O(1)$.
+- Tablas de parseo y conjuntos: Diccionarios hash (`dict`) combinados con `set` y `frozenset` para indexar celdas (`estado, terminal`) y almacenar elementos sin repeticiones. Las consultas en diccionarios y conjuntos tienen tiempo promedio $O(1)$, mientras que las uniones e intersecciones dependen del tamaño de los conjuntos involucrados.
 - Pilas de parsing: Listas dinamicas de Python (`list`) operadas con `append` y `pop` para representar la pila de analisis sintactico y la pila auxiliar de arboles.
 - Grafo de dependencias: Lista de adyacencias representada con `defaultdict(set)` y contador de grados de entrada `defaultdict(int)`.
 - Arbol sintactico concreto: Nodos `ParseTreeNode` con identificador entero consecutivo, lista ordenada de hijos, referencia a la produccion aplicada y diccionario interno de valores de atributos.

@@ -2,8 +2,8 @@
 
 ## Group members
 - Luis Alejandro Castrillón Piedrahita (lacastrilp@eafit.edu.co)
-- TODO: full name 2 (email2@eafit.edu.co)
-- TODO (optional): full name 3 (email3@eafit.edu.co)
+- Manuela Buriticá Guzmán (mburiticg1@eafit.edu.co)
+- Maria Juliana Henao Rua (mjhenaor@eafit.edu.co)
 
 ## Environment
 - **Operating System:** Linux x86_64 (Debian / Kali GNU/Linux)

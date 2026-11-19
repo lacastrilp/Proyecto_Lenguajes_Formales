@@ -77,3 +77,16 @@ Este directorio contiene las gramáticas de prueba y los archivos de cadenas uti
   4. `(1)` $\rightarrow$ `val = 2`, `max_d = 1` (Profundidad 1, ponderación $2^1$)
   5. `((1+0)+(1))` $\rightarrow$ `val = 8`, `max_d = 2` (Recursión y anidamiento múltiple)
   6. `1++0` $\rightarrow$ `no` (Cadena sintácticamente inválida)
+
+---
+
+## .6 `grammar_informe.txt` (Gramática propia de los Items 1 y 2)
+- **Descripción**: Gramática propia (no aparece en el enunciado) de listas de elementos `b` separados por comas, por ejemplo `b`, `b,b` o `b,b,b`.
+- **Propiedad formal**: Es **tanto LL(1) como SLR(1)**. Tiene 3 no terminales, 5 producciones y un no terminal anulable (`R`) que además es recursivo.
+- **Contenido** (atención: `,L e` lleva un espacio, y son **dos alternativas**, `,L` y la vacía):
+  ```text
+  3
+  S -> L
+  L -> bR
+  R -> ,L e
+  ```

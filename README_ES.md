@@ -12,9 +12,9 @@ El informe tecnico requerido en formato PDF para la entrega se encuentra compila
 ## 1. Informacion del Equipo y Entorno
 
 ### 1.1 Integrantes
-- Estudiante 1: lacastrilp (lacastrilp@eafit.edu.co)
-- Estudiante 2: [Nombre Completo del Estudiante 2]
-- Estudiante 3: [Nombre Completo del Estudiante 3 (si aplica)]
+- Luis Alejandro Castrillón Piedrahita (lacastrilp@eafit.edu.co)
+- Manuela Buriticá Guzmán (mburiticg1@eafit.edu.co)
+- Maria Juliana Henao Rua (mjhenaor@eafit.edu.co)
 
 ### 1.2 Entorno de Ejecucion
 - Sistema Operativo: Linux (probado en Ubuntu 22.04 LTS y entornos POSIX x86_64).

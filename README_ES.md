@@ -105,7 +105,7 @@ En `src/sdd.py` y `src/sdd_evaluator.py` modelamos las reglas semanticas como da
 
 ---
 
-## 4. Instrucciones de Compilacion y Ejecucion
+## 4. Instrucciones de Compilacion y Ejecucion en Linux
 
 ### 4.1 Ejecucion de Items 1 y 2 (`main.py`)
 
@@ -310,3 +310,37 @@ La convencion del enunciado establece que las alternativas se separan por espaci
 
 4. Resolucion de rutas en los scripts CLI:
 Al invocar `main.py` desde carpetas arbitrarias, los archivos relativos fallaban. Implementamos una comprobacion con `os.path.exists` que busca automaticamente en `examples/` si el archivo no esta en el directorio de ejecucion.
+
+## Cómo ejecutar en Windows
+
+No se necesita compilación ni paso de construcción. Instala Python 3.12+.
+```
+### Ítems 1 y 2: Analizadores LL(1) y SLR(1)
+La gramática se lee por entrada estándar, o desde un archivo pasado como argumento:
+```powershell
+python main.py --sets examples\grammar_ex2.txt
+
+python main.py examples\grammar_ex1.txt
+
+@"
+3
+S -> AB
+A -> aA d
+B -> bBc e
+"@ | python main.py
+```
+
+### Ítem 3: Evaluador de Definiciones Dirigidas por la Sintaxis (SDD)
+Evalúa árboles de análisis anotados usando ordenamiento topológico sobre grafos de dependencias:
+```powershell
+python sdd_main.py examples\test_strings_sdd.txt
+
+python sdd_main.py --parser ll1 examples\test_strings_sdd.txt
+
+python sdd_main.py --interactive examples\test_strings_sdd.txt
+
+@"
+1
+
+"@ | python sdd_main.py --circular
+```

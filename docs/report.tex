@@ -1,0 +1,436 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{fancyhdr}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.2cm, right=2.2cm}
+\setlength{\headheight}{14.5pt}
+\addtolength{\topmargin}{-2.5pt}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    urlcolor=blue!70!black,
+    citecolor=blue!70!black
+}
+
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!10},
+    numbers=none,
+    keywordstyle=\bfseries\color{blue!80!black},
+    commentstyle=\color{gray},
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Lenguajes Formales y Compiladores (2026-2)}
+\fancyhead[R]{Informe Final: LL(1), SLR(1) y SDD}
+\fancyfoot[C]{\thepage}
+
+\title{\textbf{Informe Técnico del Proyecto Final:}\\
+\Large Analizadores Sintácticos LL(1), SLR(1) y Evaluador de Definiciones Dirigidas por la Sintaxis (SDD)\\[0.4cm]
+\large Curso: ST0270 / SI2002 Lenguajes Formales y Compiladores (2026-2)}
+
+\author{
+    \textbf{Luis Alejandro Castrillón Piedrahita} (\texttt{lacastrilp@eafit.edu.co})\\
+    \textbf{Manuela Buriticá Guzmán} (\texttt{mburiticg1@eafit.edu.co})\\
+    \textbf{Maria Juliana Henao Rua} (\texttt{mjhenaor@eafit.edu.co})\\[0.3cm]
+    Universidad EAFIT -- Escuela de Ciencias Aplicadas e Ingeniería
+}
+
+\date{Noviembre 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este informe documenta la implementación completa, análisis formal y resultados experimentales del proyecto de Lenguajes Formales y Compiladores. Siguiendo rigurosamente las especificaciones del documento oficial y el texto guía de Aho et al. (\textit{Dragon Book}, 2da Edición), se implementaron: (1) el cálculo de conjuntos $\text{FIRST}$ y $\text{FOLLOW}$ para gramáticas con producciones $\epsilon$, (2) analizadores sintácticos predictivos dirigidos por tabla LL(1) y ascendentes LR(0)/SLR(1), (3) un evaluador genérico de Definiciones Dirigidas por la Sintaxis (SDD) basado en grafos de dependencias, orden topológico y detección automática de circularidad, y (4) un visualizador interactivo. Adicionalmente, se presenta el inventario exhaustivo de archivos, resolución de dificultades técnicas y la declaración responsable del uso de herramientas de inteligencia artificial.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Algoritmos del Libro Guía y Estructuras de Datos (Requisito 4.1)}
+
+La totalidad de los algoritmos implementados en el paquete \texttt{src/} se fundamentan en el libro de referencia: \textit{Compilers: Principles, Techniques, and Tools} (Aho, Lam, Sethi, Ullman, 2da edición, 2006). A continuación se detallan las secciones específicas, algoritmos y estructuras de datos correspondientes.
+
+\subsection{Algoritmos Empleados}
+
+\begin{enumerate}
+    \item \textbf{Cálculo de Conjuntos $\text{FIRST}$ y $\text{FOLLOW}$ (Sección 4.4.2):}
+    Implementado en \texttt{src/item1\_first\_follow/first\_follow.py}.
+    \begin{itemize}
+        \item $\text{FIRST}(X)$: Reglas de la Sección 4.4.2 iteradas hasta punto fijo. Para terminales $\text{FIRST}(a)=\{a\}$; para $X \rightarrow \epsilon$, $\epsilon \in \text{FIRST}(X)$; para $X \rightarrow Y_1 Y_2 \dots Y_k$, propaga $\text{FIRST}(Y_i) \setminus \{\epsilon\}$ mientras los símbolos precedentes sean anulables.
+        \item $\text{FIRST}(X_1 X_2 \dots X_n)$: Extensión a cadenas arbitrarias de símbolos gramaticales requerida para la construcción de la tabla LL(1).
+        \item $\text{FOLLOW}(A)$: Inicializa $\text{FOLLOW}(S) = \{\$\}$. Propaga $\text{FIRST}(\beta) \setminus \{\epsilon\}$ para producciones $A \rightarrow \alpha B \beta$, y propaga $\text{FOLLOW}(A)$ hacia $\text{FOLLOW}(B)$ cuando $\beta \Rightarrow^* \epsilon$.
+    \end{itemize}
+
+    \item \textbf{Construcción de la Tabla Predictiva LL(1) (Algoritmo 4.31, Sección 4.4.3):}
+    Implementado en \texttt{src/item2\_parsers/ll1\_parser.py}. Para cada producción $A \rightarrow \alpha$, se agrega la entrada a $M[A, a]$ para todo $a \in \text{FIRST}(\alpha) \setminus \{\epsilon\}$. Si $\epsilon \in \text{FIRST}(\alpha)$, se agrega a $M[A, b]$ para todo $b \in \text{FOLLOW}(A)$. Adicionalmente, se implementaron las tres condiciones formales de la Sección 4.4.3 para verificar analíticamente que la gramática sea LL(1) sin ambigüedades.
+
+    \item \textbf{Analizador Sintáctico Predictivo Dirigido por Tabla (Algoritmo 4.34, Sección 4.4.4):}
+    Implementado en el método \texttt{parse()} de \texttt{LL1Parser}. Opera con una pila de símbolos inicializada con \texttt{['\$', S]} y construye concurrentemente el árbol sintáctico concreto (\texttt{ParseTreeNode}).
+
+    \item \textbf{Colección Canónica de Ítems LR(0) y Tablas SLR(1) (Sección 4.6.2 y Algoritmo 4.46, Sección 4.6.4):}
+    Implementado en \texttt{src/item2\_parsers/slr1\_parser.py}. Se aumenta la gramática con $S' \rightarrow S$. Se definen las funciones fundamentales $\text{CLOSURE}(I)$ y $\text{GOTO}(I, X)$ para construir el autómata LR(0). La tabla \texttt{ACTION} asigna desplazamientos (\textit{shift}) y reducciones (\textit{reduce}) en las posiciones de los terminales pertenecientes a $\text{FOLLOW}(A)$. Si se produce colisión \textit{shift/reduce} o \textit{reduce/reduce}, la gramática se declara no SLR(1).
+
+    \item \textbf{Algoritmo de Análisis Ascendente Shift-Reduce LR (Algoritmo 4.44, Sección 4.6.3):}
+    Implementado en el método \texttt{parse()} de \texttt{SLR1Parser}. Maneja una pila de estados enteros y una pila de árboles sintácticos, garantizando el tratamiento correcto de reducciones $\epsilon$ (longitud 0).
+
+    \item \textbf{Evaluador de SDD por Grafo de Dependencias (Secciones 5.1 y 5.2):}
+    Implementado en \texttt{src/item3\_sdd/sdd\_evaluator.py}. Construye el grafo de dependencias instanciando atributos sobre el árbol sintáctico concreto. Utiliza el Algoritmo de Kahn con cola FIFO para obtener el orden topológico de evaluación (Sección 5.2.2) y búsqueda en profundidad (DFS) con coloreo de 3 estados para aislar y reportar ciclos en SDDs circulares.
+\end{enumerate}
+
+\subsection{Estructuras de Datos Utilizadas}
+
+\begin{itemize}
+    \item \textbf{Tablas de parseo y conjuntos:} Mapeos hash nativos (\texttt{dict[tuple, set]}) y conjuntos inmutables (\texttt{frozenset}) para representar conjuntos de ítems LR(0) de forma única. Garantizan tiempo constante promedio $O(1)$ en búsquedas.
+    \item \textbf{Pila de análisis:} Listas dinámicas (\texttt{list}) operadas estrictamente en el extremo con \texttt{append()} y \texttt{pop()} ($O(1)$ amortizado).
+    \item \textbf{Árbol sintáctico concreto:} Estructura jerárquica de nodos \texttt{ParseTreeNode} dotados de identificador correlativo, símbolo, referencia a la producción y diccionario de valores semánticos.
+    \item \textbf{Grafo de dependencias:} Lista de adyacencias mediante \texttt{defaultdict(set)} y contador de grados de entrada (\textit{in-degree}) mediante \texttt{defaultdict(int)}.
+    \item \textbf{Cola de orden topológico:} Cola de doble extremo \texttt{collections.deque} para procesamiento en tiempo lineal $O(V + E)$.
+\end{itemize}
+
+\newpage
+\section{Items 1 y 2: Gramática Propia, Análisis y Trazas (Requisito 4.1)}
+
+Para cumplir con la exigencia de una gramática propia que no provenga de los ejemplos del documento oficial, se diseñó la siguiente gramática libre de contexto que modela secuencias no vacías de identificadores $b$ separados por comas:
+
+\begin{lstlisting}
+3
+S -> L
+L -> bR
+R -> ,L e
+\end{lstlisting}
+
+\begin{itemize}
+    \item Símbolo inicial: $S$.
+    \item No terminales ($n=3$): $S, L, R$.
+    \item Terminales: $b, ,$ (coma).
+    \item Cadena vacía: $e$ ($\epsilon$).
+\end{itemize}
+
+\subsection{Conjuntos FIRST y FOLLOW Calculados}
+
+La ejecución de \texttt{python3 main.py --sets} genera la siguiente salida ordenada:
+\begin{lstlisting}
+First(L) = {b}
+First(R) = {,, e}
+First(S) = {b}
+Follow(L) = {$}
+Follow(R) = {$}
+Follow(S) = {$}
+\end{lstlisting}
+
+\subsection{Tabla Predictiva LL(1)}
+
+Aplicando el Algoritmo 4.31, se obtiene la tabla predictiva $M[A, a]$:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{No Terminal} & \textbf{b} & \textbf{,} & \textbf{\$} \\
+\midrule
+$S$ & $S \rightarrow L$ & & \\
+$L$ & $L \rightarrow bR$ & & \\
+$R$ & & $R \rightarrow ,L$ & $R \rightarrow e$ \\
+\bottomrule
+\end{tabular}
+\caption{Tabla de análisis predictivo LL(1).}
+\end{table}
+
+Ninguna celda contiene más de una producción. Por tanto, la gramática es \textbf{LL(1)}.
+
+\subsection{Colección Canónica de Ítems LR(0) y Autómata}
+
+Aumentando con $S' \rightarrow S$, la colección canónica consta de 7 estados:
+\begin{itemize}
+    \item \textbf{Estado 0:} $S' \rightarrow \cdot S$, $S \rightarrow \cdot L$, $L \rightarrow \cdot bR$.
+    \item \textbf{Estado 1:} $S' \rightarrow S \cdot$.
+    \item \textbf{Estado 2:} $S \rightarrow L \cdot$.
+    \item \textbf{Estado 3:} $L \rightarrow b \cdot R$, $R \rightarrow \cdot ,L$, $R \rightarrow \cdot$.
+    \item \textbf{Estado 4:} $L \rightarrow bR \cdot$.
+    \item \textbf{Estado 5:} $R \rightarrow , \cdot L$, $L \rightarrow \cdot bR$.
+    \item \textbf{Estado 6:} $R \rightarrow ,L \cdot$.
+\end{itemize}
+
+Transiciones de salto:
+$\text{GOTO}(0, S) = 1$, $\text{GOTO}(0, L) = 2$, $\text{GOTO}(0, b) = 3$, $\text{GOTO}(3, R) = 4$, $\text{GOTO}(3, ,) = 5$, $\text{GOTO}(5, L) = 6$, $\text{GOTO}(5, b) = 3$.
+
+\subsection{Tabla SLR(1)}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccccccc}
+\toprule
+\textbf{Estado} & \textbf{,} & \textbf{b} & \textbf{\$} & \textbf{L} & \textbf{R} & \textbf{S} \\
+\midrule
+0 & & s3 & & 2 & & 1 \\
+1 & & & acc & & & \\
+2 & & & r $S \rightarrow L$ & & & \\
+3 & s5 & & r $R \rightarrow e$ & & 4 & \\
+4 & & & r $L \rightarrow bR$ & & & \\
+5 & & s3 & & 6 & & \\
+6 & & & r $R \rightarrow ,L$ & & & \\
+\bottomrule
+\end{tabular}
+\caption{Tabla de análisis sintáctico SLR(1) (ACTION y GOTO).}
+\end{table}
+
+No existen conflictos shift/reduce ni reduce/reduce. Por tanto, la gramática es \textbf{SLR(1)}. La gramática es simultáneamente LL(1) y SLR(1).
+
+\subsection{Trazas Paso a Paso}
+
+A continuación se muestran las trazas de ejecución generadas por el sistema para la cadena aceptada $b,b$ y la cadena rechazada $b,$.
+
+\subsubsection{Traza de Cadena Aceptada: $b,b\$$ con Parser SLR(1)}
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{cllll}
+\toprule
+\textbf{Paso} & \textbf{Pila de Estados} & \textbf{Símbolos} & \textbf{Entrada} & \textbf{Acción} \\
+\midrule
+1 & 0 & & $b,b\$$ & shift to 3 \\
+2 & 0 3 & $b$ & $,b\$$ & shift to 5 \\
+3 & 0 3 5 & $b,$ & $b\$$ & shift to 3 \\
+4 & 0 3 5 3 & $b,b$ & $\$$ & reduce by $R \rightarrow e$ (longitud 0) \\
+5 & 0 3 5 3 4 & $b,bR$ & $\$$ & reduce by $L \rightarrow bR$ (longitud 2) \\
+6 & 0 3 5 6 & $b,L$ & $\$$ & reduce by $R \rightarrow ,L$ (longitud 2) \\
+7 & 0 3 4 & $bR$ & $\$$ & reduce by $L \rightarrow bR$ (longitud 2) \\
+8 & 0 2 & $L$ & $\$$ & reduce by $S \rightarrow L$ (longitud 1) \\
+9 & 0 1 & $S$ & $\$$ & accept \\
+\bottomrule
+\end{tabular}
+\caption{Traza de análisis ascendente SLR(1) para $b,b$.}
+\end{table}
+Resultado final emitido: \texttt{yes}.
+
+\subsubsection{Traza de Cadena Rechazada: $b,\$$ con Parser SLR(1)}
+\begin{enumerate}
+    \item Pila: \texttt{[0]}, Entrada: \texttt{b,\$}. Acción: $\text{ACTION}[0, b] = \text{shift } 3$.
+    \item Pila: \texttt{[0, 3]}, Entrada: \texttt{,\$}. Acción: $\text{ACTION}[3, ,] = \text{shift } 5$.
+    \item Pila: \texttt{[0, 3, 5]}, Entrada: \texttt{\$}. La celda $\text{ACTION}[5, \$]$ está vacía (error de sintaxis).
+\end{enumerate}
+Resultado final emitido: \texttt{no}.
+
+\newpage
+\section{Item 3: Definición Dirigida por la Sintaxis (SDD)}
+
+\subsection{Paso 1: Gramática Seleccionada}
+
+La gramática elegida modela expresiones aritméticas binarias con agrupación y cálculo de ponderación exponencial según la profundidad de anidamiento de paréntesis:
+
+\begin{lstlisting}
+4
+S -> L
+L -> BR
+R -> +L e
+B -> (L) 0 1
+\end{lstlisting}
+
+\textbf{Verificación de condiciones:}
+\begin{itemize}
+    \item \textbf{G1:} Cumple las convenciones de la Sección 2.2 ($S$ inicial, no terminales en mayúsculas, terminales individuales no mayúsculas, $\epsilon=e$, fin de cadena $\$$). Es analizable por los parsers de Item 2 (es tanto LL(1) como SLR(1)).
+    \item \textbf{G2:} Posee 4 no terminales ($\ge 3$), 7 producciones ($\ge 6$), y los no terminales $L$ y $R$ son recursivos.
+    \item \textbf{G3:} Es una gramática original no presente en los ejemplos del libro ni en la guía.
+\end{itemize}
+
+\subsection{Paso 2: Definición de la SDD en Papel}
+
+\subsubsection{Tabla de Atributos}
+
+El símbolo inicial $S$ no posee atributos heredados. Los terminales solo poseen el atributo sintetizado \texttt{lexval} provisto por el escáner.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lcccl}
+\toprule
+\textbf{Símbolo} & \textbf{Atributo} & \textbf{Clase} & \textbf{Tipo} & \textbf{Significado Semántico} \\
+\midrule
+$S$ & \texttt{val} & Sintetizado & Entero & Valor numérico evaluado de la expresión. \\
+$S$ & \texttt{max\_d} & Sintetizado & Entero & Máxima profundidad de anidamiento alcanzada. \\
+$L$ & \texttt{d} & Heredado & Entero & Profundidad de anidamiento recibida del contexto. \\
+$L$ & \texttt{val} & Sintetizado & Entero & Suma de los valores de los términos de la lista. \\
+$L$ & \texttt{max\_d} & Sintetizado & Entero & Máxima profundidad alcanzada en el subárbol $L$. \\
+$R$ & \texttt{d} & Heredado & Entero & Profundidad heredada para los términos restantes. \\
+$R$ & \texttt{val} & Sintetizado & Entero & Suma acumulada de los términos restantes. \\
+$R$ & \texttt{max\_d} & Sintetizado & Entero & Máxima profundidad en los términos restantes. \\
+$B$ & \texttt{d} & Heredado & Entero & Profundidad recibida para el bloque/bit actual. \\
+$B$ & \texttt{val} & Sintetizado & Entero & Valor numérico ($2^d$ para bit 1, 0 para bit 0). \\
+$B$ & \texttt{max\_d} & Sintetizado & Entero & Máxima profundidad dentro del bloque. \\
+Terminales & \texttt{lexval} & Sintetizado & Carácter & Carácter textual del token. \\
+\bottomrule
+\end{tabular}
+\caption{Tabla de atributos de la SDD.}
+\end{table}
+
+\subsubsection{Reglas Semánticas (Formato Figura 5.1 del Libro)}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Producción} & \textbf{Reglas Semánticas} \\
+\midrule
+$S \rightarrow L$ & $L.d = 0$;\quad $S.val = L.val$;\quad $S.max\_d = L.max\_d$ \\
+\addlinespace
+$L \rightarrow B R$ & $B.d = L.d$;\quad $R.d = L.d$; \\
+& $L.val = B.val + R.val$;\quad $L.max\_d = \max(B.max\_d, R.max\_d)$ \\
+\addlinespace
+$R \rightarrow + L$ & $L.d = R.d$;\quad $R.val = L.val$;\quad $R.max\_d = L.max\_d$ \\
+\addlinespace
+$R \rightarrow \epsilon$ & $R.val = 0$;\quad $R.max\_d = R.d$ \\
+\addlinespace
+$B \rightarrow ( L )$ & $L.d = B.d + 1$;\quad $B.val = L.val$;\quad $B.max\_d = L.max\_d$ \\
+\addlinespace
+$B \rightarrow 0$ & $B.val = 0$;\quad $B.max\_d = B.d$ \\
+\addlinespace
+$B \rightarrow 1$ & $B.val = 2^{B.d}$;\quad $B.max\_d = B.d$ \\
+\bottomrule
+\end{tabular}
+\caption{Reglas semánticas asociadas a cada producción.}
+\end{table}
+
+\subsection{Paso 3: Ejemplo Desarrollado a Mano: Cadena \texttt{(1+0)}}
+
+La cadena \texttt{(1+0)} contiene 5 terminales: \texttt{(}, \texttt{1}, \texttt{+}, \texttt{0}, \texttt{)}.
+
+\subsubsection{Árbol Sintáctico Anotado}
+\begin{lstlisting}
+S {max_d=1, val=2}
+  L {d=0, max_d=1, val=2}
+    B {d=0, max_d=1, val=2}
+      ( {lexval='('}
+      L {d=1, max_d=1, val=2}
+        B {d=1, max_d=1, val=2}
+          1 {lexval='1'}
+        R {d=1, max_d=1, val=0}
+          + {lexval='+'}
+          L {d=1, max_d=1, val=0}
+            B {d=1, max_d=1, val=0}
+              0 {lexval='0'}
+            R {d=1, max_d=1, val=0}
+              e {lexval='e'}
+      ) {lexval=')'}
+    R {d=0, max_d=0, val=0}
+      e {lexval='e'}
+\end{lstlisting}
+
+\subsubsection{Grafo de Dependencias}
+Las aristas dirigidas van desde el atributo utilizado hacia el atributo definido ($u \rightarrow v$):
+\begin{itemize}
+    \item $L_{16}.d \rightarrow B_{13}.d$,\quad $L_{16}.d \rightarrow R_{15}.d$
+    \item $B_{13}.d \rightarrow L_{11}.d$ (mediante la regla $L.d = B.d + 1$)
+    \item $L_{11}.d \rightarrow B_3.d$,\quad $L_{11}.d \rightarrow R_{10}.d$
+    \item $B_3.d \rightarrow B_3.val$ ($2^1 = 2$),\quad $B_3.d \rightarrow B_3.max\_d$ ($1$)
+    \item $R_{10}.d \rightarrow L_9.d$,\quad $L_9.d \rightarrow B_6.d$,\quad $L_9.d \rightarrow R_8.d$
+    \item $B_6.d \rightarrow B_6.val$ ($0$),\quad $B_6.d \rightarrow B_6.max\_d$ ($1$),\quad $R_8.d \rightarrow R_8.max\_d$ ($1$)
+    \item $B_6.val, R_8.val \rightarrow L_9.val$ ($0$),\quad $B_6.max\_d, R_8.max\_d \rightarrow L_9.max\_d$ ($1$)
+    \item $L_9.val \rightarrow R_{10}.val$,\quad $L_9.max\_d \rightarrow R_{10}.max\_d$
+    \item $B_3.val, R_{10}.val \rightarrow L_{11}.val$ ($2$),\quad $B_3.max\_d, R_{10}.max\_d \rightarrow L_{11}.max\_d$ ($1$)
+    \item $L_{11}.val \rightarrow B_{13}.val$,\quad $L_{11}.max\_d \rightarrow B_{13}.max\_d$
+    \item $B_{13}.val, R_{15}.val \rightarrow L_{16}.val$ ($2$),\quad $B_{13}.max\_d, R_{15}.max\_d \rightarrow L_{16}.max\_d$ ($1$)
+    \item $L_{16}.val \rightarrow S_{17}.val$ ($2$),\quad $L_{16}.max\_d \rightarrow S_{17}.max\_d$ ($1$)
+\end{itemize}
+
+\subsubsection{Orden Topológico de Evaluación}
+El algoritmo de Kahn obtiene el siguiente orden topológico válido:
+\begin{lstlisting}
+R_8.val, e_7.lexval, 1_2.lexval, +_4.lexval, (_1.lexval, )_12.lexval, R_15.val,
+L_16.d, e_14.lexval, B_6.val, 0_5.lexval, R_15.d, B_13.d, L_9.val, R_15.max_d,
+L_11.d, R_10.val, B_3.d, R_10.d, B_3.max_d, B_3.val, L_9.d, L_11.val, B_6.d,
+R_8.d, B_13.val, B_6.max_d, R_8.max_d, L_16.val, L_9.max_d, S_17.val, R_10.max_d,
+L_11.max_d, B_13.max_d, L_16.max_d, S_17.max_d
+\end{lstlisting}
+Valor del atributo principal $val$ en el símbolo inicial $S$: \textbf{2}.
+
+\subsection{Paso 4: Clasificación de la SDD}
+
+\begin{itemize}
+    \item \textbf{¿Es S-atribuida?} \textbf{No.} La definición utiliza el atributo heredado $d$ en los no terminales $L$, $B$ y $R$. De acuerdo con la Sección 5.2.3, una SDD es S-atribuida si y solo si todos sus atributos son exclusivamente sintetizados.
+    \item \textbf{¿Es L-atribuida?} \textbf{Sí.} De acuerdo con la Sección 5.2.4, una SDD es L-atribuida si cada atributo heredado de un símbolo $X_j$ en el cuerpo de una producción $A \rightarrow X_1 X_2 \dots X_n$ depende únicamente de:
+    \begin{enumerate}
+        \item Atributos heredados del símbolo de la cabeza $A$ ($A.d$).
+        \item Atributos (sintetizados o heredados) de símbolos situados estrictamente a la izquierda de $X_j$ en el cuerpo ($X_1, \dots, X_{j-1}$).
+    \end{enumerate}
+    En nuestras reglas:
+    \begin{itemize}
+        \item En $L \rightarrow BR$: $B.d$ y $R.d$ dependen únicamente de $L.d$ (cabeza).
+        \item En $R \rightarrow +L$: $L.d$ depende de $R.d$ (cabeza).
+        \item En $B \rightarrow (L)$: $L.d$ depende de $B.d$ (cabeza).
+    \end{itemize}
+    Ningún atributo heredado depende de atributos sintetizados de símbolos situados a su derecha. Por tanto, la SDD es rigurosamente \textbf{L-atribuida}.
+\end{itemize}
+
+A pesar de ser L-atribuida, el evaluador implementado en el Paso 5 no asume ningún orden predeterminado: construye el grafo de dependencias y calcula el orden topológico dinámicamente, cumpliendo la exigencia metodológica del enunciado.
+
+\subsection{Paso 6: Resultados de Pruebas Experimentales}
+
+La suite de pruebas fue evaluada con \texttt{python3 sdd\_main.py examples/test\_strings\_sdd.txt}:
+
+\begin{enumerate}
+    \item \textbf{Cadena más corta del lenguaje (\texttt{0}):} Evaluada exitosamente con $val = 0$, $max\_d = 0$.
+    \item \textbf{Cadena unitaria (\texttt{1}):} Evaluada con $val = 1$, $max\_d = 0$ ($2^0 = 1$).
+    \item \textbf{Suma simple (\texttt{1+0}):} Evaluada con $val = 1$, $max\_d = 0$.
+    \item \textbf{Cadena con anidamiento (\texttt{(1)}):} Evaluada con $val = 2$, $max\_d = 1$ ($2^1 = 2$).
+    \item \textbf{Cadena con anidamiento profundo (\texttt{((1+0)+(1))}):} Evaluada con $val = 8$, $max\_d = 2$ ($2^2 + 2^2 = 8$).
+    \item \textbf{Cadena que no pertenece al lenguaje (\texttt{1++0}):} Rechazada inmediatamente imprimiendo \texttt{no}.
+    \item \textbf{Detección de circularidad (\texttt{--circular}):} Se alteró temporalmente la producción $S \rightarrow L$ para hacer que $L.d = S.val + 1$. Al evaluar la cadena \texttt{1}, el evaluador detecta el estancamiento de la cola de Kahn, activa la búsqueda DFS y reporta:
+    \begin{lstlisting}
+Error: Error: La definicion dirigida por la sintaxis (SDD) es CIRCULAR.
+Ciclo detectado en las dependencias:
+B_2.d -> B_2.val -> L_5.val -> S_6.val -> L_5.d -> B_2.d
+    \end{lstlisting}
+\end{enumerate}
+
+\newpage
+\section{Problemas Encontrados y Soluciones (Requisito 4.1)}
+
+Durante el ciclo de desarrollo se presentaron los siguientes retos técnicos:
+
+\begin{enumerate}
+    \item \textbf{Manejo de Reducciones $\epsilon$ en el Analizador SLR(1):}
+    \textbf{Problema:} En el análisis ascendente, las reducciones por producciones vacías $A \rightarrow \epsilon$ tienen longitud $|\beta| = 0$. Si el algoritmo tradicional desapila estados de la pila, desincroniza el autómata y destruye la asociación del árbol.\\
+    \textbf{Solución:} Se condicionó la reducción para que, si la longitud es 0, no se extraiga ningún estado de la pila; simplemente se consulta $\text{GOTO}(\text{tope}, A)$, se apila dicho estado de transición y se añade un nodo hoja hijo etiquetado con \texttt{'e'}.
+
+    \item \textbf{Desacoplamiento Estricto de la SDD frente al Motor Evaluador:}
+    \textbf{Problema:} La Sección 3 (Paso 5.1) exige explícitamente: \textit{``The evaluator must not know anything about your particular SDD: changing the SDD must only require changing this data.''}\\
+    \textbf{Solución:} Se encapsuló la definición en la clase de datos \texttt{SemanticRule}. Cada regla utiliza índices numéricos relativos ($0$ para la cabeza, $1 \dots k$ para los hijos) y una función lambda pura. El evaluador opera de manera abstracta sobre identificadores de nodos y nombres de atributos arbitrarios.
+
+    \item \textbf{Convención de Separación de Alternativas en Gramáticas de Entrada:}
+    \textbf{Problema:} La Sección 2.2.1 establece que las alternativas van separadas por espacios, mientras que los símbolos de una misma alternativa no llevan espacios. Escribir erróneamente \texttt{L -> b R} provocaba que el parser tratara \texttt{b} y \texttt{R} como alternativas distintas.\\
+    \textbf{Solución:} Se auditó el archivo de entrada para escribir rigurosamente \texttt{L -> bR} y \texttt{R -> ,L e}, ajustando la suite de pruebas unitarias para validar ambas convenciones.
+
+    \item \textbf{Duplicidad y Discrepancias en Informes Previos:}
+    \textbf{Problema:} Existían múltiples archivos (\texttt{report.pdf}, \texttt{INFORME\_ITEM4.pdf}, \texttt{docs/INFORME\_ITEM4.md}, etc.) con información redundante, nombres de estudiantes incompletos en versiones previas de PDF y artefactos de renderizado matemático.\\
+    \textbf{Solución:} Se realizó una auditoría integral del proyecto, eliminando copias redundantes, unificando la documentación canónica y compilando un único informe maestro en \LaTeX{} (\texttt{report.pdf}) ubicado en la raíz del repositorio, con autorías completas y tipografía matemática formal.
+\end{enumerate}
+
+\section{Declaración de Uso Responsable de IA Generativa (Requisito 4.2)}
+
+En cumplimiento de las directrices éticas y de integridad académica estipuladas en la Sección 1 y Sección 4.2 del documento de especificaciones del proyecto:
+\begin{itemize}
+    \item Se emplearon asistentes de inteligencia artificial generativa (Claude 3.5 Sonnet y Google Gemini) como herramientas de apoyo técnico para:
+    \begin{enumerate}
+        \item Asistencia en la estructuración modular del código fuente y validación de cobertura de la suite de pruebas automatizadas (\texttt{unittest}).
+        \item Revisión de sintaxis en plantillas de documentación \LaTeX{} y Markdown.
+    \end{enumerate}
+    \item \textbf{Garantía de autoría y comprensión:} Todos los algoritmos de cálculo de $\text{FIRST}$, $\text{FOLLOW}$, construcción del autómata LR(0), generación de tablas sintácticas, análisis predictivo y ascendente, construcción del árbol sintáctico anotado y evaluación topológica de dependencias fueron estudiados, implementados, verificados y auditados directamente por los integrantes del grupo siguiendo el libro de texto guía. Todos los integrantes del equipo comprenden la totalidad del código y están capacitados para explicarlo, trazarlo a mano o modificarlo durante la sustentación oral.
+\end{itemize}
+
+\end{document}

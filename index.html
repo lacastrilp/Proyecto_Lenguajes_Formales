@@ -1081,7 +1081,7 @@ R -> ,L e</div>
       e {lexval=e}</div>
                     <div class="meta-label">Orden de Evaluación Topológico:</div>
                     <div style="font-family: 'JetBrains Mono'; font-size: 0.85rem; color: var(--accent-blue); margin-top: 6px;">
-                        R_8.val, +_4.lexval, (_1.lexval, e_14.lexval, L_16.d, )_12.lexval, 0_5.lexval, e_7.lexval, R_15.val, B_6.val, 1_2.lexval, B_13.d, R_15.d, L_9.val, L_11.d, R_15.max_d, R_10.val, B_3.d, R_10.d, B_3.val, B_3.max_d, L_9.d, L_11.val, R_8.d, B_6.d, B_13.val, R_8.max_d, B_6.max_d, L_16.val, L_9.max_d, S_17.val, R_10.max_d, L_11.max_d, B_13.max_d, L_16.max_d, S_17.max_d
+                        R_8.val, 1_2.lexval, +_4.lexval, (_1.lexval, L_16.d, )_12.lexval, e_14.lexval, 0_5.lexval, R_15.val, B_6.val, e_7.lexval, R_15.d, B_13.d, L_9.val, R_15.max_d, L_11.d, R_10.val, R_10.d, B_3.d, L_9.d, B_3.val, B_3.max_d, R_8.d, B_6.d, L_11.val, R_8.max_d, B_6.max_d, B_13.val, L_9.max_d, L_16.val, R_10.max_d, S_17.val, L_11.max_d, B_13.max_d, L_16.max_d, S_17.max_d
                     </div>
                 </div>
             </div>
@@ -1132,8 +1132,8 @@ R -> ,L e</div>
                 <div class="proof-card-body">
                     <p style="color: var(--text-body); margin-bottom: 14px;">Al introducir temporalmente la regla circular <code>L.d = S.val + 1</code> en la producción <code>S -> L</code>, el algoritmo de ordenamiento topológico no puede resolver todos los nodos y la búsqueda en profundidad (DFS) aísla el ciclo exacto:</p>
                     <div class="code-box" style="border-color: var(--accent-red); color: var(--accent-red); background: #fff5f5;">Error: Error: La definición dirigida por la sintaxis (SDD) es CIRCULAR.
-Ciclo detectado en las dependencias: L_5.d -> B_2.d -> B_2.val -> L_5.val -> S_6.val -> L_5.d
-Ciclo identificado: L_5.d -> B_2.d -> B_2.val -> L_5.val -> S_6.val -> L_5.d</div>
+Ciclo detectado en las dependencias: L_5.val -> S_6.val -> L_5.d -> B_2.d -> B_2.val -> L_5.val
+Ciclo identificado: L_5.val -> S_6.val -> L_5.d -> B_2.d -> B_2.val -> L_5.val</div>
                 </div>
             </div>
         </main>

@@ -19,7 +19,7 @@
 | **Shared** | [`src/common/grammar.py`](src/common/grammar.py)<br>[`src/common/parse_tree.py`](src/common/parse_tree.py)<br>[`src/common/html_formatter.py`](src/common/html_formatter.py) | CFG definition, parse tree node representation, and optional interactive HTML visualizer generator |
 | **Entry points** | [`main.py`](main.py)<br>[`sdd_main.py`](sdd_main.py) | CLI driver for Items 1-2 and CLI driver for Item 3 SDD evaluation |
 | **Examples and tests** | [`examples/`](examples/)<br>[`tests/test_examples.py`](tests/test_examples.py)<br>[`run_tests.sh`](run_tests.sh) | Grammar/strings test suites and automated test runner script |
-| **4. Report** | [`report.pdf`](report.pdf)<br>[`INFORME_ITEM4.pdf`](INFORME_ITEM4.pdf)<br>[`docs/INFORME_ITEM4.md`](docs/INFORME_ITEM4.md) | Technical comparison report between LL(1) and SLR(1) parsing algorithms |
+| **4. Report** | [`report.pdf`](report.pdf)<br>[`docs/report.tex`](docs/report.tex)<br>[`docs/INFORME_OFICIAL_PROYECTO.md`](docs/INFORME_OFICIAL_PROYECTO.md) | Official project technical report (LaTeX compiled PDF in root) |
 
 ## How to Run
 

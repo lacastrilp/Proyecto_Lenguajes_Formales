@@ -492,6 +492,175 @@ def generate_html_visualizer(output_path: str = "index.html") -> str:
         .input-btn:active {{
             transform: scale(0.97);
         }}
+
+        /* -----------------------------------------------------------------
+           LABORATORIO SDD INTERACTIVO PASO A PASO
+           ----------------------------------------------------------------- */
+        .lab-ex-btn {{
+            flex: 1;
+            min-width: 220px;
+            background: var(--bg-subtle);
+            border: 2px solid var(--border);
+            padding: 14px 18px;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: var(--shadow-hard);
+            transition: all var(--duration) var(--ease-emil);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }}
+
+        .lab-ex-btn:hover {{
+            background: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hard-hover);
+        }}
+
+        .lab-ex-btn.active {{
+            background: var(--text-main);
+            color: #ffffff;
+        }}
+
+        .lab-ex-btn.active .ex-num {{
+            color: #93c5fd;
+        }}
+
+        .lab-ex-btn.active .ex-name {{
+            color: #ffffff;
+        }}
+
+        .ex-num {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            letter-spacing: 0.1em;
+        }}
+
+        .ex-name {{
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }}
+
+        .ex-badge {{
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border: 1px solid currentColor;
+            display: inline-block;
+            margin-top: 4px;
+            align-self: flex-start;
+        }}
+
+        .ex-badge.l-attr {{
+            color: var(--accent-blue);
+            background: #eff6ff;
+        }}
+
+        .lab-ex-btn.active .ex-badge.l-attr {{
+            color: #bfdbfe;
+            background: rgba(255,255,255,0.12);
+            border-color: #93c5fd;
+        }}
+
+        .ex-badge.no-l-attr {{
+            color: var(--accent-amber);
+            background: #fffbeb;
+        }}
+
+        .lab-ex-btn.active .ex-badge.no-l-attr {{
+            color: #fde68a;
+            background: rgba(255,255,255,0.12);
+            border-color: #fcd34d;
+        }}
+
+        .transport-btn {{
+            background: var(--bg-subtle);
+            border: 2px solid var(--border);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 8px 14px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px #0f172a;
+            transition: all var(--duration) var(--ease-emil);
+        }}
+
+        .transport-btn:hover {{
+            background: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-hard);
+        }}
+
+        .transport-btn:active {{
+            transform: scale(0.97);
+            box-shadow: 0px 0px 0px #0f172a;
+        }}
+
+        .transport-btn.active-play {{
+            background: var(--accent-blue);
+            color: #ffffff;
+            border-color: var(--border);
+        }}
+
+        .preset-btn {{
+            background: #ffffff;
+            border: 1.5px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            cursor: pointer;
+            box-shadow: 1px 1px 0px #0f172a;
+            transition: all 0.12s ease;
+        }}
+
+        .preset-btn:hover {{
+            background: #eff6ff;
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            transform: translateY(-1px);
+        }}
+
+        .kahn-step-item {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            transition: background 0.15s ease;
+        }}
+
+        .kahn-step-item:hover {{
+            background: #f1f5f9;
+        }}
+
+        .kahn-step-item.active {{
+            background: #fef3c7;
+            border-left: 4px solid var(--accent-amber);
+            font-weight: 700;
+        }}
+
+        .kahn-step-item.evaluated {{
+            color: #334155;
+        }}
+
+        .kahn-step-item.pending {{
+            color: #94a3b8;
+        }}
+
+        .rule-row-active {{
+            background: #fef3c7 !important;
+            font-weight: 700;
+        }}
+
     </style>
 </head>
 <body>
@@ -503,8 +672,8 @@ def generate_html_visualizer(output_path: str = "index.html") -> str:
                 <p class="editorial-lead">Visualizador interactivo para analizadores LL(1) y SLR(1), autómatas LR(0) y evaluador genérico de Definiciones Dirigidas por la Sintaxis (SDD) basado en Aho, Lam, Sethi y Ullman (Dragon Book).</p>
             </div>
             <div class="hero-right-meta">
-                <div class="meta-label">Estudiante</div>
-                <div class="meta-val">Luis Alejandro Castrillón Pulgarín</div>
+                <div class="meta-label">Estudiantes</div>
+                <div class="meta-val">Luis Alejandro Castrillón Piedrahita, Manuela Buriticá Guzmán, Maria Juliana Henao Rua</div>
 
                 <div class="meta-label">Profesores</div>
                 <div class="meta-val">Oscar Rodríguez Cifuentes, Adolfo Andrés Castro, César Augusto Guerra, Sergio Ramírez Rico</div>
@@ -518,8 +687,9 @@ def generate_html_visualizer(output_path: str = "index.html") -> str:
             <button class="nav-btn active" onclick="switchTab('tab-grammar', this)">1. Gramáticas & FIRST/FOLLOW</button>
             <button class="nav-btn" onclick="switchTab('tab-lr0-graph', this)">2. Autómata LR(0) & Tablas SLR(1)/LL(1)</button>
             <button class="nav-btn" onclick="switchTab('tab-traces', this)">3. Trazas de Parseo Paso a Paso</button>
-            <button class="nav-btn" onclick="switchTab('tab-sdd-eval', this)">4. Evaluador SDD & Grafo de Dependencias (DAG)</button>
-            <button class="nav-btn" onclick="switchTab('tab-suite', this)">5. Verificación & Circularidad</button>
+            <button class="nav-btn" style="border-color: var(--accent-blue); background: #eff6ff;" onclick="switchTab('tab-sdd-lab', this)">★ 4. Laboratorio SDD Paso a Paso</button>
+            <button class="nav-btn" onclick="switchTab('tab-sdd-eval', this)">5. Evaluador SDD Base & DAG</button>
+            <button class="nav-btn" onclick="switchTab('tab-suite', this)">6. Verificación & Circularidad</button>
         </nav>
 
         <!-- TAB 1: GRAMATICAS Y FIRST / FOLLOW -->
@@ -761,7 +931,204 @@ R -> ,L e</div>
             </div>
         </main>
 
-        <!-- TAB 4: SDD EVALUATOR & GRAFO DE DEPENDENCIAS -->
+
+        <!-- TAB 4: LABORATORIO SDD INTERACTIVO PASO A PASO -->
+        <main id="tab-sdd-lab" class="tab-pane">
+            <!-- HERO DEL LABORATORIO -->
+            <div class="proof-card" style="margin-bottom: 24px; border-left: 6px solid var(--accent-blue);">
+                <div class="proof-card-body" style="padding: 20px 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <span class="editorial-tag" style="margin-bottom: 6px;">MOTOR DINÁMICO DE EVALUACIÓN SEMÁNTICA EN VIVO</span>
+                            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.85rem; font-weight: 800; margin-bottom: 8px;">
+                                Laboratorio Interactivo Paso a Paso de SDD
+                            </h2>
+                            <p style="color: var(--text-body); max-width: 840px; font-size: 0.95rem;">
+                                Explora la construcción del árbol sintáctico concreto, la instanciación de dependencias de atributos, el ordenamiento topológico por algoritmo de Kahn y el cómputo semántico paso a paso con explicaciones pedagógicas formales.
+                            </p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="status-badge tag-new" style="font-size: 0.8rem;">JS PURO • 0 DEPENDENCIAS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SELECTOR DE EJERCICIOS -->
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
+                <button class="lab-ex-btn active" id="btn-ex1" onclick="selectLabExercise('ex1')">
+                    <span class="ex-num">EJERCICIO 1</span>
+                    <span class="ex-name">Indentación y Costo en Bloques</span>
+                    <span class="ex-badge l-attr">L-Atribuida</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-ex2" onclick="selectLabExercise('ex2')">
+                    <span class="ex-num">EJERCICIO 2</span>
+                    <span class="ex-name">Conversión Binaria con Escala</span>
+                    <span class="ex-badge no-l-attr">Ni S ni L (Flujo R→L)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-ex3" onclick="selectLabExercise('ex3')">
+                    <span class="ex-num">EJERCICIO 3</span>
+                    <span class="ex-name">Tipado y Coerción de Expresiones</span>
+                    <span class="ex-badge l-attr">L-Atribuida</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-base" onclick="selectLabExercise('base')">
+                    <span class="ex-num">SDD BASE</span>
+                    <span class="ex-name">Listas Binarias y Profundidad</span>
+                    <span class="ex-badge l-attr">L-Atribuida (Oficial)</span>
+                </button>
+            </div>
+
+            <!-- BARRA DE CONFIGURACION EN VIVO -->
+            <div class="proof-card" style="margin-bottom: 24px;">
+                <div class="proof-card-header">
+                    <div class="step-meta-group">
+                        <span class="step-num-badge">ENTRADA Y PARÁMETROS</span>
+                        <h3 class="step-title" id="labConfigTitle">Configuración de Entrada: Ejercicio 1</h3>
+                    </div>
+                    <button class="nav-btn" style="padding: 6px 14px; font-size: 0.75rem;" onclick="resetLabToDefaults()">↺ Restaurar Valores por Defecto</button>
+                </div>
+                <div class="proof-card-body">
+                    <!-- Fila de Entrada de Cadena y Presets -->
+                    <div style="display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end; margin-bottom: 16px;">
+                        <div>
+                            <label class="meta-label" for="labInputString">Cadena de Entrada (Tokens)</label>
+                            <input type="text" id="labInputString" class="input-field" style="width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 600;" oninput="onLabInputChanged()">
+                        </div>
+                        <button class="input-btn" style="height: 48px; padding: 0 24px;" onclick="reparseAndRunLab()">Re-parsear y Evaluar</button>
+                    </div>
+
+                    <!-- Botones de Presets -->
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <span class="meta-label" style="margin-bottom: 0;">Presets Rápidos:</span>
+                        <div id="labPresetsContainer" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Parametros dinamicos segun el ejercicio -->
+                    <div id="labCustomParams" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; padding-top: 16px; border-top: 1.5px dashed var(--border-light);">
+                        <!-- Inyectado por JS -->
+                    </div>
+
+                    <!-- Mensaje de Error Sintactico / Validacion -->
+                    <div id="labErrorMsg" style="display: none; margin-top: 16px; padding: 12px 16px; background: #fef2f2; border: 1.5px solid var(--accent-red); color: var(--accent-red); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL DE REPRODUCCION Y NARRADOR PEDAGOGICO -->
+            <div class="proof-card" style="margin-bottom: 24px; border-top: 4px solid var(--border);">
+                <div class="proof-card-header" style="flex-wrap: wrap; gap: 12px;">
+                    <!-- Controles de Transporte -->
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <button class="transport-btn" title="Paso 0 (Árbol inicial sin evaluar)" onclick="labStepTo(0)">⏮ Inicio</button>
+                        <button class="transport-btn" title="Paso Anterior" onclick="labStepPrev()">◀ Anterior</button>
+                        <button class="transport-btn active-play" id="btnLabPlay" title="Auto-Play" onclick="labTogglePlay()">▶ Auto-Play</button>
+                        <button class="transport-btn" title="Paso Siguiente" onclick="labStepNext()">▶ Siguiente</button>
+                        <button class="transport-btn" title="Evaluar Todo" onclick="labStepEnd()">⏭ Evaluar Todo</button>
+                        
+                        <div style="display: flex; align-items: center; gap: 6px; margin-left: 10px;">
+                            <span class="meta-label" style="margin-bottom: 0;">Vel:</span>
+                            <select id="labSpeedSelect" class="input-field" style="padding: 4px 8px; font-size: 0.8rem; width: auto;" onchange="changeLabSpeed(this.value)">
+                                <option value="1500">0.5x</option>
+                                <option value="800" selected>1x</option>
+                                <option value="350">2x</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Indicador de Paso y Estado -->
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span id="labStepBadge" class="step-num-badge" style="font-size: 0.85rem; padding: 6px 12px;">PASO 0 / 0</span>
+                        <span id="labFlowBadge" class="status-badge regular-tag">SIN EVALUAR</span>
+                    </div>
+                </div>
+
+                <!-- Barra de Progreso / Timeline Clickeable -->
+                <div style="background: var(--bg-subtle); padding: 10px 24px; border-bottom: 2px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="meta-label" style="margin-bottom: 0; min-width: 60px;">Timeline:</span>
+                        <input type="range" id="labTimelineSlider" min="0" max="10" value="0" style="flex: 1; accent-color: var(--accent-blue); cursor: pointer;" oninput="onTimelineSlider(this.value)">
+                        <span id="labProgressPct" class="meta-label" style="margin-bottom: 0; min-width: 45px; text-align: right;">0%</span>
+                    </div>
+                </div>
+
+                <!-- Tarjeta del Narrador Pedagógico -->
+                <div class="proof-card-body" id="labNarratorBody" style="background: #ffffff; padding: 20px 24px;">
+                    <!-- Contenido del narrador inyectado por JS -->
+                </div>
+            </div>
+
+            <!-- VISTA DUAL: ARBOL SINTACTICO ANOTADO (SVG) Y GRAFO DE DEPENDENCIAS (DAG SVG) + COLA KAHN -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px;">
+                <!-- ARBOL SINTACTICO SVG -->
+                <div class="proof-card">
+                    <div class="proof-card-header">
+                        <div class="step-meta-group">
+                            <span class="step-num-badge">ÁRBOL ANOTADO</span>
+                            <h3 class="step-title">Árbol Sintáctico Concreto (Decorado Dinámicamente)</h3>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <span class="status-badge" style="background: #ecfdf5; color: #059669; border-color: #059669;">● Evaluado</span>
+                            <span class="status-badge" style="background: #fef3c7; color: #d97706; border-color: #d97706;">● Activo</span>
+                            <span class="status-badge regular-tag">○ Pendiente (?)</span>
+                        </div>
+                    </div>
+                    <div class="proof-card-body" style="padding: 12px; background: #fafafa; overflow-x: auto;">
+                        <svg id="labTreeSvg" style="width: 100%; min-height: 480px; display: block; background: #ffffff; border: 1.5px solid var(--border-light);"></svg>
+                    </div>
+                </div>
+
+                <!-- GRAFO DE DEPENDENCIAS Y COLA TOPOLOGICA -->
+                <div style="display: grid; grid-template-columns: 7fr 5fr; gap: 24px;">
+                    <!-- DAG SVG -->
+                    <div class="proof-card">
+                        <div class="proof-card-header">
+                            <div class="step-meta-group">
+                                <span class="step-num-badge">DAG SVG</span>
+                                <h3 class="step-title">Grafo de Dependencias Activo</h3>
+                            </div>
+                            <span class="status-badge start-tag">ORDEN TOPOLÓGICO</span>
+                        </div>
+                        <div class="proof-card-body" style="padding: 12px; background: #fafafa; overflow-x: auto;">
+                            <svg id="labDagSvg" style="width: 100%; min-height: 420px; display: block; background: #ffffff; border: 1.5px solid var(--border-light);"></svg>
+                        </div>
+                    </div>
+
+                    <!-- COLA TOPOLOGICA DE KAHN -->
+                    <div class="proof-card">
+                        <div class="proof-card-header">
+                            <div class="step-meta-group">
+                                <span class="step-num-badge">KAHN</span>
+                                <h3 class="step-title">Secuencia de Evaluación</h3>
+                            </div>
+                            <span class="status-badge tag-new" id="labTotalStepsBadge">0 PASOS</span>
+                        </div>
+                        <div class="proof-card-body" style="padding: 0; max-height: 440px; overflow-y: auto;">
+                            <div id="labKahnList" style="display: flex; flex-direction: column;">
+                                <!-- Inyectado por JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FICHA TEORICA Y DE REFERENCIA FORMAL (COLAPSABLE) -->
+            <div class="proof-card">
+                <div class="proof-card-header" style="cursor: pointer;" onclick="toggleLabTheory()">
+                    <div class="step-meta-group">
+                        <span class="step-num-badge">TEORÍA FORMAL</span>
+                        <h3 class="step-title" id="labTheoryTitle">Ficha Teórica y Semántica de la SDD</h3>
+                    </div>
+                    <span class="status-badge regular-tag" id="labTheoryToggleIcon">▼ MOSTRAR DETALLES</span>
+                </div>
+                <div class="proof-card-body" id="labTheoryContent" style="display: block;">
+                    <!-- Contenido formal inyectado segun el ejercicio activo -->
+                </div>
+            </div>
+        </main>
+
+        <!-- TAB 5: SDD EVALUATOR & GRAFO DE DEPENDENCIAS (OFICIAL) -->
         <main id="tab-sdd-eval" class="tab-pane">
             <div class="interactive-tester">
                 <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 6px;">Probador Interactivo de Expresiones SDD</h3>
@@ -826,7 +1193,7 @@ R -> ,L e</div>
             </div>
         </main>
 
-        <!-- TAB 5: VERIFICACION Y CIRCULARIDAD -->
+        <!-- TAB 6: VERIFICACION Y CIRCULARIDAD -->
         <main id="tab-suite" class="tab-pane">
             <div class="proof-card">
                 <div class="proof-card-header">
@@ -891,6 +1258,8 @@ Ciclo identificado: {' -> '.join(circular_cycle_path)}</div>
                 setTimeout(renderLR0Graph, 50);
             }} else if (paneId === 'tab-sdd-eval') {{
                 setTimeout(renderDAGGraph, 50);
+            }} else if (paneId === 'tab-sdd-lab') {{
+                setTimeout(initLabIfNeeded, 50);
             }}
         }}
 
@@ -1111,7 +1480,1625 @@ Ciclo identificado: {' -> '.join(circular_cycle_path)}</div>
             alert(`Cadena evaluada: "${{str}}". Revisa la consola o ejecuta 'python3 sdd_main.py' para la traza completa.`);
         }}
 
+// =========================================================================
+// MOTOR INTERACTIVO DEL LABORATORIO SDD (JS PURO, 0 DEPENDENCIAS)
+// =========================================================================
+
+class LabNode {{
+    constructor(symbol, production, children = []) {{
+        this.id = ++labNodeIdCounter;
+        this.symbol = symbol;
+        this.production = production;
+        this.children = children;
+        this.attributes = {{}};
+    }}
+    isLeaf() {{
+        return !this.children || this.children.length === 0;
+    }}
+}}
+
+let labNodeIdCounter = 0;
+let currentExerciseId = 'ex1';
+let labCurrentStep = 0;
+let labSteps = [];
+let labTreeRoot = null;
+let labIsPlaying = false;
+let labPlayInterval = null;
+let labPlaySpeed = 800;
+let labInitialized = false;
+
+// Configuración de los 4 Ejercicios
+const labExercises = {{
+    ex1: {{
+        id: 'ex1',
+        name: 'Ejercicio 1: Formateador y Conteo de Indentación en Bloques',
+        shortName: 'Indentación y Costo en Bloques',
+        classification: 'L-atribuida',
+        classBadgeClass: 'l-attr',
+        defaultInput: '{{ ; ; }}',
+        presets: ['{{ ; ; }}', '{{ {{ ; }} }}', '{{ {{ ; }} ; {{ ; ; }} }}', ';'],
+        defaultParams: {{
+            initial_depth: 0,
+            base_stmt_cost: 1
+        }},
+        paramDefs: [
+            {{ id: 'initial_depth', label: 'B.depth Inicial (en S)', type: 'number', min: 0, max: 5, step: 1 }},
+            {{ id: 'base_stmt_cost', label: 'Costo Base de Sentencia (;)', type: 'number', min: 1, max: 10, step: 1 }}
+        ],
+        mainAttr: {{ symbol: 'S', attr: 'total' }},
+        grammar: {{
+            text: ["3", "S -> B", "B -> {{ L }} | ;", "L -> B L | e"].join("\\n"),
+            terminals: ['{{', '}}', ';'],
+            nonterminals: ['S', 'B', 'L']
+        }},
+        theory: {{
+            g1: "Cumple las convenciones formales de la Sección 2.2 y es tanto LL(1) como SLR(1).",
+            g2: "Posee 3 símbolos no terminales (S, B, L), 5 alternativas de producción y recursión en L.",
+            g3: "Gramática original desarrollada para modelar bloques anidados y ponderación de sentencias.",
+            attributes: [
+                {{ symbol: 'S', attr: 'total', type: 'Sintetizado', dtype: 'Entero', desc: 'Costo total acumulado de sentencias ponderadas por profundidad' }},
+                {{ symbol: 'B', attr: 'depth', type: 'Heredado', dtype: 'Entero', desc: 'Nivel de anidamiento heredado del contexto exterior' }},
+                {{ symbol: 'B', attr: 'cost', type: 'Sintetizado', dtype: 'Entero', desc: 'Costo calculado del bloque o sentencia simple' }},
+                {{ symbol: 'L', attr: 'depth', type: 'Heredado', dtype: 'Entero', desc: 'Profundidad heredada para la lista de bloques' }},
+                {{ symbol: 'L', attr: 'cost', type: 'Sintetizado', dtype: 'Entero', desc: 'Suma de costos de las sentencias en la lista' }}
+            ],
+            rules: [
+                {{ prod: 'S -> B', rules: 'B.depth = initial_depth; S.total = B.cost', flow: 'B.depth (Heredado de S), S.total (Sintetizado de B)' }},
+                {{ prod: 'B -> {{ L }}', rules: 'L.depth = B.depth + 1; B.cost = L.cost', flow: 'L.depth (Heredado hacia abajo), B.cost (Sintetizado hacia arriba)' }},
+                {{ prod: 'B -> ;', rules: 'B.cost = B.depth + base_stmt_cost', flow: 'B.cost (Sintetizado internamente usando B.depth)' }},
+                {{ prod: 'L -> B L1', rules: 'B.depth = L.depth; L1.depth = L.depth; L.cost = B.cost + L1.cost', flow: 'B.depth, L1.depth (Heredados), L.cost (Sintetizado)' }},
+                {{ prod: 'L -> e', rules: 'L.cost = 0', flow: 'L.cost (Sintetizado base)' }}
+            ],
+            classificationJust: "Es <strong>L-atribuida</strong> porque utiliza el atributo heredado <code>depth</code> para propagar el nivel de anidamiento estrictamente de arriba hacia abajo (de padre a hijo) y de izquierda a derecha entre hermanos en los cuerpos de las producciones. No es S-atribuida debido a la presencia de atributos heredados."
+        }}
+    }},
+    ex2: {{
+        id: 'ex2',
+        name: 'Ejercicio 2: Conversión Binaria a Decimal con Notación Posicional y Escalamiento',
+        shortName: 'Conversión Binaria con Escala',
+        classification: 'Ni S-atribuida ni L-atribuida',
+        classBadgeClass: 'no-l-attr',
+        defaultInput: '1 * * *',
+        presets: ['1 * * *', '0 * * *', '1', '1 * * * * *'],
+        defaultParams: {{
+            factor: 2,
+            base_scale: 1
+        }},
+        paramDefs: [
+            {{ id: 'factor', label: 'Factor Multiplicador por (*)', type: 'select', options: [2, 8, 10, 16] }},
+            {{ id: 'base_scale', label: 'Escala Base en (D -> e)', type: 'number', min: 1, max: 100, step: 1 }}
+        ],
+        mainAttr: {{ symbol: 'S', attr: 'val' }},
+        grammar: {{
+            text: ["3", "S -> N", "N -> B D", "D -> * D | e", "B -> 0 | 1"].join("\\n"),
+            terminals: ['*', '0', '1'],
+            nonterminals: ['S', 'N', 'D', 'B']
+        }},
+        theory: {{
+            g1: "Cumple las convenciones del curso y es tanto LL(1) como SLR(1).",
+            g2: "Posee 4 símbolos no terminales (S, N, D, B) y 6 producciones con recursión en D.",
+            g3: "SDD no estándar diseñada específicamente para ilustrar dependencias de derecha a izquierda.",
+            attributes: [
+                {{ symbol: 'S', attr: 'val', type: 'Sintetizado', dtype: 'Entero', desc: 'Valor numérico final de la expresión' }},
+                {{ symbol: 'N', attr: 'val', type: 'Sintetizado', dtype: 'Entero', desc: 'Valor del número con su escala posicional' }},
+                {{ symbol: 'B', attr: 'scale', type: 'Heredado (R→L)', dtype: 'Entero', desc: 'Factor de escala heredado desde D a su derecha' }},
+                {{ symbol: 'B', attr: 'val', type: 'Sintetizado', dtype: 'Entero', desc: 'Valor del bit ponderado por scale' }},
+                {{ symbol: 'D', attr: 'scale', type: 'Sintetizado', dtype: 'Entero', desc: 'Potencia o factor acumulado por la cantidad de asteriscos' }}
+            ],
+            rules: [
+                {{ prod: 'S -> N', rules: 'S.val = N.val', flow: 'Sintetizado de N hacia S' }},
+                {{ prod: 'N -> B D', rules: 'B.scale = D.scale; N.val = B.val', flow: '⚠️ B.scale = D.scale (Flujo de DERECHA a IZQUIERDA), N.val (Sintetizado)' }},
+                {{ prod: 'D -> * D1', rules: 'D.scale = D1.scale * factor', flow: 'Sintetizado de abajo hacia arriba en la cadena de asteriscos' }},
+                {{ prod: 'D -> e', rules: 'D.scale = base_scale', flow: 'Sintetizado base en la cadena vacía' }},
+                {{ prod: 'B -> 0', rules: 'B.val = 0', flow: 'Sintetizado constante' }},
+                {{ prod: 'B -> 1', rules: 'B.val = 1 * B.scale', flow: 'Sintetizado multiplicando 1 por B.scale' }}
+            ],
+            classificationJust: "<strong>Ni S-atribuida ni L-atribuida.</strong> En la producción <code>N -> B D</code>, la regla <code>B.scale = D.scale</code> asigna un atributo heredado al símbolo <code>B</code> a partir de un atributo de <code>D</code>, el cual se encuentra estrictamente a su <strong>derecha</strong>. La definición de gramáticas L-atribuidas exige que todo atributo heredado en el cuerpo dependa exclusivamente de atributos heredados de la cabeza o de atributos de símbolos situados a su <strong>izquierda</strong>. Por ende, esta SDD no puede evaluarse en un solo recorrido descendente de izquierda a derecha y <em>requiere obligatoriamente</em> el Grafo de Dependencias y el Ordenamiento Topológico."
+        }}
+    }},
+    ex3: {{
+        id: 'ex3',
+        name: 'Ejercicio 3: Verificación de Tipos y Compatibilidad en Expresiones con Coerción',
+        shortName: 'Tipado y Coerción de Expresiones',
+        classification: 'L-atribuida',
+        classBadgeClass: 'l-attr',
+        defaultInput: 'n + f + n',
+        presets: ['n + f + n', 'n + n + n', 'f + f', 'n + n + f + n'],
+        defaultParams: {{
+            root_req_type: 'float'
+        }},
+        paramDefs: [
+            {{ id: 'root_req_type', label: 'E.req_type Inicial (en S)', type: 'select', options: ['float', 'int'] }}
+        ],
+        mainAttr: {{ symbol: 'S', attr: 'type' }},
+        grammar: {{
+            text: ["3", "S -> E", "E -> T R", "R -> + E | e", "T -> n | f"].join("\\n"),
+            terminals: ['+', 'n', 'f'],
+            nonterminals: ['S', 'E', 'R', 'T']
+        }},
+        theory: {{
+            g1: "Cumple las convenciones y es LL(1) y SLR(1).",
+            g2: "Posee 4 no terminales (S, E, R, T) y 6 producciones con recursión en R y E.",
+            g3: "Sistema de tipos con atributos heredados para requerimiento de contexto y síntesis con promoción semántica.",
+            attributes: [
+                {{ symbol: 'S', attr: 'type', type: 'Sintetizado', dtype: 'Cadena', desc: 'Tipo semántico final evaluado (int o float)' }},
+                {{ symbol: 'E', attr: 'req_type', type: 'Heredado', dtype: 'Cadena', desc: 'Tipo exigido por el contexto superior' }},
+                {{ symbol: 'E', attr: 'type', type: 'Sintetizado', dtype: 'Cadena', desc: 'Tipo resultante de la suma' }},
+                {{ symbol: 'T', attr: 'type', type: 'Sintetizado', dtype: 'Cadena', desc: 'Tipo léxico del componente (int para n, float para f)' }},
+                {{ symbol: 'R', attr: 'inh_type', type: 'Heredado', dtype: 'Cadena', desc: 'Tipo heredado del término izquierdo T' }},
+                {{ symbol: 'R', attr: 'type', type: 'Sintetizado', dtype: 'Cadena', desc: 'Tipo acumulado del resto de la suma' }}
+            ],
+            rules: [
+                {{ prod: 'S -> E', rules: 'E.req_type = root_req_type; S.type = E.type', flow: 'E.req_type (Heredado de S), S.type (Sintetizado)' }},
+                {{ prod: 'E -> T R', rules: 'R.inh_type = T.type; E.type = "float" if (R.type=="float" or E.req_type=="float") else R.type', flow: 'R.inh_type (Heredado de T a su izquierda), E.type (Sintetizado)' }},
+                {{ prod: 'R -> + E', rules: 'E.req_type = R.inh_type; R.type = "float" if (R.inh_type=="float" or E.type=="float") else "int"', flow: 'E.req_type (Heredado de R.inh_type), R.type (Sintetizado con coerción)' }},
+                {{ prod: 'R -> e', rules: 'R.type = R.inh_type', flow: 'R.type sintetizado directo desde R.inh_type' }},
+                {{ prod: 'T -> n', rules: 'T.type = "int"', flow: 'Sintetizado constante' }},
+                {{ prod: 'T -> f', rules: 'T.type = "float"', flow: 'Sintetizado constante' }}
+            ],
+            classificationJust: "Es <strong>L-atribuida</strong>. Los atributos heredados son <code>req_type</code> (que desciende de la cabeza o se propaga hacia el operando derecho) e <code>inh_type</code> (que pasa desde el operando <code>T</code> hacia el operador derecho <code>R</code>). Ningún atributo depende de elementos a su derecha."
+        }}
+    }},
+    base: {{
+        id: 'base',
+        name: 'SDD Base Oficial: Listas Binarias con Profundidad de Paréntesis',
+        shortName: 'Listas Binarias y Profundidad',
+        classification: 'L-atribuida (Oficial)',
+        classBadgeClass: 'l-attr',
+        defaultInput: '(1+0)',
+        presets: ['0', '1', '1+0', '(1)', '(1+0)', '((1+0)+(1))'],
+        defaultParams: {{}},
+        paramDefs: [],
+        mainAttr: {{ symbol: 'S', attr: 'val' }},
+        grammar: {{
+            text: ["4", "S -> L", "L -> BR", "R -> +L e", "B -> (L) 0 1"].join("\\n"),
+            terminals: ['(', ')', '+', '0', '1'],
+            nonterminals: ['S', 'L', 'R', 'B']
+        }},
+        theory: {{
+            g1: "Cumple las convenciones del curso y es tanto LL(1) como SLR(1).",
+            g2: "4 no terminales (S, L, R, B), 7 producciones y recursión en L y R.",
+            g3: "Gramática oficial del Item 3 que calcula expresiones con peso exponencial según nivel de paréntesis.",
+            attributes: [
+                {{ symbol: 'S', attr: 'val', type: 'Sintetizado', dtype: 'Entero', desc: 'Valor acumulado total de la expresión binaria' }},
+                {{ symbol: 'S', attr: 'max_d', type: 'Sintetizado', dtype: 'Entero', desc: 'Máxima profundidad alcanzada en toda la expresión' }},
+                {{ symbol: 'L', attr: 'd', type: 'Heredado', dtype: 'Entero', desc: 'Profundidad de anidamiento heredada' }},
+                {{ symbol: 'L', attr: 'val', type: 'Sintetizado', dtype: 'Entero', desc: 'Suma de valores en la sublista' }},
+                {{ symbol: 'L', attr: 'max_d', type: 'Sintetizado', dtype: 'Entero', desc: 'Máxima profundidad en la sublista' }},
+                {{ symbol: 'R', attr: 'd', type: 'Heredado', dtype: 'Entero', desc: 'Profundidad heredada para los términos restantes' }},
+                {{ symbol: 'R', attr: 'val', type: 'Sintetizado', dtype: 'Entero', desc: 'Valor de los términos restantes' }},
+                {{ symbol: 'R', attr: 'max_d', type: 'Sintetizado', dtype: 'Entero', desc: 'Máxima profundidad en términos restantes' }},
+                {{ symbol: 'B', attr: 'd', type: 'Heredado', dtype: 'Entero', desc: 'Profundidad heredada para el bit o bloque' }},
+                {{ symbol: 'B', attr: 'val', type: 'Sintetizado', dtype: 'Entero', desc: '2^d para 1, 0 para 0, o suma de L' }},
+                {{ symbol: 'B', attr: 'max_d', type: 'Sintetizado', dtype: 'Entero', desc: 'Máxima profundidad alcanzada en el bloque' }}
+            ],
+            rules: [
+                {{ prod: 'S -> L', rules: 'L.d = 0; S.val = L.val; S.max_d = L.max_d', flow: 'L.d (Heredado), S.val / max_d (Sintetizados)' }},
+                {{ prod: 'L -> BR', rules: 'B.d = L.d; R.d = L.d; L.val = B.val + R.val; L.max_d = max(B.max_d, R.max_d)', flow: 'B.d / R.d (Heredados), L.val / max_d (Sintetizados)' }},
+                {{ prod: 'R -> +L', rules: 'L.d = R.d; R.val = L.val; R.max_d = L.max_d', flow: 'L.d (Heredado), R.val / max_d (Sintetizados)' }},
+                {{ prod: 'R -> e', rules: 'R.val = 0; R.max_d = R.d', flow: 'R.val / max_d (Sintetizados base)' }},
+                {{ prod: 'B -> (L)', rules: 'L.d = B.d + 1; B.val = L.val; B.max_d = L.max_d', flow: 'L.d (Heredado con incremento de nivel), B.val / max_d (Sintetizados)' }},
+                {{ prod: 'B -> 0', rules: 'B.val = 0; B.max_d = B.d', flow: 'B.val constante 0, max_d toma B.d' }},
+                {{ prod: 'B -> 1', rules: 'B.val = 2^(B.d); B.max_d = B.d', flow: 'B.val ponderado 2^(B.d), max_d toma B.d' }}
+            ],
+            classificationJust: "Es <strong>L-atribuida</strong>. Utiliza el atributo heredado <code>d</code> propagado estrictamente de arriba hacia abajo (de padre a hijo) y de izquierda a derecha. No posee ninguna dependencia hacia la derecha en los cuerpos."
+        }}
+    }}
+}};
+
+function tokenizeInput(inputStr, exId) {{
+    const raw = inputStr.replace(/\\s+/g, '');
+    const tokens = [];
+    for (let i = 0; i < raw.length; i++) {{
+        tokens.push(raw[i]);
+    }}
+    tokens.push('$');
+    return tokens;
+}}
+
+function parseInputForExercise(inputStr, exId) {{
+    const tokens = tokenizeInput(inputStr, exId);
+    let ip = 0;
+    labNodeIdCounter = 0;
+
+    function peek() {{
+        return tokens[ip];
+    }}
+    function match(expected) {{
+        if (tokens[ip] === expected) {{
+            const sym = tokens[ip];
+            ip++;
+            return sym;
+        }}
+        throw new Error("Error sintáctico: se esperaba '" + expected + "', pero se encontró '" + tokens[ip] + "' en la posición " + (ip + 1) + ".");
+    }}
+
+    if (exId === 'ex1') {{
+        function parseS() {{
+            const node = new LabNode('S', 'S -> B');
+            node.children = [parseB()];
+            return node;
+        }}
+        function parseB() {{
+            if (peek() === '{{') {{
+                match('{{');
+                const tOpen = new LabNode('{{', null);
+                const lNode = parseL();
+                match('}}');
+                const tClose = new LabNode('}}', null);
+                return new LabNode('B', 'B -> {{ L }}', [tOpen, lNode, tClose]);
+            }} else if (peek() === ';') {{
+                match(';');
+                return new LabNode('B', 'B -> ;', [new LabNode(';', null)]);
+            }} else {{
+                throw new Error("Error sintáctico en B: se esperaba '{{' o ';', pero se encontró '" + peek() + "'.");
+            }}
+        }}
+        function parseL() {{
+            if (peek() === '{{' || peek() === ';') {{
+                const bNode = parseB();
+                const l1Node = parseL();
+                return new LabNode('L', 'L -> B L', [bNode, l1Node]);
+            }} else if (peek() === '}}' || peek() === '$') {{
+                return new LabNode('L', 'L -> e', [new LabNode('e', null)]);
+            }} else {{
+                throw new Error("Error sintáctico en L: se esperaba '{{', ';' o '}}', pero se encontró '" + peek() + "'.");
+            }}
+        }}
+        const root = parseS();
+        if (peek() !== '$') {{
+            throw new Error("Error sintáctico: tokens sobrantes no reconocidos al final: '" + tokens.slice(ip, -1).join('') + "'.");
+        }}
+        return root;
+    }} else if (exId === 'ex2') {{
+        function parseS() {{
+            const node = new LabNode('S', 'S -> N');
+            node.children = [parseN()];
+            return node;
+        }}
+        function parseN() {{
+            const bNode = parseB();
+            const dNode = parseD();
+            return new LabNode('N', 'N -> B D', [bNode, dNode]);
+        }}
+        function parseB() {{
+            if (peek() === '0') {{
+                match('0');
+                return new LabNode('B', 'B -> 0', [new LabNode('0', null)]);
+            }} else if (peek() === '1') {{
+                match('1');
+                return new LabNode('B', 'B -> 1', [new LabNode('1', null)]);
+            }} else {{
+                throw new Error("Error sintáctico en B: se esperaba '0' o '1', pero se encontró '" + peek() + "'.");
+            }}
+        }}
+        function parseD() {{
+            if (peek() === '*') {{
+                match('*');
+                const tStar = new LabNode('*', null);
+                const d1Node = parseD();
+                return new LabNode('D', 'D -> * D', [tStar, d1Node]);
+            }} else if (peek() === '$') {{
+                return new LabNode('D', 'D -> e', [new LabNode('e', null)]);
+            }} else {{
+                throw new Error("Error sintáctico en D: se esperaba '*' o fin de cadena, pero se encontró '" + peek() + "'.");
+            }}
+        }}
+        const root = parseS();
+        if (peek() !== '$') {{
+            throw new Error("Error sintáctico: tokens sobrantes no reconocidos al final: '" + tokens.slice(ip, -1).join('') + "'.");
+        }}
+        return root;
+    }} else if (exId === 'ex3') {{
+        function parseS() {{
+            const node = new LabNode('S', 'S -> E');
+            node.children = [parseE()];
+            return node;
+        }}
+        function parseE() {{
+            const tNode = parseT();
+            const rNode = parseR();
+            return new LabNode('E', 'E -> T R', [tNode, rNode]);
+        }}
+        function parseT() {{
+            if (peek() === 'n') {{
+                match('n');
+                return new LabNode('T', 'T -> n', [new LabNode('n', null)]);
+            }} else if (peek() === 'f') {{
+                match('f');
+                return new LabNode('T', 'T -> f', [new LabNode('f', null)]);
+            }} else {{
+                throw new Error("Error sintáctico en T: se esperaba 'n' o 'f', pero se encontró '" + peek() + "'.");
+            }}
+        }}
+        function parseR() {{
+            if (peek() === '+') {{
+                match('+');
+                const tPlus = new LabNode('+', null);
+                const eNode = parseE();
+                return new LabNode('R', 'R -> + E', [tPlus, eNode]);
+            }} else if (peek() === '$') {{
+                return new LabNode('R', 'R -> e', [new LabNode('e', null)]);
+            }} else {{
+                throw new Error("Error sintáctico en R: se esperaba '+' o fin de cadena, pero se encontró '" + peek() + "'.");
+            }}
+        }}
+        const root = parseS();
+        if (peek() !== '$') {{
+            throw new Error("Error sintáctico: tokens sobrantes no reconocidos al final: '" + tokens.slice(ip, -1).join('') + "'.");
+        }}
+        return root;
+    }} else if (exId === 'base') {{
+        function parseS() {{
+            const node = new LabNode('S', 'S -> L');
+            node.children = [parseL()];
+            return node;
+        }}
+        function parseL() {{
+            const bNode = parseB();
+            const rNode = parseR();
+            return new LabNode('L', 'L -> BR', [bNode, rNode]);
+        }}
+        function parseB() {{
+            if (peek() === '(') {{
+                match('(');
+                const tOpen = new LabNode('(', null);
+                const lNode = parseL();
+                match(')');
+                const tClose = new LabNode(')', null);
+                return new LabNode('B', 'B -> (L)', [tOpen, lNode, tClose]);
+            }} else if (peek() === '0') {{
+                match('0');
+                return new LabNode('B', 'B -> 0', [new LabNode('0', null)]);
+            }} else if (peek() === '1') {{
+                match('1');
+                return new LabNode('B', 'B -> 1', [new LabNode('1', null)]);
+            }} else {{
+                throw new Error("Error sintáctico en B: se esperaba '(', '0' o '1', pero se encontró '" + peek() + "'.");
+            }}
+        }}
+        function parseR() {{
+            if (peek() === '+') {{
+                match('+');
+                const tPlus = new LabNode('+', null);
+                const lNode = parseL();
+                return new LabNode('R', 'R -> +L', [tPlus, lNode]);
+            }} else if (peek() === ')' || peek() === '$') {{
+                return new LabNode('R', 'R -> e', [new LabNode('e', null)]);
+            }} else {{
+                throw new Error("Error sintáctico en R: se esperaba '+', ')' o fin de cadena, pero se encontró '" + peek() + "'.");
+            }}
+        }}
+        const root = parseS();
+        if (peek() !== '$') {{
+            throw new Error("Error sintáctico: tokens sobrantes no reconocidos al final: '" + tokens.slice(ip, -1).join('') + "'.");
+        }}
+        return root;
+    }}
+    throw new Error("Ejercicio desconocido: " + exId);
+}}
+
+function buildLabSemanticRules(root, exId, params) {{
+    const rules = [];
+    const allNodesById = {{}};
+
+    function collectNodes(node) {{
+        allNodesById[node.id] = node;
+        if (node.children) {{
+            node.children.forEach(collectNodes);
+        }}
+    }}
+    collectNodes(root);
+
+    function traverse(node) {{
+        if (!node.production) return;
+
+        if (exId === 'ex1') {{
+            const initialDepth = Number(params.initial_depth !== undefined ? params.initial_depth : 0);
+            const baseCost = Number(params.base_stmt_cost !== undefined ? params.base_stmt_cost : 1);
+
+            if (node.production === 'S -> B') {{
+                const B = node.children[0];
+                rules.push({{
+                    target: {{ id: B.id, attr: 'depth', node: B }},
+                    deps: [],
+                    compute: () => initialDepth,
+                    ruleDesc: "B.depth = " + initialDepth + " (initial_depth)",
+                    evalFormula: (deps) => "B_" + B.id + ".depth = " + initialDepth,
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada inicial: la raíz S fija la profundidad inicial del bloque B_" + B.id + " en " + initialDepth + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'total', node: node }},
+                    deps: [{{ id: B.id, attr: 'cost', node: B }}],
+                    compute: (bCost) => bCost,
+                    ruleDesc: "S.total = B.cost",
+                    evalFormula: (deps) => "S_" + node.id + ".total = B_" + B.id + ".cost = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada final: el costo total en S_" + node.id + " recibe el costo acumulado " + deps[0]?.val + " del bloque B_" + B.id + "."
+                }});
+            }} else if (node.production === 'B -> {{ L }}') {{
+                const L = node.children[1];
+                rules.push({{
+                    target: {{ id: L.id, attr: 'depth', node: L }},
+                    deps: [{{ id: node.id, attr: 'depth', node: node }}],
+                    compute: (bDepth) => bDepth + 1,
+                    ruleDesc: "L.depth = B.depth + 1",
+                    evalFormula: (deps) => "L_" + L.id + ".depth = B_" + node.id + ".depth + 1 = " + deps[0]?.val + " + 1 = " + (deps[0]?.val + 1),
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada: al descender dentro del bloque {{ ... }}, la profundidad para L_" + L.id + " se incrementa a " + (deps[0]?.val + 1) + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'cost', node: node }},
+                    deps: [{{ id: L.id, attr: 'cost', node: L }}],
+                    compute: (lCost) => lCost,
+                    ruleDesc: "B.cost = L.cost",
+                    evalFormula: (deps) => "B_" + node.id + ".cost = L_" + L.id + ".cost = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: el bloque B_" + node.id + " toma el costo " + deps[0]?.val + " calculado por su lista interna L_" + L.id + "."
+                }});
+            }} else if (node.production === 'B -> ;') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'cost', node: node }},
+                    deps: [{{ id: node.id, attr: 'depth', node: node }}],
+                    compute: (bDepth) => bDepth + baseCost,
+                    ruleDesc: "B.cost = B.depth + " + baseCost + " (base_stmt_cost)",
+                    evalFormula: (deps) => "B_" + node.id + ".cost = B_" + node.id + ".depth + " + baseCost + " = " + deps[0]?.val + " + " + baseCost + " = " + (deps[0]?.val + baseCost),
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: sentencia simple ';' calcula su costo sumando profundidad (" + deps[0]?.val + ") + costo base (" + baseCost + ") = " + (deps[0]?.val + baseCost) + "."
+                }});
+            }} else if (node.production === 'L -> B L') {{
+                const B = node.children[0];
+                const L1 = node.children[1];
+                rules.push({{
+                    target: {{ id: B.id, attr: 'depth', node: B }},
+                    deps: [{{ id: node.id, attr: 'depth', node: node }}],
+                    compute: (lDepth) => lDepth,
+                    ruleDesc: "B.depth = L.depth",
+                    evalFormula: (deps) => "B_" + B.id + ".depth = L_" + node.id + ".depth = " + deps[0]?.val,
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada: la profundidad " + deps[0]?.val + " se propaga al primer elemento B_" + B.id + "."
+                }});
+                rules.push({{
+                    target: {{ id: L1.id, attr: 'depth', node: L1 }},
+                    deps: [{{ id: node.id, attr: 'depth', node: node }}],
+                    compute: (lDepth) => lDepth,
+                    ruleDesc: "L1.depth = L.depth",
+                    evalFormula: (deps) => "L_" + L1.id + ".depth = L_" + node.id + ".depth = " + deps[0]?.val,
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada (de izquierda a derecha): la profundidad " + deps[0]?.val + " se transmite al resto L_" + L1.id + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'cost', node: node }},
+                    deps: [{{ id: B.id, attr: 'cost', node: B }}, {{ id: L1.id, attr: 'cost', node: L1 }}],
+                    compute: (bCost, l1Cost) => bCost + l1Cost,
+                    ruleDesc: "L.cost = B.cost + L1.cost",
+                    evalFormula: (deps) => "L_" + node.id + ".cost = B_" + B.id + ".cost + L_" + L1.id + ".cost = " + deps[0]?.val + " + " + deps[1]?.val + " = " + (deps[0]?.val + deps[1]?.val),
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: suma el costo del bloque B_" + B.id + " (" + deps[0]?.val + ") con el resto L_" + L1.id + " (" + deps[1]?.val + ") = " + (deps[0]?.val + deps[1]?.val) + "."
+                }});
+            }} else if (node.production === 'L -> e') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'cost', node: node }},
+                    deps: [],
+                    compute: () => 0,
+                    ruleDesc: "L.cost = 0",
+                    evalFormula: (deps) => "L_" + node.id + ".cost = 0",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada base: epsilon no añade costo (L.cost = 0)."
+                }});
+            }}
+        }} else if (exId === 'ex2') {{
+            const factor = Number(params.factor !== undefined ? params.factor : 2);
+            const baseScale = Number(params.base_scale !== undefined ? params.base_scale : 1);
+
+            if (node.production === 'S -> N') {{
+                const N = node.children[0];
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [{{ id: N.id, attr: 'val', node: N }}],
+                    compute: (nVal) => nVal,
+                    ruleDesc: "S.val = N.val",
+                    evalFormula: (deps) => "S_" + node.id + ".val = N_" + N.id + ".val = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada final: S_" + node.id + " recibe el valor " + deps[0]?.val + " de N_" + N.id + "."
+                }});
+            }} else if (node.production === 'N -> B D') {{
+                const B = node.children[0];
+                const D = node.children[1];
+                rules.push({{
+                    target: {{ id: B.id, attr: 'scale', node: B }},
+                    deps: [{{ id: D.id, attr: 'scale', node: D }}],
+                    compute: (dScale) => dScale,
+                    ruleDesc: "B.scale = D.scale (¡FLUJO DE DERECHA A IZQUIERDA!)",
+                    evalFormula: (deps) => "B_" + B.id + ".scale = D_" + D.id + ".scale = " + deps[0]?.val,
+                    flow: 'rtl',
+                    explanation: (deps) => "⚠️ ATENCIÓN (NO L-ATRIBUIDA): Dependencia derecha-a-izquierda. La escala acumulada en D_" + D.id + " (" + deps[0]?.val + ") se propaga hacia el dígito B_" + B.id + " a su izquierda para fijar su escala posicional."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [{{ id: B.id, attr: 'val', node: B }}],
+                    compute: (bVal) => bVal,
+                    ruleDesc: "N.val = B.val",
+                    evalFormula: (deps) => "N_" + node.id + ".val = B_" + B.id + ".val = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: N_" + node.id + " toma el valor escalado " + deps[0]?.val + " de B_" + B.id + "."
+                }});
+            }} else if (node.production === 'D -> * D') {{
+                const D1 = node.children[1];
+                rules.push({{
+                    target: {{ id: node.id, attr: 'scale', node: node }},
+                    deps: [{{ id: D1.id, attr: 'scale', node: D1 }}],
+                    compute: (d1Scale) => d1Scale * factor,
+                    ruleDesc: "D.scale = D1.scale * " + factor,
+                    evalFormula: (deps) => "D_" + node.id + ".scale = D_" + D1.id + ".scale * " + factor + " = " + deps[0]?.val + " * " + factor + " = " + (deps[0]?.val * factor),
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: cada '*' multiplica la escala de D_" + D1.id + " (" + deps[0]?.val + ") por " + factor + " = " + (deps[0]?.val * factor) + "."
+                }});
+            }} else if (node.production === 'D -> e') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'scale', node: node }},
+                    deps: [],
+                    compute: () => baseScale,
+                    ruleDesc: "D.scale = " + baseScale,
+                    evalFormula: (deps) => "D_" + node.id + ".scale = " + baseScale,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada base: fin de asteriscos fija escala base = " + baseScale + "."
+                }});
+            }} else if (node.production === 'B -> 0') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [],
+                    compute: () => 0,
+                    ruleDesc: "B.val = 0",
+                    evalFormula: (deps) => "B_" + node.id + ".val = 0",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: bit 0 vale 0."
+                }});
+            }} else if (node.production === 'B -> 1') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [{{ id: node.id, attr: 'scale', node: node }}],
+                    compute: (bScale) => 1 * bScale,
+                    ruleDesc: "B.val = 1 * B.scale",
+                    evalFormula: (deps) => "B_" + node.id + ".val = 1 * B_" + node.id + ".scale = 1 * " + deps[0]?.val + " = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: bit 1 multiplicado por escala (" + deps[0]?.val + ") = " + deps[0]?.val + "."
+                }});
+            }}
+        }} else if (exId === 'ex3') {{
+            const rootReqType = params.root_req_type !== undefined ? params.root_req_type : 'float';
+
+            if (node.production === 'S -> E') {{
+                const E = node.children[0];
+                rules.push({{
+                    target: {{ id: E.id, attr: 'req_type', node: E }},
+                    deps: [],
+                    compute: () => rootReqType,
+                    ruleDesc: 'E.req_type = "' + rootReqType + '"',
+                    evalFormula: (deps) => "E_" + E.id + ".req_type = '" + rootReqType + "'",
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada: el contexto superior exige tipo objetivo '" + rootReqType + "'."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'type', node: node }},
+                    deps: [{{ id: E.id, attr: 'type', node: E }}],
+                    compute: (eType) => eType,
+                    ruleDesc: "S.type = E.type",
+                    evalFormula: (deps) => "S_" + node.id + ".type = E_" + E.id + ".type = '" + deps[0]?.val + "'",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada final: tipo verificado para el programa es '" + deps[0]?.val + "'."
+                }});
+            }} else if (node.production === 'E -> T R') {{
+                const T = node.children[0];
+                const R = node.children[1];
+                rules.push({{
+                    target: {{ id: R.id, attr: 'inh_type', node: R }},
+                    deps: [{{ id: T.id, attr: 'type', node: T }}],
+                    compute: (tType) => tType,
+                    ruleDesc: "R.inh_type = T.type",
+                    evalFormula: (deps) => "R_" + R.id + ".inh_type = T_" + T.id + ".type = '" + deps[0]?.val + "'",
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada de izquierda a derecha: el tipo '" + deps[0]?.val + "' de T_" + T.id + " se hereda a R_" + R.id + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'type', node: node }},
+                    deps: [{{ id: R.id, attr: 'type', node: R }}, {{ id: node.id, attr: 'req_type', node: node }}],
+                    compute: (rType, reqType) => (rType === 'float' || reqType === 'float') ? 'float' : rType,
+                    ruleDesc: "E.type = 'float' if (R.type=='float' or E.req_type=='float') else R.type",
+                    evalFormula: (deps) => "E_" + node.id + ".type = (" + deps[0]?.val + "=='float' || " + deps[1]?.val + "=='float') ? 'float' : '" + deps[0]?.val + "' = '" + ((deps[0]?.val === 'float' || deps[1]?.val === 'float') ? 'float' : deps[0]?.val) + "'",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada con coerción: compara tipo de operandos (" + deps[0]?.val + ") y exigido (" + deps[1]?.val + "). Si alguno es float, promueve a 'float'."
+                }});
+            }} else if (node.production === 'R -> + E') {{
+                const E = node.children[1];
+                rules.push({{
+                    target: {{ id: E.id, attr: 'req_type', node: E }},
+                    deps: [{{ id: node.id, attr: 'inh_type', node: node }}],
+                    compute: (rInh) => rInh,
+                    ruleDesc: "E.req_type = R.inh_type",
+                    evalFormula: (deps) => "E_" + E.id + ".req_type = R_" + node.id + ".inh_type = '" + deps[0]?.val + "'",
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada: transmite requerimiento '" + deps[0]?.val + "' al término derecho E_" + E.id + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'type', node: node }},
+                    deps: [{{ id: node.id, attr: 'inh_type', node: node }}, {{ id: E.id, attr: 'type', node: E }}],
+                    compute: (rInh, eType) => (rInh === 'float' || eType === 'float') ? 'float' : 'int',
+                    ruleDesc: "R.type = 'float' if (R.inh_type=='float' or E.type=='float') else 'int'",
+                    evalFormula: (deps) => "R_" + node.id + ".type = (" + deps[0]?.val + "=='float' || " + deps[1]?.val + "=='float') ? 'float' : 'int' = '" + ((deps[0]?.val === 'float' || deps[1]?.val === 'float') ? 'float' : 'int') + "'",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada de suma (+): (" + deps[0]?.val + " + " + deps[1]?.val + "). Si al menos uno es float, resultado es 'float'."
+                }});
+            }} else if (node.production === 'R -> e') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'type', node: node }},
+                    deps: [{{ id: node.id, attr: 'inh_type', node: node }}],
+                    compute: (rInh) => rInh,
+                    ruleDesc: "R.type = R.inh_type",
+                    evalFormula: (deps) => "R_" + node.id + ".type = R_" + node.id + ".inh_type = '" + deps[0]?.val + "'",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada base: retorna directamente el tipo heredado '" + deps[0]?.val + "'."
+                }});
+            }} else if (node.production === 'T -> n') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'type', node: node }},
+                    deps: [],
+                    compute: () => 'int',
+                    ruleDesc: "T.type = 'int'",
+                    evalFormula: (deps) => "T_" + node.id + ".type = 'int'",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: literal entero 'n' tiene tipo 'int'."
+                }});
+            }} else if (node.production === 'T -> f') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'type', node: node }},
+                    deps: [],
+                    compute: () => 'float',
+                    ruleDesc: "T.type = 'float'",
+                    evalFormula: (deps) => "T_" + node.id + ".type = 'float'",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: literal flotante 'f' tiene tipo 'float'."
+                }});
+            }}
+        }} else if (exId === 'base') {{
+            if (node.production === 'S -> L') {{
+                const L = node.children[0];
+                rules.push({{
+                    target: {{ id: L.id, attr: 'd', node: L }},
+                    deps: [],
+                    compute: () => 0,
+                    ruleDesc: "L.d = 0",
+                    evalFormula: (deps) => "L_" + L.id + ".d = 0",
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada inicial: la raíz S fija la profundidad base L_" + L.id + ".d = 0."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [{{ id: L.id, attr: 'val', node: L }}],
+                    compute: (lVal) => lVal,
+                    ruleDesc: "S.val = L.val",
+                    evalFormula: (deps) => "S_" + node.id + ".val = L_" + L.id + ".val = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: el valor final de la expresión binaria es " + deps[0]?.val + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'max_d', node: node }},
+                    deps: [{{ id: L.id, attr: 'max_d', node: L }}],
+                    compute: (lMax) => lMax,
+                    ruleDesc: "S.max_d = L.max_d",
+                    evalFormula: (deps) => "S_" + node.id + ".max_d = L_" + L.id + ".max_d = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: la profundidad máxima alcanzada en la expresión es " + deps[0]?.val + "."
+                }});
+            }} else if (node.production === 'L -> BR') {{
+                const B = node.children[0];
+                const R = node.children[1];
+                rules.push({{
+                    target: {{ id: B.id, attr: 'd', node: B }},
+                    deps: [{{ id: node.id, attr: 'd', node: node }}],
+                    compute: (lD) => lD,
+                    ruleDesc: "B.d = L.d",
+                    evalFormula: (deps) => "B_" + B.id + ".d = L_" + node.id + ".d = " + deps[0]?.val,
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada: la profundidad " + deps[0]?.val + " desciende hacia el bloque B_" + B.id + "."
+                }});
+                rules.push({{
+                    target: {{ id: R.id, attr: 'd', node: R }},
+                    deps: [{{ id: node.id, attr: 'd', node: node }}],
+                    compute: (lD) => lD,
+                    ruleDesc: "R.d = L.d",
+                    evalFormula: (deps) => "R_" + R.id + ".d = L_" + node.id + ".d = " + deps[0]?.val,
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada: la profundidad " + deps[0]?.val + " se propaga al resto R_" + R.id + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [{{ id: B.id, attr: 'val', node: B }}, {{ id: R.id, attr: 'val', node: R }}],
+                    compute: (bVal, rVal) => bVal + rVal,
+                    ruleDesc: "L.val = B.val + R.val",
+                    evalFormula: (deps) => "L_" + node.id + ".val = B_" + B.id + ".val + R_" + R.id + ".val = " + deps[0]?.val + " + " + deps[1]?.val + " = " + (deps[0]?.val + deps[1]?.val),
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: suma el valor del término B_" + B.id + " (" + deps[0]?.val + ") y el resto R_" + R.id + " (" + deps[1]?.val + ") = " + (deps[0]?.val + deps[1]?.val) + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'max_d', node: node }},
+                    deps: [{{ id: B.id, attr: 'max_d', node: B }}, {{ id: R.id, attr: 'max_d', node: R }}],
+                    compute: (bMax, rMax) => Math.max(bMax, rMax),
+                    ruleDesc: "L.max_d = max(B.max_d, R.max_d)",
+                    evalFormula: (deps) => "L_" + node.id + ".max_d = max(" + deps[0]?.val + ", " + deps[1]?.val + ") = " + Math.max(deps[0]?.val, deps[1]?.val),
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: toma la profundidad máxima entre B_" + B.id + " (" + deps[0]?.val + ") y R_" + R.id + " (" + deps[1]?.val + ")."
+                }});
+            }} else if (node.production === 'R -> +L') {{
+                const L = node.children[1];
+                rules.push({{
+                    target: {{ id: L.id, attr: 'd', node: L }},
+                    deps: [{{ id: node.id, attr: 'd', node: node }}],
+                    compute: (rD) => rD,
+                    ruleDesc: "L.d = R.d",
+                    evalFormula: (deps) => "L_" + L.id + ".d = R_" + node.id + ".d = " + deps[0]?.val,
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada: propaga la profundidad " + deps[0]?.val + " hacia el operando L_" + L.id + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [{{ id: L.id, attr: 'val', node: L }}],
+                    compute: (lVal) => lVal,
+                    ruleDesc: "R.val = L.val",
+                    evalFormula: (deps) => "R_" + node.id + ".val = L_" + L.id + ".val = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: R_" + node.id + " recibe el valor " + deps[0]?.val + " del término sumado L_" + L.id + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'max_d', node: node }},
+                    deps: [{{ id: L.id, attr: 'max_d', node: L }}],
+                    compute: (lMax) => lMax,
+                    ruleDesc: "R.max_d = L.max_d",
+                    evalFormula: (deps) => "R_" + node.id + ".max_d = L_" + L.id + ".max_d = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: propaga la profundidad máxima " + deps[0]?.val + "."
+                }});
+            }} else if (node.production === 'R -> e') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [],
+                    compute: () => 0,
+                    ruleDesc: "R.val = 0",
+                    evalFormula: (deps) => "R_" + node.id + ".val = 0",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada base: epsilon no añade valor (R.val = 0)."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'max_d', node: node }},
+                    deps: [{{ id: node.id, attr: 'd', node: node }}],
+                    compute: (rD) => rD,
+                    ruleDesc: "R.max_d = R.d",
+                    evalFormula: (deps) => "R_" + node.id + ".max_d = R_" + node.id + ".d = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada base: max_d toma la profundidad actual " + deps[0]?.val + "."
+                }});
+            }} else if (node.production === 'B -> (L)') {{
+                const L = node.children[1];
+                rules.push({{
+                    target: {{ id: L.id, attr: 'd', node: L }},
+                    deps: [{{ id: node.id, attr: 'd', node: node }}],
+                    compute: (bD) => bD + 1,
+                    ruleDesc: "L.d = B.d + 1",
+                    evalFormula: (deps) => "L_" + L.id + ".d = B_" + node.id + ".d + 1 = " + deps[0]?.val + " + 1 = " + (deps[0]?.val + 1),
+                    flow: 'inh',
+                    explanation: (deps) => "Regla heredada con incremento: dentro de los paréntesis ( ... ), el nivel de anidamiento sube de " + deps[0]?.val + " a " + (deps[0]?.val + 1) + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [{{ id: L.id, attr: 'val', node: L }}],
+                    compute: (lVal) => lVal,
+                    ruleDesc: "B.val = L.val",
+                    evalFormula: (deps) => "B_" + node.id + ".val = L_" + L.id + ".val = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: B_" + node.id + " toma el valor evaluado de la subexpresión L_" + L.id + " (" + deps[0]?.val + ")."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'max_d', node: node }},
+                    deps: [{{ id: L.id, attr: 'max_d', node: L }}],
+                    compute: (lMax) => lMax,
+                    ruleDesc: "B.max_d = L.max_d",
+                    evalFormula: (deps) => "B_" + node.id + ".max_d = L_" + L.id + ".max_d = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: profundidad máxima heredada del interior de los paréntesis (" + deps[0]?.val + ")."
+                }});
+            }} else if (node.production === 'B -> 0') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [],
+                    compute: () => 0,
+                    ruleDesc: "B.val = 0",
+                    evalFormula: (deps) => "B_" + node.id + ".val = 0",
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: bit 0 vale 0."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'max_d', node: node }},
+                    deps: [{{ id: node.id, attr: 'd', node: node }}],
+                    compute: (bD) => bD,
+                    ruleDesc: "B.max_d = B.d",
+                    evalFormula: (deps) => "B_" + node.id + ".max_d = B_" + node.id + ".d = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: max_d es la profundidad actual " + deps[0]?.val + "."
+                }});
+            }} else if (node.production === 'B -> 1') {{
+                rules.push({{
+                    target: {{ id: node.id, attr: 'val', node: node }},
+                    deps: [{{ id: node.id, attr: 'd', node: node }}],
+                    compute: (bD) => Math.pow(2, bD),
+                    ruleDesc: "B.val = 2^(B.d)",
+                    evalFormula: (deps) => "B_" + node.id + ".val = 2^(B_" + node.id + ".d) = 2^" + deps[0]?.val + " = " + Math.pow(2, deps[0]?.val),
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada ponderada: el bit 1 vale 2^(profundidad) = 2^" + deps[0]?.val + " = " + Math.pow(2, deps[0]?.val) + "."
+                }});
+                rules.push({{
+                    target: {{ id: node.id, attr: 'max_d', node: node }},
+                    deps: [{{ id: node.id, attr: 'd', node: node }}],
+                    compute: (bD) => bD,
+                    ruleDesc: "B.max_d = B.d",
+                    evalFormula: (deps) => "B_" + node.id + ".max_d = B_" + node.id + ".d = " + deps[0]?.val,
+                    flow: 'syn',
+                    explanation: (deps) => "Regla sintetizada: max_d es la profundidad actual " + deps[0]?.val + "."
+                }});
+            }}
+        }}
+
+        if (node.children) {{
+            node.children.forEach(traverse);
+        }}
+    }}
+
+    traverse(root);
+    return {{ rules, allNodesById }};
+}}
+
+function runLabKahnTopologicalSort(rules, allNodesById) {{
+    const vertexKey = (id, attr) => id + "." + attr;
+    const vertexLabel = (node, attr) => node.symbol + "_" + node.id + "." + attr;
+
+    const adj = {{}};
+    const inDegree = {{}};
+    const ruleByTarget = {{}};
+    const allVertices = new Set();
+
+    rules.forEach(r => {{
+        const tKey = vertexKey(r.target.id, r.target.attr);
+        allVertices.add(tKey);
+        ruleByTarget[tKey] = r;
+        if (inDegree[tKey] === undefined) inDegree[tKey] = 0;
+
+        r.deps.forEach(d => {{
+            const dKey = vertexKey(d.id, d.attr);
+            allVertices.add(dKey);
+            if (!adj[dKey]) adj[dKey] = [];
+            adj[dKey].push(tKey);
+            inDegree[tKey] = (inDegree[tKey] || 0) + 1;
+            if (inDegree[dKey] === undefined) inDegree[dKey] = 0;
+        }});
+    }});
+
+    // Cola de Kahn
+    const queue = [];
+    allVertices.forEach(vKey => {{
+        if (inDegree[vKey] === 0) {{
+            queue.push(vKey);
+        }}
+    }});
+
+    // Ordenar determinísticamente por ID numérico de nodo y nombre de atributo
+    queue.sort((a, b) => {{
+        const [aId, aAttr] = a.split('.');
+        const [bId, bAttr] = b.split('.');
+        const diff = Number(aId) - Number(bId);
+        return diff !== 0 ? diff : aAttr.localeCompare(bAttr);
+    }});
+
+    const evaluatedValues = {{}};
+    const steps = [];
+    let stepNum = 0;
+
+    while (queue.length > 0) {{
+        const uKey = queue.shift();
+        stepNum++;
+        const rule = ruleByTarget[uKey];
+        if (!rule) continue;
+
+        const depValues = rule.deps.map(d => {{
+            const dKey = vertexKey(d.id, d.attr);
+            return {{
+                id: d.id,
+                attr: d.attr,
+                label: vertexLabel(d.node, d.attr),
+                val: evaluatedValues[dKey]
+            }};
+        }});
+
+        const computedVal = rule.compute(...depValues.map(d => d.val));
+        evaluatedValues[uKey] = computedVal;
+        rule.target.node.attributes[rule.target.attr] = computedVal;
+
+        const targetLabel = vertexLabel(rule.target.node, rule.target.attr);
+        const evalFormulaStr = rule.evalFormula(depValues);
+        const explanationStr = typeof rule.explanation === 'function' ? rule.explanation(depValues) : rule.explanation;
+
+        steps.push({{
+            stepNum,
+            vertexKey: uKey,
+            targetLabel,
+            targetNode: rule.target.node,
+            targetAttr: rule.target.attr,
+            val: computedVal,
+            ruleDesc: rule.ruleDesc,
+            evalFormula: evalFormulaStr,
+            flow: rule.flow,
+            deps: depValues,
+            explanation: explanationStr,
+            inDegree: 0
+        }});
+
+        const neighbors = adj[uKey] || [];
+        const nextBatch = [];
+        neighbors.forEach(vKey => {{
+            inDegree[vKey]--;
+            if (inDegree[vKey] === 0) {{
+                nextBatch.push(vKey);
+            }}
+        }});
+        nextBatch.sort((a, b) => {{
+            const [aId, aAttr] = a.split('.');
+            const [bId, bAttr] = b.split('.');
+            const diff = Number(aId) - Number(bId);
+            return diff !== 0 ? diff : aAttr.localeCompare(bAttr);
+        }});
+        queue.push(...nextBatch);
+    }}
+
+    const hasCycle = steps.length < rules.length;
+    return {{ steps, hasCycle, evaluatedValues, adj }};
+}}
+
+function renderLabTreeSVG(root, currentStepIndex) {{
+    const svg = document.getElementById('labTreeSvg');
+    if (!svg) return;
+    svg.innerHTML = '';
+
+    let leafX = 50;
+    const leafSpacing = 95;
+    const levelHeight = 110;
+    let maxDepth = 0;
+
+    function layout(node, depth) {{
+        if (depth > maxDepth) maxDepth = depth;
+        node.depth = depth;
+        node.y = 60 + depth * levelHeight;
+
+        if (!node.children || node.children.length === 0) {{
+            node.x = leafX;
+            leafX += leafSpacing;
+        }} else {{
+            node.children.forEach(c => layout(c, depth + 1));
+            const first = node.children[0];
+            const last = node.children[node.children.length - 1];
+            node.x = (first.x + last.x) / 2;
+        }}
+    }}
+    layout(root, 0);
+
+    const totalWidth = Math.max(leafX + 50, 750);
+    const totalHeight = 80 + (maxDepth + 1) * levelHeight + 40;
+    svg.setAttribute('viewBox', "0 0 " + totalWidth + " " + totalHeight);
+    svg.style.height = totalHeight + "px";
+
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    defs.innerHTML = '<marker id="labArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706" /></marker><marker id="labArrowRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" /></marker>';
+    svg.appendChild(defs);
+
+    const branchGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    function drawBranches(node) {{
+        if (!node.children) return;
+        node.children.forEach(child => {{
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', node.x);
+            line.setAttribute('y1', node.y + 18);
+            line.setAttribute('x2', child.x);
+            line.setAttribute('y2', child.y - 18);
+            line.setAttribute('stroke', '#0f172a');
+            line.setAttribute('stroke-width', '2');
+            branchGroup.appendChild(line);
+            drawBranches(child);
+        }});
+    }}
+    drawBranches(root);
+    svg.appendChild(branchGroup);
+
+    const activeStep = (currentStepIndex > 0 && currentStepIndex <= labSteps.length) ? labSteps[currentStepIndex - 1] : null;
+    const nodePosMap = {{}};
+
+    const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    function drawNodes(node) {{
+        nodePosMap[node.id] = {{ x: node.x, y: node.y }};
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const isLeaf = node.isLeaf();
+        const isTargetNode = activeStep && activeStep.targetNode.id === node.id;
+
+        if (isLeaf) {{
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', node.x);
+            circle.setAttribute('cy', node.y);
+            circle.setAttribute('r', '17');
+            circle.setAttribute('fill', node.symbol === 'e' ? '#f1f5f9' : '#ffffff');
+            circle.setAttribute('stroke', '#0f172a');
+            circle.setAttribute('stroke-width', '2');
+            g.appendChild(circle);
+
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', node.x);
+            text.setAttribute('y', node.y + 5);
+            text.setAttribute('font-family', monospace);
+            text.setAttribute('font-size', '13');
+            text.setAttribute('font-weight', '700');
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('fill', node.symbol === 'e' ? '#64748b' : '#0f172a');
+            text.textContent = node.symbol === 'e' ? 'ε' : node.symbol;
+            g.appendChild(text);
+        }} else {{
+            const boxW = 68;
+            const boxH = 34;
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', node.x - boxW / 2);
+            rect.setAttribute('y', node.y - boxH / 2);
+            rect.setAttribute('width', boxW);
+            rect.setAttribute('height', boxH);
+            rect.setAttribute('rx', '4');
+            rect.setAttribute('fill', isTargetNode ? '#fef3c7' : '#ffffff');
+            rect.setAttribute('stroke', isTargetNode ? '#d97706' : '#0f172a');
+            rect.setAttribute('stroke-width', isTargetNode ? '2.5' : '2');
+            if (isTargetNode) {{
+                rect.setAttribute('filter', 'drop-shadow(2px 2px 0px #0f172a)');
+            }}
+            g.appendChild(rect);
+
+            const symText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            symText.setAttribute('x', node.x);
+            symText.setAttribute('y', node.y + 3);
+            symText.setAttribute('font-family', 'Inter');
+            symText.setAttribute('font-size', '13');
+            symText.setAttribute('font-weight', '800');
+            symText.setAttribute('text-anchor', 'middle');
+            symText.setAttribute('fill', '#0f172a');
+            symText.textContent = node.symbol;
+            g.appendChild(symText);
+
+            const subText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            subText.setAttribute('x', node.x + 12);
+            subText.setAttribute('y', node.y + 7);
+            subText.setAttribute('font-family', monospace);
+            subText.setAttribute('font-size', '10');
+            subText.setAttribute('font-weight', '700');
+            subText.setAttribute('fill', isTargetNode ? '#d97706' : '#1e40af');
+            subText.textContent = "" + node.id;
+            g.appendChild(subText);
+
+            if (node.production) {{
+                const prodText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                prodText.setAttribute('x', node.x);
+                prodText.setAttribute('y', node.y + boxH / 2 + 13);
+                prodText.setAttribute('font-family', monospace);
+                prodText.setAttribute('font-size', '9');
+                prodText.setAttribute('font-weight', '600');
+                prodText.setAttribute('text-anchor', 'middle');
+                prodText.setAttribute('fill', '#64748b');
+                prodText.textContent = node.production;
+                g.appendChild(prodText);
+            }}
+
+            const attrs = Object.keys(node.attributes);
+            if (attrs.length > 0) {{
+                let badgeY = node.y + boxH / 2 + 27;
+                attrs.forEach(attrName => {{
+                    const isActiveAttr = activeStep && activeStep.targetNode.id === node.id && activeStep.targetAttr === attrName;
+                    
+                    let isEvaluated = false;
+                    let valToShow = '?';
+                    for (let s = 0; s < currentStepIndex && s < labSteps.length; s++) {{
+                        if (labSteps[s].targetNode.id === node.id && labSteps[s].targetAttr === attrName) {{
+                            isEvaluated = true;
+                            valToShow = labSteps[s].val;
+                            break;
+                        }}
+                    }}
+
+                    const attrG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    const bW = 68;
+                    const bH = 17;
+                    const bRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    bRect.setAttribute('x', node.x - bW / 2);
+                    bRect.setAttribute('y', badgeY);
+                    bRect.setAttribute('width', bW);
+                    bRect.setAttribute('height', bH);
+                    bRect.setAttribute('rx', '3');
+                    bRect.setAttribute('fill', isActiveAttr ? '#fef3c7' : (isEvaluated ? '#ecfdf5' : '#f8fafc'));
+                    bRect.setAttribute('stroke', isActiveAttr ? '#d97706' : (isEvaluated ? '#059669' : '#cbd5e1'));
+                    bRect.setAttribute('stroke-width', isActiveAttr ? '2' : '1');
+                    attrG.appendChild(bRect);
+
+                    const aText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    aText.setAttribute('x', node.x);
+                    aText.setAttribute('y', badgeY + 12);
+                    aText.setAttribute('font-family', monospace);
+                    aText.setAttribute('font-size', '9.5');
+                    aText.setAttribute('font-weight', '700');
+                    aText.setAttribute('text-anchor', 'middle');
+                    aText.setAttribute('fill', isActiveAttr ? '#b45309' : (isEvaluated ? '#047857' : '#94a3b8'));
+                    aText.textContent = attrName + ": " + valToShow;
+                    attrG.appendChild(aText);
+
+                    g.appendChild(attrG);
+                    badgeY += 20;
+                }});
+            }}
+        }}
+
+        nodeGroup.appendChild(g);
+        if (node.children) {{
+            node.children.forEach(drawNodes);
+        }}
+    }}
+    drawNodes(root);
+    svg.appendChild(nodeGroup);
+
+    if (activeStep && activeStep.deps.length > 0) {{
+        const arrowGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const tgtPos = nodePosMap[activeStep.targetNode.id];
+
+        activeStep.deps.forEach(dep => {{
+            const srcPos = nodePosMap[dep.id];
+            if (!srcPos || !tgtPos) return;
+            if (srcPos.x === tgtPos.x && srcPos.y === tgtPos.y) return;
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const dx = tgtPos.x - srcPos.x;
+            const dy = tgtPos.y - srcPos.y;
+            const cx = (srcPos.x + tgtPos.x) / 2 - (dy * 0.25);
+            const cy = (srcPos.y + tgtPos.y) / 2 + (dx * 0.25);
+            const d = "M " + srcPos.x + " " + srcPos.y + " Q " + cx + " " + cy + " " + tgtPos.x + " " + tgtPos.y;
+
+            path.setAttribute('d', d);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke', activeStep.flow === 'rtl' ? '#dc2626' : '#d97706');
+            path.setAttribute('stroke-width', '2.5');
+            path.setAttribute('stroke-dasharray', '4 3');
+            path.setAttribute('marker-end', activeStep.flow === 'rtl' ? 'url(#labArrowRed)' : 'url(#labArrow)');
+            arrowGroup.appendChild(path);
+        }});
+        svg.appendChild(arrowGroup);
+    }}
+}}
+
+function renderLabDAGSVG(steps, currentStepIndex) {{
+    const svg = document.getElementById('labDagSvg');
+    if (!svg) return;
+    svg.innerHTML = '';
+
+    const width = svg.clientWidth || 540;
+    const height = 400;
+    svg.setAttribute('viewBox', "0 0 " + width + " " + height);
+
+    if (!steps || steps.length === 0) return;
+
+    const N = steps.length;
+    const cols = Math.min(Math.ceil(Math.sqrt(N * 1.5)), 6);
+    const rows = Math.ceil(N / cols);
+    const colW = (width - 100) / Math.max(cols - 1, 1);
+    const rowH = (height - 90) / Math.max(rows - 1, 1);
+
+    const posMap = {{}};
+    steps.forEach((step, i) => {{
+        const r = Math.floor(i / cols);
+        const c = (r % 2 === 0) ? (i % cols) : (cols - 1 - (i % cols));
+        const x = 50 + c * colW;
+        const y = 45 + r * rowH;
+        posMap[step.vertexKey] = {{ x, y }};
+    }});
+
+    steps.forEach(step => {{
+        const tgtPos = posMap[step.vertexKey];
+        if (!tgtPos) return;
+        step.deps.forEach(dep => {{
+            const dKey = dep.id + "." + dep.attr;
+            const srcPos = posMap[dKey];
+            if (!srcPos) return;
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', srcPos.x);
+            line.setAttribute('y1', srcPos.y);
+            line.setAttribute('x2', tgtPos.x);
+            line.setAttribute('y2', tgtPos.y);
+            line.setAttribute('stroke', '#cbd5e1');
+            line.setAttribute('stroke-width', '1.5');
+            line.setAttribute('stroke-dasharray', '3 3');
+            svg.appendChild(line);
+        }});
+    }});
+
+    steps.forEach((step) => {{
+        const pos = posMap[step.vertexKey];
+        if (!pos) return;
+
+        const isCurrent = (currentStepIndex === step.stepNum);
+        const isEvaluated = (step.stepNum <= currentStepIndex);
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.style.cursor = 'pointer';
+        g.onclick = () => labStepTo(step.stepNum);
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', pos.x);
+        circle.setAttribute('cy', pos.y);
+        circle.setAttribute('r', isCurrent ? '18' : '14');
+        circle.setAttribute('fill', isCurrent ? '#fef3c7' : (isEvaluated ? '#ecfdf5' : '#ffffff'));
+        circle.setAttribute('stroke', isCurrent ? '#d97706' : (isEvaluated ? '#059669' : '#0f172a'));
+        circle.setAttribute('stroke-width', isCurrent ? '2.5' : '1.5');
+        g.appendChild(circle);
+
+        const valText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        valText.setAttribute('x', pos.x);
+        valText.setAttribute('y', pos.y + 4);
+        valText.setAttribute('font-family', monospace);
+        valText.setAttribute('font-size', isCurrent ? '10' : '9');
+        valText.setAttribute('font-weight', '700');
+        valText.setAttribute('text-anchor', 'middle');
+        valText.setAttribute('fill', isCurrent ? '#b45309' : (isEvaluated ? '#047857' : '#94a3b8'));
+        valText.textContent = isEvaluated ? ("" + step.val) : '?';
+        g.appendChild(valText);
+
+        const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lbl.setAttribute('x', pos.x);
+        lbl.setAttribute('y', pos.y - (isCurrent ? 22 : 18));
+        lbl.setAttribute('font-family', monospace);
+        lbl.setAttribute('font-size', '8.5');
+        lbl.setAttribute('font-weight', '600');
+        lbl.setAttribute('text-anchor', 'middle');
+        lbl.setAttribute('fill', isCurrent ? '#d97706' : '#475569');
+        lbl.textContent = step.targetLabel;
+        g.appendChild(lbl);
+
+        svg.appendChild(g);
+    }});
+}}
+
+function renderLabKahnList(steps, currentStepIndex) {{
+    const container = document.getElementById('labKahnList');
+    if (!container) return;
+    container.innerHTML = '';
+
+    steps.forEach(step => {{
+        const isCurrent = (currentStepIndex === step.stepNum);
+        const isEvaluated = (step.stepNum <= currentStepIndex);
+
+        const item = document.createElement('div');
+        item.className = "kahn-step-item " + (isCurrent ? 'active' : '') + " " + (isEvaluated ? 'evaluated' : 'pending');
+        item.onclick = () => labStepTo(step.stepNum);
+
+        let flowTag = '';
+        if (step.flow === 'rtl') {{
+            flowTag = '<span class="status-badge" style="background:#fef2f2; color:#dc2626; border-color:#dc2626; font-size:0.65rem;">R→L</span>';
+        }} else if (step.flow === 'inh') {{
+            flowTag = '<span class="status-badge" style="background:#eff6ff; color:#1e40af; border-color:#1e40af; font-size:0.65rem;">HER</span>';
+        }} else {{
+            flowTag = '<span class="status-badge" style="background:#fef3c7; color:#d97706; border-color:#d97706; font-size:0.65rem;">SIN</span>';
+        }}
+
+        item.innerHTML = '<div style="display: flex; align-items: center; gap: 8px;"><span style="font-weight: 700; min-width: 28px;">#' + step.stepNum + '</span>' + flowTag + '<span style="font-weight: 600;">' + step.targetLabel + '</span></div><div style="font-weight: 700; color: ' + (isEvaluated ? 'var(--text-main)' : 'var(--text-muted)') + ';">' + (isEvaluated ? step.val : '?') + '</div>';
+
+        if (isCurrent) {{
+            setTimeout(() => {{
+                item.scrollIntoView({{ block: 'nearest', behavior: 'smooth' }});
+            }}, 10);
+        }}
+
+        container.appendChild(item);
+    }});
+}}
+
+function renderLabTheory(exId, activeRuleDesc = null) {{
+    const container = document.getElementById('labTheoryContent');
+    if (!container) return;
+    const ex = labExercises[exId];
+    if (!ex) return;
+
+    let attrsRows = ex.theory.attributes.map(a => '<tr><td><strong>' + a.symbol + '</strong></td><td><code>' + a.attr + '</code></td><td><span class="status-badge ' + (a.type.includes('Heredado') ? 'start-tag' : 'final-tag') + '">' + a.type + '</span></td><td>' + a.dtype + '</td><td>' + a.desc + '</td></tr>').join('');
+
+    let rulesRows = ex.theory.rules.map(r => {{
+        const isActive = activeRuleDesc && activeRuleDesc.includes(r.prod);
+        return '<tr class="' + (isActive ? 'rule-row-active' : '') + '"><td><strong>' + r.prod + '</strong></td><td><code>' + r.rules + '</code></td><td><span style="font-size: 0.85rem; color: var(--text-body);">' + r.flow + '</span></td></tr>';
+    }}).join('');
+
+    container.innerHTML = '<div style="margin-bottom: 20px;"><h4 style="font-family: monospace; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">1. Gramática y Propiedades</h4><div class="code-box" style="margin-bottom: 12px;">' + ex.grammar.text + '</div><ul style="padding-left: 20px; font-size: 0.9rem; color: var(--text-body);"><li><strong>G1:</strong> ' + ex.theory.g1 + '</li><li><strong>G2:</strong> ' + ex.theory.g2 + '</li><li><strong>G3:</strong> ' + ex.theory.g3 + '</li></ul></div><div style="margin-bottom: 20px;"><h4 style="font-family: monospace; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">2. Tabla de Atributos</h4><table class="editorial-table"><thead><tr><th>Símbolo</th><th>Atributo</th><th>Tipo</th><th>Tipo de Dato</th><th>Descripción Semántica</th></tr></thead><tbody>' + attrsRows + '</tbody></table></div><div style="margin-bottom: 20px;"><h4 style="font-family: monospace; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">3. Reglas Semánticas (Figura 5.1 Dragon Book)</h4><table class="editorial-table"><thead><tr><th>Producción</th><th>Reglas Semánticas</th><th>Flujo de Atributos</th></tr></thead><tbody>' + rulesRows + '</tbody></table></div><div style="background: var(--bg-subtle); border-left: 4px solid var(--accent-blue); padding: 14px 18px;"><h4 style="font-family: monospace; font-size: 0.85rem; text-transform: uppercase; color: var(--accent-blue); margin-bottom: 6px;">4. Clasificación Formal</h4><div style="font-size: 0.92rem; color: var(--text-body); line-height: 1.6;">' + ex.theory.classificationJust + '</div></div>';
+}}
+
+function renderLabStep(stepIndex) {{
+    labCurrentStep = stepIndex;
+    const total = labSteps.length;
+
+    const badge = document.getElementById('labStepBadge');
+    if (badge) badge.textContent = "PASO " + stepIndex + " / " + total;
+
+    const flowBadge = document.getElementById('labFlowBadge');
+    const slider = document.getElementById('labTimelineSlider');
+    if (slider) {{
+        slider.max = total;
+        slider.value = stepIndex;
+    }}
+
+    const pct = document.getElementById('labProgressPct');
+    if (pct) {{
+        const p = total > 0 ? Math.round((stepIndex / total) * 100) : 0;
+        pct.textContent = p + "%";
+    }}
+
+    const narratorBody = document.getElementById('labNarratorBody');
+
+    if (stepIndex === 0) {{
+        if (flowBadge) {{
+            flowBadge.className = 'status-badge regular-tag';
+            flowBadge.textContent = 'ÁRBOL INICIAL SIN EVALUAR';
+        }}
+        if (narratorBody) {{
+            narratorBody.innerHTML = '<div style="display: flex; align-items: center; gap: 16px;"><div style="font-size: 2.2rem; color: var(--accent-blue);">✦</div><div><h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Árbol Sintáctico Construido (' + labExercises[currentExerciseId].shortName + ')</h4><p style="font-size: 0.92rem; color: var(--text-body); line-height: 1.55;">El parser ha validado la cadena y ensamblado la estructura concreta con <strong>' + labNodeIdCounter + ' nodos</strong>. Todos los atributos se encuentran actualmente en estado pendiente (<code>?</code>). Usa <strong>▶ Siguiente</strong> o <strong>▶ Auto-Play</strong> para ejecutar paso a paso el cómputo según el orden de Kahn.</p></div></div>';
+        }}
+        renderLabTreeSVG(labTreeRoot, 0);
+        renderLabDAGSVG(labSteps, 0);
+        renderLabKahnList(labSteps, 0);
+        renderLabTheory(currentExerciseId, null);
+        return;
+    }}
+
+    const step = labSteps[stepIndex - 1];
+
+    if (flowBadge) {{
+        if (step.flow === 'rtl') {{
+            flowBadge.className = 'status-badge tag-danger';
+            flowBadge.textContent = '⚠️ FLUJO DERECHA-A-IZQUIERDA';
+        }} else if (step.flow === 'inh') {{
+            flowBadge.className = 'status-badge start-tag';
+            flowBadge.textContent = '↓ HEREDADO (DESCENDENTE)';
+        }} else {{
+            flowBadge.className = 'status-badge final-tag';
+            flowBadge.textContent = '↑ SINTETIZADO (ASCENDENTE)';
+        }}
+    }}
+
+    if (narratorBody) {{
+        const depsHtml = step.deps.map(d => '<div style="display: flex; justify-content: space-between; font-family: monospace; font-size: 0.8rem; background: #ffffff; padding: 4px 8px; border: 1px solid #e2e8f0;"><span style="color: var(--text-main); font-weight: 600;">' + d.label + '</span><span style="color: var(--accent-emerald); font-weight: 700;">' + d.val + '</span></div>').join('');
+        const noDepsMsg = step.deps.length === 0 ? '<div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-top: 6px;">Sin dependencias previas (grado de entrada 0).</div>' : '';
+
+        narratorBody.innerHTML = '<div style="display: grid; grid-template-columns: 8fr 4fr; gap: 24px; align-items: start;"><div><div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;"><span class="step-num-badge">Paso ' + step.stepNum + '</span><h4 style="font-family: monospace; font-size: 1.15rem; color: var(--accent-blue);">' + step.targetLabel + ' = <span style="color: var(--text-main); font-weight: 800;">' + step.val + '</span></h4></div><div style="background: var(--bg-subtle); border-left: 3px solid var(--border); padding: 10px 14px; margin-bottom: 12px; font-family: monospace; font-size: 0.88rem;"><div style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase;">Regla Semántica y Cómputo:</div><div style="font-weight: 700; color: var(--text-main); margin-top: 2px;">' + step.ruleDesc + '</div><div style="color: var(--accent-blue); margin-top: 4px;">↳ ' + step.evalFormula + '</div></div><p style="font-size: 0.92rem; color: var(--text-body); line-height: 1.55;">' + step.explanation + '</p></div><div style="background: #f8fafc; border: 1.5px solid var(--border-light); padding: 14px; border-radius: 4px;"><div class="meta-label">Dependencias Previas (' + step.deps.length + '):</div>' + noDepsMsg + '<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">' + depsHtml + '</div></div></div>';
+    }}
+
+    renderLabTreeSVG(labTreeRoot, stepIndex);
+    renderLabDAGSVG(labSteps, stepIndex);
+    renderLabKahnList(labSteps, stepIndex);
+    renderLabTheory(currentExerciseId, step.ruleDesc);
+}}
+
+function initLabIfNeeded() {{
+    if (labInitialized) return;
+    labInitialized = true;
+    selectLabExercise('ex1');
+}}
+
+function selectLabExercise(exId) {{
+    currentExerciseId = exId;
+    const ex = labExercises[exId];
+    if (!ex) return;
+
+    document.querySelectorAll('.lab-ex-btn').forEach(btn => btn.classList.remove('active'));
+    const btn = document.getElementById("btn-" + exId);
+    if (btn) btn.classList.add('active');
+
+    const title = document.getElementById('labConfigTitle');
+    if (title) title.textContent = "Configuración de Entrada: " + ex.name;
+
+    const input = document.getElementById('labInputString');
+    if (input) input.value = ex.defaultInput;
+
+    const presetsBox = document.getElementById('labPresetsContainer');
+    if (presetsBox) {{
+        presetsBox.innerHTML = '';
+        ex.presets.forEach(p => {{
+            const pBtn = document.createElement('button');
+            pBtn.className = 'preset-btn';
+            pBtn.textContent = p;
+            pBtn.onclick = () => applyLabPreset(p);
+            presetsBox.appendChild(pBtn);
+        }});
+    }}
+
+    const paramsBox = document.getElementById('labCustomParams');
+    if (paramsBox) {{
+        if (!ex.paramDefs || ex.paramDefs.length === 0) {{
+            paramsBox.style.display = 'none';
+            paramsBox.innerHTML = '';
+        }} else {{
+            paramsBox.style.display = 'grid';
+            paramsBox.innerHTML = ex.paramDefs.map(p => {{
+                if (p.type === 'select') {{
+                    const opts = p.options.map(o => '<option value="' + o + '" ' + (o == ex.defaultParams[p.id] ? 'selected' : '') + '>' + o + '</option>').join('');
+                    return '<div><label class="meta-label" for="param_' + p.id + '">' + p.label + '</label><select id="param_' + p.id + '" class="input-field" style="width: 100%;" onchange="reparseAndRunLab()">' + opts + '</select></div>';
+                }} else {{
+                    return '<div><label class="meta-label" for="param_' + p.id + '">' + p.label + '</label><input type="' + p.type + '" id="param_' + p.id + '" class="input-field" style="width: 100%;" value="' + ex.defaultParams[p.id] + '" min="' + p.min + '" max="' + p.max + '" step="' + p.step + '" onchange="reparseAndRunLab()"></div>';
+                }}
+            }}).join('');
+        }}
+    }}
+
+    reparseAndRunLab();
+}}
+
+function applyLabPreset(val) {{
+    const input = document.getElementById('labInputString');
+    if (input) input.value = val;
+    reparseAndRunLab();
+}}
+
+function resetLabToDefaults() {{
+    const ex = labExercises[currentExerciseId];
+    if (!ex) return;
+    const input = document.getElementById('labInputString');
+    if (input) input.value = ex.defaultInput;
+
+    if (ex.paramDefs) {{
+        ex.paramDefs.forEach(p => {{
+            const el = document.getElementById("param_" + p.id);
+            if (el) el.value = ex.defaultParams[p.id];
+        }});
+    }}
+    reparseAndRunLab();
+}}
+
+function onLabInputChanged() {{
+    reparseAndRunLab();
+}}
+
+function reparseAndRunLab() {{
+    const ex = labExercises[currentExerciseId];
+    if (!ex) return;
+
+    if (labIsPlaying) labTogglePlay();
+
+    const inputVal = (document.getElementById('labInputString')?.value || '').trim();
+    const errorBox = document.getElementById('labErrorMsg');
+    if (errorBox) {{
+        errorBox.style.display = 'none';
+        errorBox.textContent = '';
+    }}
+
+    const params = {{}};
+    if (ex.paramDefs) {{
+        ex.paramDefs.forEach(p => {{
+            const el = document.getElementById("param_" + p.id);
+            params[p.id] = (el && el.value !== "" && el.value !== undefined) ? el.value : ex.defaultParams[p.id];
+        }});
+    }}
+
+    try {{
+        labTreeRoot = parseInputForExercise(inputVal, currentExerciseId);
+        const {{ rules, allNodesById }} = buildLabSemanticRules(labTreeRoot, currentExerciseId, params);
+        const {{ steps, hasCycle }} = runLabKahnTopologicalSort(rules, allNodesById);
+        
+        if (hasCycle) {{
+            throw new Error("Se ha detectado una definición circular en la SDD (el grafo de dependencias contiene ciclos).");
+        }}
+
+        labSteps = steps;
+        const totalBadge = document.getElementById('labTotalStepsBadge');
+        if (totalBadge) totalBadge.textContent = steps.length + " PASOS";
+
+        labStepTo(0);
+    }} catch (err) {{
+        if (errorBox) {{
+            errorBox.style.display = 'block';
+            errorBox.textContent = err.message || err;
+        }}
+    }}
+}}
+
+function labStepTo(stepIndex) {{
+    if (stepIndex < 0) stepIndex = 0;
+    if (stepIndex > labSteps.length) stepIndex = labSteps.length;
+    renderLabStep(stepIndex);
+}}
+
+function labStepPrev() {{
+    if (labIsPlaying) labTogglePlay();
+    if (labCurrentStep > 0) {{
+        labStepTo(labCurrentStep - 1);
+    }}
+}}
+
+function labStepNext() {{
+    if (labCurrentStep < labSteps.length) {{
+        labStepTo(labCurrentStep + 1);
+    }} else {{
+        if (labIsPlaying) labTogglePlay();
+    }}
+}}
+
+function labStepEnd() {{
+    if (labIsPlaying) labTogglePlay();
+    labStepTo(labSteps.length);
+}}
+
+function labTogglePlay() {{
+    const playBtn = document.getElementById('btnLabPlay');
+    if (labIsPlaying) {{
+        clearInterval(labPlayInterval);
+        labIsPlaying = false;
+        if (playBtn) {{
+            playBtn.classList.remove('active-play');
+            playBtn.textContent = '▶ Auto-Play';
+        }}
+    }} else {{
+        if (labCurrentStep >= labSteps.length) {{
+            labStepTo(0);
+        }}
+        labIsPlaying = true;
+        if (playBtn) {{
+            playBtn.classList.add('active-play');
+            playBtn.textContent = '⏸ Pausar';
+        }}
+        labPlayInterval = setInterval(() => {{
+            if (labCurrentStep < labSteps.length) {{
+                labStepNext();
+            }} else {{
+                labTogglePlay();
+            }}
+        }}, labPlaySpeed);
+    }}
+}}
+
+function changeLabSpeed(speedVal) {{
+    labPlaySpeed = Number(speedVal);
+    if (labIsPlaying) {{
+        clearInterval(labPlayInterval);
+        labPlayInterval = setInterval(() => {{
+            if (labCurrentStep < labSteps.length) {{
+                labStepNext();
+            }} else {{
+                labTogglePlay();
+            }}
+        }}, labPlaySpeed);
+    }}
+}}
+
+function onTimelineSlider(val) {{
+    if (labIsPlaying) labTogglePlay();
+    labStepTo(Number(val));
+}}
+
+function toggleLabTheory() {{
+    const content = document.getElementById('labTheoryContent');
+    const icon = document.getElementById('labTheoryToggleIcon');
+    if (!content) return;
+    if (content.style.display === 'none') {{
+        content.style.display = 'block';
+        if (icon) icon.textContent = '▲ OCULTAR DETALLES';
+    }} else {{
+        content.style.display = 'none';
+        if (icon) icon.textContent = '▼ MOSTRAR DETALLES';
+    }}
+}}
+
+
         window.onload = function() {{
+            initLabIfNeeded();
             // Renderizado inicial
         }};
     </script>

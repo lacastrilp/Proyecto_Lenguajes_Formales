@@ -12,9 +12,9 @@ El informe tecnico requerido en formato PDF para la entrega se encuentra compila
 ## 1. Informacion del Equipo y Entorno
 
 ### 1.1 Integrantes
-- Estudiante 1: lacastrilp (lacastrilp@eafit.edu.co)
-- Estudiante 2: [Nombre Completo del Estudiante 2]
-- Estudiante 3: [Nombre Completo del Estudiante 3 (si aplica)]
+- Luis Alejandro Castrillón Piedrahita (lacastrilp@eafit.edu.co)
+- Manuela Buriticá Guzmán (mburiticg1@eafit.edu.co)
+- Maria Juliana Henao Rua (mjhenaor@eafit.edu.co)
 
 ### 1.2 Entorno de Ejecucion
 - Sistema Operativo: Linux (probado en Ubuntu 22.04 LTS y entornos POSIX x86_64).
@@ -33,53 +33,62 @@ Distribuimos el proyecto en modulos de codigo organizados por items de entrega, 
 
 ```text
 Proyecto_Lenguajes_Formales/
-├── .gitignore
-├── README.md                 # Documentacion oficial en ingles (Seccion 4.2)
-├── README_ES.md              # Documentacion detallada en espanol
-├── report.pdf                # Informe academico obligatorio compilado en PDF (raiz)
-├── INFORME_ITEM4.pdf         # Copia del informe tecnico Item 4
-├── index.html                # Visualizador interactivo web HTML/SVG
-├── main.py                   # Ejecutable CLI para Items 1 y 2 (LL(1) y SLR(1))
-├── sdd_main.py               # Ejecutable CLI para Item 3 (Evaluador de SDD)
-├── run_tests.sh              # Script Bash para ejecucion y verificacion integral
+├── .gitignore                    # Exclusiones de Git
+├── README.md                     # Documentación oficial en inglés
+├── README_ES.md                  # Documentación en español
+├── report.pdf                    # Informe del proyecto en PDF
+├── INFORME_ITEM4.pdf             # Copia del informe en PDF
+├── index.html                    # Visualizador web
+├── main.py                       # Entrada principal de los ítems 1 y 2
+├── sdd_main.py                   # Entrada principal del ítem 3
+├── run_tests.sh                  # Ejecución de pruebas y ejemplos
 │
-├── src/                      # Codigo fuente modularizado por items de la rubrica
+├── src/                          # Código fuente
 │   ├── __init__.py
-│   ├── common/               # Modulos comunes compartidos
+│   │
+│   ├── common/                   # Componentes compartidos
 │   │   ├── __init__.py
-│   │   ├── grammar.py        # Lectura y modelado de gramaticas CFG
-│   │   ├── parse_tree.py     # Nodos del arbol de derivacion y render
-│   │   └── html_formatter.py # Generador del visualizador web interactivo
-│   ├── item1_first_follow/   # Item 1: Calculo de FIRST y FOLLOW
+│   │   ├── grammar.py            # Lectura y representación de gramáticas
+│   │   ├── parse_tree.py         # Nodos y presentación del árbol sintáctico
+│   │   └── html_formatter.py     # Generación del visualizador HTML
+│   │
+│   ├── item1_first_follow/       # Ítem 1: FIRST y FOLLOW
 │   │   ├── __init__.py
-│   │   └── first_follow.py   # Algoritmos de punto fijo y formateador --sets
-│   ├── item2_parsers/        # Item 2: Analizadores sintacticos
+│   │   └── first_follow.py       # Cálculo de conjuntos y formato de --sets
+│   │
+│   ├── item2_parsers/            # Ítem 2: analizadores sintácticos
 │   │   ├── __init__.py
-│   │   ├── ll1_parser.py     # Tabla predictiva y parser LL(1) no recursivo
-│   │   └── slr1_parser.py    # Coleccion LR(0), tablas ACTION/GOTO y parser SLR(1)
-│   └── item3_sdd/            # Item 3: Evaluacion dirigida por sintaxis
+│   │   ├── ll1_parser.py         # Tabla predictiva y parser LL(1)
+│   │   ├── slr1_parser.py        # Autómata LR(0), tablas y parser SLR(1)
+│   │   └── report_output.py      # Formato de tablas, autómata y trazas
+│   │
+│   └── item3_sdd/                # Ítem 3: definición dirigida por la sintaxis
 │       ├── __init__.py
-│       ├── sdd.py            # Representacion pura de datos de la SDD
-│       ├── sdd_evaluator.py  # Grafo de dependencias, orden topologico y ciclos
-│       └── visualizer.py     # Visualizador interactivo en terminal
+│       ├── sdd.py                # Gramática y reglas semánticas como datos
+│       ├── sdd_evaluator.py      # Grafo, evaluación topológica y ciclos
+│       └── visualizer.py         # Visualización paso a paso en terminal
 │
-├── tests/                    # Pruebas automatizadas
+├── tests/                        # Pruebas automatizadas
 │   ├── __init__.py
-│   └── test_examples.py      # Pruebas de Ejemplos 1, 2, 3, evaluacion SDD y ciclos
+│   ├── test_examples.py          # Ejemplos del enunciado y evaluación SDD
+│   ├── test_first_follow.py      # FIRST, FOLLOW, anulabilidad y formato
+│   ├── test_item2_libro.py       # Clasificación y parsers con casos del libro
+│   └── test_ll1_conditions.py    # Condiciones de las gramáticas LL(1)
 │
-├── examples/                 # Gramaticas y cadenas de prueba
-│   ├── README.md             # Guia de ejemplos
-│   ├── grammar_ex1.txt       # Ejemplo 1: SLR(1), no LL(1)
-│   ├── grammar_ex2.txt       # Ejemplo 2: LL(1) y SLR(1)
-│   ├── grammar_ex3.txt       # Ejemplo 3: ni LL(1) ni SLR(1)
-│   ├── grammar_sdd.txt       # Gramatica seleccionada para el Item 3
-│   └── test_strings_sdd.txt  # Cadenas de prueba para el Item 3
+├── examples/                     # Gramáticas y cadenas de prueba
+│   ├── README.md                 # Descripción de los ejemplos
+│   ├── grammar_ex1.txt           # Ejemplo 1: SLR(1), no LL(1)
+│   ├── grammar_ex2.txt           # Ejemplo 2: LL(1) y SLR(1)
+│   ├── grammar_ex3.txt           # Ejemplo 3: ni LL(1) ni SLR(1)
+│   ├── grammar_informe.txt       # Gramática propia de los ítems 1 y 2
+│   ├── grammar_sdd.txt           # Gramática del ítem 3
+│   └── test_strings_sdd.txt      # Cadenas para evaluar la SDD
 │
-└── docs/                     # Enunciados, informes y teoria
-    ├── LF_project_2026_2.pdf # Enunciado oficial
-    ├── LecturesLeng.pdf      # Diapositivas de clase
-    ├── INFORME_ITEM4.md      # Informe tecnico en Markdown
-    └── TEORIA_COMPILADORES.md# Documentacion teorica detallada
+└── docs/                         # Documentación y material de referencia
+    ├── LF_project_2026_2.pdf     # Enunciado del proyecto
+    ├── LecturesLeng.pdf          # Material de clase
+    ├── INFORME_ITEM4.md          # Informe editable en Markdown
+    └── TEORIA_COMPILADORES.md    # Fundamentos teóricos
 ```
 
 ---
@@ -88,8 +97,7 @@ Proyecto_Lenguajes_Formales/
 
 Seguimos las definiciones y algoritmos de Aho, Lam, Sethi y Ullman (*Compilers: Principles, Techniques, and Tools*, 2da edicion, 2006):
 
-1. Conjuntos FIRST y FOLLOW (Seccion 4.4.2):
-Calculamos FIRST y FOLLOW mediante iteraciones de punto fijo en `src/first_follow.py`. Para FIRST procesamos simbolos de izquierda a derecha en cada cuerpo, propagando terminales y controlando la anulabilidad con `e`. Para FOLLOW ubicamos el fin de cadena `$` en el simbolo inicial y propagamos terminales segun el contexto de cada no terminal. La salida del flag `--sets` ordena los no terminales alfabeticamente, y los terminales en orden ASCII, luego `e`, y finalmente `$`.
+1. Conjuntos FIRST y FOLLOW (Sección 4.4.2): Calculamos FIRST y FOLLOW mediante iteraciones de punto fijo en `src/item1_first_follow/first_follow.py`, hasta que ningún conjunto cambia. Para FIRST procesamos símbolos de izquierda a derecha en cada cuerpo, incorporando terminales y avanzando mientras el símbolo actual pueda derivar la cadena vacía, representada por `e`. La función `first_of_string` extiende este cálculo a secuencias de símbolos e incluye `e` cuando todos son anulables. Para FOLLOW agregamos `$` al conjunto del símbolo inicial `S`, incorporamos FIRST del sufijo sin `e` y propagamos FOLLOW de la cabeza cuando dicho sufijo es anulable o vacío. La salida del flag `--sets` ordena los no terminales alfabéticamente y los terminales en orden ASCII, seguidos de `e` y finalmente `$`, si pertenecen al conjunto.
 
 2. Tabla de Parseo Predictivo LL(1) (Algoritmo 4.31, Seccion 4.4.3):
 En `src/ll1_parser.py` construimos la tabla bidimensional $M[A, a]$. Para cada produccion $A \rightarrow \alpha$, agregamos la regla a $M[A, a]$ para cada terminal $a \in \text{FIRST}(\alpha)$. Si $\alpha \Rightarrow^* \epsilon$, agregamos la regla a $M[A, b]$ para cada $b \in \text{FOLLOW}(A)$. Si una celda recibe mas de una regla, la gramatica no es LL(1). No aplicamos transformaciones previas a la gramatica (como eliminacion de recursion izquierda), respetando la restriccion del enunciado.
@@ -105,7 +113,7 @@ En `src/sdd.py` y `src/sdd_evaluator.py` modelamos las reglas semanticas como da
 
 ---
 
-## 4. Instrucciones de Compilacion y Ejecucion
+## 4. Instrucciones de Compilacion y Ejecucion en Linux
 
 ### 4.1 Ejecucion de Items 1 y 2 (`main.py`)
 
@@ -310,3 +318,37 @@ La convencion del enunciado establece que las alternativas se separan por espaci
 
 4. Resolucion de rutas en los scripts CLI:
 Al invocar `main.py` desde carpetas arbitrarias, los archivos relativos fallaban. Implementamos una comprobacion con `os.path.exists` que busca automaticamente en `examples/` si el archivo no esta en el directorio de ejecucion.
+
+## Cómo ejecutar en Windows
+
+No se necesita compilación ni paso de construcción. Instala Python 3.12+.
+```
+### Ítems 1 y 2: Analizadores LL(1) y SLR(1)
+La gramática se lee por entrada estándar, o desde un archivo pasado como argumento:
+```powershell
+python main.py --sets examples\grammar_ex2.txt
+
+python main.py examples\grammar_ex1.txt
+
+@"
+3
+S -> AB
+A -> aA d
+B -> bBc e
+"@ | python main.py
+```
+
+### Ítem 3: Evaluador de Definiciones Dirigidas por la Sintaxis (SDD)
+Evalúa árboles de análisis anotados usando ordenamiento topológico sobre grafos de dependencias:
+```powershell
+python sdd_main.py examples\test_strings_sdd.txt
+
+python sdd_main.py --parser ll1 examples\test_strings_sdd.txt
+
+python sdd_main.py --interactive examples\test_strings_sdd.txt
+
+@"
+1
+
+"@ | python sdd_main.py --circular
+```

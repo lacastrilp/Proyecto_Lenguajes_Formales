@@ -2,8 +2,8 @@
 
 ## Group members
 - Luis Alejandro Castrillón Piedrahita (lacastrilp@eafit.edu.co)
-- TODO: full name 2 (email2@eafit.edu.co)
-- TODO (optional): full name 3 (email3@eafit.edu.co)
+- Manuela Buriticá Guzmán (mburiticg1@eafit.edu.co)
+- Maria Juliana Henao Rua (mjhenaor@eafit.edu.co)
 
 ## Environment
 - **Operating System:** Linux x86_64 (Debian / Kali GNU/Linux)
@@ -60,6 +60,40 @@ python3 sdd_main.py --circular << 'EOF'
 1
 
 EOF
+```
+
+## How to Run on Windows
+
+No compilation or build step is needed. Install Python 3.12+.
+
+### Items 1 and 2: LL(1) and SLR(1) Parsers
+Grammar read from standard input, or from a file passed as an argument:
+```powershell
+python main.py --sets examples\grammar_ex2.txt
+
+python main.py examples\grammar_ex1.txt
+
+@"
+3
+S -> AB
+A -> aA d
+B -> bBc e
+"@ | python main.py
+```
+
+### Item 3: Syntax-Directed Definition (SDD) Evaluator
+Evaluates annotated parse trees using topological sort on dependency graphs:
+```powershell
+python sdd_main.py examples\test_strings_sdd.txt
+
+python sdd_main.py --parser ll1 examples\test_strings_sdd.txt
+
+python sdd_main.py --interactive examples\test_strings_sdd.txt
+
+@"
+1
+
+"@ | python sdd_main.py --circular
 ```
 
 ### Optional Interactive Web Visualizer

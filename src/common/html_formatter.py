@@ -2540,7 +2540,7 @@ function renderLabTreeSVG(root, currentStepIndex) {{
             const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             text.setAttribute('x', node.x);
             text.setAttribute('y', node.y + 5);
-            text.setAttribute('font-family', monospace);
+            text.setAttribute('font-family', 'JetBrains Mono');
             text.setAttribute('font-size', '13');
             text.setAttribute('font-weight', '700');
             text.setAttribute('text-anchor', 'middle');
@@ -2578,7 +2578,7 @@ function renderLabTreeSVG(root, currentStepIndex) {{
             const subText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             subText.setAttribute('x', node.x + 12);
             subText.setAttribute('y', node.y + 7);
-            subText.setAttribute('font-family', monospace);
+            subText.setAttribute('font-family', 'JetBrains Mono');
             subText.setAttribute('font-size', '10');
             subText.setAttribute('font-weight', '700');
             subText.setAttribute('fill', isTargetNode ? '#d97706' : '#1e40af');
@@ -2589,7 +2589,7 @@ function renderLabTreeSVG(root, currentStepIndex) {{
                 const prodText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 prodText.setAttribute('x', node.x);
                 prodText.setAttribute('y', node.y + boxH / 2 + 13);
-                prodText.setAttribute('font-family', monospace);
+                prodText.setAttribute('font-family', 'JetBrains Mono');
                 prodText.setAttribute('font-size', '9');
                 prodText.setAttribute('font-weight', '600');
                 prodText.setAttribute('text-anchor', 'middle');
@@ -2631,7 +2631,7 @@ function renderLabTreeSVG(root, currentStepIndex) {{
                     const aText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     aText.setAttribute('x', node.x);
                     aText.setAttribute('y', badgeY + 12);
-                    aText.setAttribute('font-family', monospace);
+                    aText.setAttribute('font-family', 'JetBrains Mono');
                     aText.setAttribute('font-size', '9.5');
                     aText.setAttribute('font-weight', '700');
                     aText.setAttribute('text-anchor', 'middle');
@@ -2750,7 +2750,7 @@ function renderLabDAGSVG(steps, currentStepIndex) {{
         const valText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         valText.setAttribute('x', pos.x);
         valText.setAttribute('y', pos.y + 4);
-        valText.setAttribute('font-family', monospace);
+        valText.setAttribute('font-family', 'JetBrains Mono');
         valText.setAttribute('font-size', isCurrent ? '10' : '9');
         valText.setAttribute('font-weight', '700');
         valText.setAttribute('text-anchor', 'middle');
@@ -2761,7 +2761,7 @@ function renderLabDAGSVG(steps, currentStepIndex) {{
         const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         lbl.setAttribute('x', pos.x);
         lbl.setAttribute('y', pos.y - (isCurrent ? 22 : 18));
-        lbl.setAttribute('font-family', monospace);
+        lbl.setAttribute('font-family', 'JetBrains Mono');
         lbl.setAttribute('font-size', '8.5');
         lbl.setAttribute('font-weight', '600');
         lbl.setAttribute('text-anchor', 'middle');
@@ -2799,7 +2799,9 @@ function renderLabKahnList(steps, currentStepIndex) {{
 
         if (isCurrent) {{
             setTimeout(() => {{
-                item.scrollIntoView({{ block: 'nearest', behavior: 'smooth' }});
+                if (item.scrollIntoView) {{
+                    item.scrollIntoView({{ block: 'nearest', behavior: 'smooth' }});
+                }}
             }}, 10);
         }}
 

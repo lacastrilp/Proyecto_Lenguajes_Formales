@@ -1081,7 +1081,7 @@ R -> ,L e</div>
       e {lexval=e}</div>
                     <div class="meta-label">Orden de Evaluación Topológico:</div>
                     <div style="font-family: 'JetBrains Mono'; font-size: 0.85rem; color: var(--accent-blue); margin-top: 6px;">
-                        e_7.lexval, R_8.val, 1_2.lexval, L_16.d, +_4.lexval, (_1.lexval, )_12.lexval, e_14.lexval, 0_5.lexval, R_15.val, B_6.val, R_15.d, B_13.d, L_9.val, R_15.max_d, L_11.d, R_10.val, B_3.d, R_10.d, B_3.max_d, B_3.val, L_9.d, L_11.val, R_8.d, B_6.d, B_13.val, R_8.max_d, B_6.max_d, L_16.val, L_9.max_d, S_17.val, R_10.max_d, L_11.max_d, B_13.max_d, L_16.max_d, S_17.max_d
+                        R_8.val, +_4.lexval, (_1.lexval, e_14.lexval, L_16.d, )_12.lexval, 0_5.lexval, e_7.lexval, R_15.val, B_6.val, 1_2.lexval, B_13.d, R_15.d, L_9.val, L_11.d, R_15.max_d, R_10.val, B_3.d, R_10.d, B_3.val, B_3.max_d, L_9.d, L_11.val, R_8.d, B_6.d, B_13.val, R_8.max_d, B_6.max_d, L_16.val, L_9.max_d, S_17.val, R_10.max_d, L_11.max_d, B_13.max_d, L_16.max_d, S_17.max_d
                     </div>
                 </div>
             </div>
@@ -1132,8 +1132,8 @@ R -> ,L e</div>
                 <div class="proof-card-body">
                     <p style="color: var(--text-body); margin-bottom: 14px;">Al introducir temporalmente la regla circular <code>L.d = S.val + 1</code> en la producción <code>S -> L</code>, el algoritmo de ordenamiento topológico no puede resolver todos los nodos y la búsqueda en profundidad (DFS) aísla el ciclo exacto:</p>
                     <div class="code-box" style="border-color: var(--accent-red); color: var(--accent-red); background: #fff5f5;">Error: Error: La definición dirigida por la sintaxis (SDD) es CIRCULAR.
-Ciclo detectado en las dependencias: L_5.val -> S_6.val -> L_5.d -> B_2.d -> B_2.val -> L_5.val
-Ciclo identificado: L_5.val -> S_6.val -> L_5.d -> B_2.d -> B_2.val -> L_5.val</div>
+Ciclo detectado en las dependencias: L_5.d -> B_2.d -> B_2.val -> L_5.val -> S_6.val -> L_5.d
+Ciclo identificado: L_5.d -> B_2.d -> B_2.val -> L_5.val -> S_6.val -> L_5.d</div>
                 </div>
             </div>
         </main>
@@ -2434,7 +2434,7 @@ function renderLabTreeSVG(root, currentStepIndex) {
             const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             text.setAttribute('x', node.x);
             text.setAttribute('y', node.y + 5);
-            text.setAttribute('font-family', monospace);
+            text.setAttribute('font-family', 'JetBrains Mono');
             text.setAttribute('font-size', '13');
             text.setAttribute('font-weight', '700');
             text.setAttribute('text-anchor', 'middle');
@@ -2472,7 +2472,7 @@ function renderLabTreeSVG(root, currentStepIndex) {
             const subText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             subText.setAttribute('x', node.x + 12);
             subText.setAttribute('y', node.y + 7);
-            subText.setAttribute('font-family', monospace);
+            subText.setAttribute('font-family', 'JetBrains Mono');
             subText.setAttribute('font-size', '10');
             subText.setAttribute('font-weight', '700');
             subText.setAttribute('fill', isTargetNode ? '#d97706' : '#1e40af');
@@ -2483,7 +2483,7 @@ function renderLabTreeSVG(root, currentStepIndex) {
                 const prodText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 prodText.setAttribute('x', node.x);
                 prodText.setAttribute('y', node.y + boxH / 2 + 13);
-                prodText.setAttribute('font-family', monospace);
+                prodText.setAttribute('font-family', 'JetBrains Mono');
                 prodText.setAttribute('font-size', '9');
                 prodText.setAttribute('font-weight', '600');
                 prodText.setAttribute('text-anchor', 'middle');
@@ -2525,7 +2525,7 @@ function renderLabTreeSVG(root, currentStepIndex) {
                     const aText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     aText.setAttribute('x', node.x);
                     aText.setAttribute('y', badgeY + 12);
-                    aText.setAttribute('font-family', monospace);
+                    aText.setAttribute('font-family', 'JetBrains Mono');
                     aText.setAttribute('font-size', '9.5');
                     aText.setAttribute('font-weight', '700');
                     aText.setAttribute('text-anchor', 'middle');
@@ -2644,7 +2644,7 @@ function renderLabDAGSVG(steps, currentStepIndex) {
         const valText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         valText.setAttribute('x', pos.x);
         valText.setAttribute('y', pos.y + 4);
-        valText.setAttribute('font-family', monospace);
+        valText.setAttribute('font-family', 'JetBrains Mono');
         valText.setAttribute('font-size', isCurrent ? '10' : '9');
         valText.setAttribute('font-weight', '700');
         valText.setAttribute('text-anchor', 'middle');
@@ -2655,7 +2655,7 @@ function renderLabDAGSVG(steps, currentStepIndex) {
         const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         lbl.setAttribute('x', pos.x);
         lbl.setAttribute('y', pos.y - (isCurrent ? 22 : 18));
-        lbl.setAttribute('font-family', monospace);
+        lbl.setAttribute('font-family', 'JetBrains Mono');
         lbl.setAttribute('font-size', '8.5');
         lbl.setAttribute('font-weight', '600');
         lbl.setAttribute('text-anchor', 'middle');
@@ -2693,7 +2693,9 @@ function renderLabKahnList(steps, currentStepIndex) {
 
         if (isCurrent) {
             setTimeout(() => {
-                item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                if (item.scrollIntoView) {
+                    item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                }
             }, 10);
         }
 

@@ -33,56 +33,62 @@ Distribuimos el proyecto en modulos de codigo organizados por items de entrega, 
 
 ```text
 Proyecto_Lenguajes_Formales/
-├── .gitignore
-├── README.md                 # Documentacion oficial en ingles (Seccion 4.2)
-├── README_ES.md              # Documentacion detallada en espanol
-├── report.pdf                # Informe academico obligatorio compilado en PDF (raiz)
-├── INFORME_ITEM4.pdf         # Copia del informe tecnico Item 4
-├── index.html                # Visualizador interactivo web HTML/SVG
-├── main.py                   # Ejecutable CLI para Items 1 y 2 (LL(1) y SLR(1))
-├── sdd_main.py               # Ejecutable CLI para Item 3 (Evaluador de SDD)
-├── run_tests.sh              # Script Bash para ejecucion y verificacion integral
+├── .gitignore                    # Exclusiones de Git
+├── README.md                     # Documentación oficial en inglés
+├── README_ES.md                  # Documentación en español
+├── report.pdf                    # Informe del proyecto en PDF
+├── INFORME_ITEM4.pdf             # Copia del informe en PDF
+├── index.html                    # Visualizador web
+├── main.py                       # Entrada principal de los ítems 1 y 2
+├── sdd_main.py                   # Entrada principal del ítem 3
+├── run_tests.sh                  # Ejecución de pruebas y ejemplos
 │
-├── src/                      # Codigo fuente modularizado por items de la rubrica
+├── src/                          # Código fuente
 │   ├── __init__.py
-│   ├── common/               # Modulos comunes compartidos
+│   │
+│   ├── common/                   # Componentes compartidos
 │   │   ├── __init__.py
-│   │   ├── grammar.py        # Lectura y modelado de gramaticas CFG
-│   │   ├── parse_tree.py     # Nodos del arbol de derivacion y render
-│   │   └── html_formatter.py # Generador del visualizador web interactivo
-│   ├── item1_first_follow/   # Item 1: Calculo de FIRST y FOLLOW
+│   │   ├── grammar.py            # Lectura y representación de gramáticas
+│   │   ├── parse_tree.py         # Nodos y presentación del árbol sintáctico
+│   │   └── html_formatter.py     # Generación del visualizador HTML
+│   │
+│   ├── item1_first_follow/       # Ítem 1: FIRST y FOLLOW
 │   │   ├── __init__.py
-│   │   └── first_follow.py   # Algoritmos de punto fijo y formateador --sets
-│   ├── item2_parsers/        # Item 2: Analizadores sintacticos
+│   │   └── first_follow.py       # Cálculo de conjuntos y formato de --sets
+│   │
+│   ├── item2_parsers/            # Ítem 2: analizadores sintácticos
 │   │   ├── __init__.py
-│   │   ├── ll1_parser.py     # Tabla predictiva y parser LL(1) no recursivo
-│   │   └── slr1_parser.py    # Coleccion LR(0), tablas ACTION/GOTO y parser SLR(1)
-│   └── item3_sdd/            # Item 3: Evaluacion dirigida por sintaxis
+│   │   ├── ll1_parser.py         # Tabla predictiva y parser LL(1)
+│   │   ├── slr1_parser.py        # Autómata LR(0), tablas y parser SLR(1)
+│   │   └── report_output.py      # Formato de tablas, autómata y trazas
+│   │
+│   └── item3_sdd/                # Ítem 3: definición dirigida por la sintaxis
 │       ├── __init__.py
-│       ├── sdd.py            # Representacion pura de datos de la SDD
-│       ├── sdd_evaluator.py  # Grafo de dependencias, orden topologico y ciclos
-│       └── visualizer.py     # Visualizador interactivo en terminal
+│       ├── sdd.py                # Gramática y reglas semánticas como datos
+│       ├── sdd_evaluator.py      # Grafo, evaluación topológica y ciclos
+│       └── visualizer.py         # Visualización paso a paso en terminal
 │
-├── tests/                    # Pruebas automatizadas
+├── tests/                        # Pruebas automatizadas
 │   ├── __init__.py
-│   ├── test_examples.py      # Ejemplos del enunciado y pruebas de SDD
-│   ├── test_first_follow.py  # Pruebas adicionales de FIRST, FOLLOW y formato
-│   ├── test_item2_libro.py   # Clasificación y parsers con casos del libro
-│   └── test_ll1_conditions.py# Verificación de las condiciones LL(1)
+│   ├── test_examples.py          # Ejemplos del enunciado y evaluación SDD
+│   ├── test_first_follow.py      # FIRST, FOLLOW, anulabilidad y formato
+│   ├── test_item2_libro.py       # Clasificación y parsers con casos del libro
+│   └── test_ll1_conditions.py    # Condiciones de las gramáticas LL(1)
 │
-├── examples/                 # Gramaticas y cadenas de prueba
-│   ├── README.md             # Guia de ejemplos
-│   ├── grammar_ex1.txt       # Ejemplo 1: SLR(1), no LL(1)
-│   ├── grammar_ex2.txt       # Ejemplo 2: LL(1) y SLR(1)
-│   ├── grammar_ex3.txt       # Ejemplo 3: ni LL(1) ni SLR(1)
-│   ├── grammar_sdd.txt       # Gramatica seleccionada para el Item 3
-│   └── test_strings_sdd.txt  # Cadenas de prueba para el Item 3
+├── examples/                     # Gramáticas y cadenas de prueba
+│   ├── README.md                 # Descripción de los ejemplos
+│   ├── grammar_ex1.txt           # Ejemplo 1: SLR(1), no LL(1)
+│   ├── grammar_ex2.txt           # Ejemplo 2: LL(1) y SLR(1)
+│   ├── grammar_ex3.txt           # Ejemplo 3: ni LL(1) ni SLR(1)
+│   ├── grammar_informe.txt       # Gramática propia de los ítems 1 y 2
+│   ├── grammar_sdd.txt           # Gramática del ítem 3
+│   └── test_strings_sdd.txt      # Cadenas para evaluar la SDD
 │
-└── docs/                     # Enunciados, informes y teoria
-    ├── LF_project_2026_2.pdf # Enunciado oficial
-    ├── LecturesLeng.pdf      # Diapositivas de clase
-    ├── INFORME_ITEM4.md      # Informe tecnico en Markdown
-    └── TEORIA_COMPILADORES.md# Documentacion teorica detallada
+└── docs/                         # Documentación y material de referencia
+    ├── LF_project_2026_2.pdf     # Enunciado del proyecto
+    ├── LecturesLeng.pdf          # Material de clase
+    ├── INFORME_ITEM4.md          # Informe editable en Markdown
+    └── TEORIA_COMPILADORES.md    # Fundamentos teóricos
 ```
 
 ---

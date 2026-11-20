@@ -70,8 +70,8 @@ La totalidad de los algoritmos implementados en el paquete \texttt{src/} se fund
 
 \begin{enumerate}
     \item \textbf{Cálculo de Conjuntos $\text{FIRST}$ y $\text{FOLLOW}$ (Sección 4.4.2):}
-    Implementado en \texttt{src/item1\_first\_follow/first\_follow.py}.
     \begin{itemize}
+        \item Implementado en \texttt{src/item1\_first\_follow/first\_follow.py}.
         \item $\text{FIRST}(X)$: Reglas de la Sección 4.4.2 iteradas hasta punto fijo. Para terminales $\text{FIRST}(a)=\{a\}$; para $X \rightarrow \epsilon$, $\epsilon \in \text{FIRST}(X)$; para $X \rightarrow Y_1 Y_2 \dots Y_k$, propaga $\text{FIRST}(Y_i) \setminus \{\epsilon\}$ mientras los símbolos precedentes sean anulables.
         \item $\text{FIRST}(X_1 X_2 \dots X_n)$: Extensión a cadenas arbitrarias de símbolos gramaticales requerida para la construcción de la tabla LL(1).
         \item $\text{FOLLOW}(A)$: Inicializa $\text{FOLLOW}(S) = \{\$\}$. Propaga $\text{FIRST}(\beta) \setminus \{\epsilon\}$ para producciones $A \rightarrow \alpha B \beta$, y propaga $\text{FOLLOW}(A)$ hacia $\text{FOLLOW}(B)$ cuando $\beta \Rightarrow^* \epsilon$.

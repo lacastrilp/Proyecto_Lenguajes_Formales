@@ -49,3 +49,10 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+docs/.texbuild/

@@ -562,95 +562,367 @@
         </header>
 
         <nav class="tactile-nav">
-            <button class="nav-btn active" onclick="switchTab('tab-grammar', this)">1. Gramáticas & FIRST/FOLLOW</button>
-            <button class="nav-btn" onclick="switchTab('tab-lr0-graph', this)">2. Autómata LR(0) & Tablas SLR(1)/LL(1)</button>
-            <button class="nav-btn" onclick="switchTab('tab-traces', this)">3. Trazas de Parseo Paso a Paso</button>
-            <button class="nav-btn" style="border-color: var(--accent-blue); background: #eff6ff;" onclick="switchTab('tab-sdd-lab', this)">★ 4. Laboratorio SDD Paso a Paso</button>
+            <button class="nav-btn active" style="border-color: var(--accent-emerald); background: #ecfdf5;" onclick="switchTab('tab-ff-lab', this)">★ 1. Lab FIRST & FOLLOW</button>
+            <button class="nav-btn" style="border-color: var(--accent-amber); background: #fffbeb;" onclick="switchTab('tab-parsers-lab', this)">★ 2. Lab Parsers LL(1) & SLR(1)</button>
+            <button class="nav-btn" style="border-color: var(--accent-blue); background: #eff6ff;" onclick="switchTab('tab-sdd-lab', this)">★ 3. Lab SDD Paso a Paso</button>
+            <button class="nav-btn" onclick="switchTab('tab-lr0-graph', this)">4. Autómata LR(0) & Tablas</button>
             <button class="nav-btn" onclick="switchTab('tab-sdd-eval', this)">5. Evaluador SDD Base & DAG</button>
             <button class="nav-btn" onclick="switchTab('tab-suite', this)">6. Verificación & Circularidad</button>
         </nav>
 
-        <!-- TAB 1: GRAMATICAS Y FIRST / FOLLOW -->
-        <main id="tab-grammar" class="tab-pane active">
-            <div class="proof-card">
-                <div class="proof-card-header">
-                    <div class="step-meta-group">
-                        <span class="step-num-badge">ITEM 1 & 2</span>
-                        <h3 class="step-title">Gramática Propia Seleccionada</h3>
+
+        <!-- TAB 1: LABORATORIO INTERACTIVO FIRST & FOLLOW -->
+        <main id="tab-ff-lab" class="tab-pane active">
+            <!-- HERO DEL LABORATORIO -->
+            <div class="proof-card" style="margin-bottom: 24px; border-left: 6px solid var(--accent-emerald);">
+                <div class="proof-card-body" style="padding: 20px 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <span class="editorial-tag" style="margin-bottom: 6px; color: var(--accent-emerald); border-color: var(--accent-emerald);">ALGORITMO ITERATIVO DE PUNTO FIJO • SECCIÓN 4.4.2</span>
+                            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.85rem; font-weight: 800; margin-bottom: 8px;">
+                                Laboratorio Interactivo: FIRST() y FOLLOW()
+                            </h2>
+                            <p style="color: var(--text-body); max-width: 860px; font-size: 0.95rem;">
+                                Calcula paso a paso los conjuntos FIRST y FOLLOW para cualquier gramática libre de contexto con soporte de producciones &epsilon; (<code>e</code>). Observa en tiempo real cómo se descubren los símbolos anulables y cómo se propagan los conjuntos hasta alcanzar el punto fijo de acuerdo con el texto guía de Aho et al.
+                            </p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="status-badge tag-new" style="font-size: 0.8rem; background: #ecfdf5; color: #047857; border-color: #059669;">SECCIÓN 4.4.2 COMPLETA</span>
+                        </div>
                     </div>
-                    <span class="status-badge tag-new">LL(1) & SLR(1) VÁLIDA</span>
-                </div>
-                <div class="proof-card-body">
-                    <div class="code-box">3
-S -> L
-L -> bR
-R -> ,L e</div>
-                    <table class="proof-grid-table">
-                        <thead>
-                            <tr>
-                                <th>No Terminal & Conjunto Calculado</th>
-                                <th>Regla y Justificación Formal (Dragon Book Sec. 4.4.2)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="proof-row">
-                                <td class="calc-col"><span class="math-expr">First(S) = {b}</span><br><span class="math-sub">First(L) = {b}</span><br><span class="math-sub">First(R) = {,, e}</span></td>
-                                <td class="just-col"><div class="rule-title">Cálculo de FIRST</div><div class="rule-desc">Propagación izquierda de terminales. R deriva e directamente. S y L heredan First(b) = {b}.</div></td>
-                            </tr>
-                            <tr class="proof-row">
-                                <td class="calc-col"><span class="math-expr">Follow(S) = {S}</span><br><span class="math-sub">Follow(L) = {S}</span><br><span class="math-sub">Follow(R) = {S}</span></td>
-                                <td class="just-col"><div class="rule-title">Cálculo de FOLLOW</div><div class="rule-desc">S recibe $ por ser símbolo inicial. En S -> L, Follow(L) contiene Follow(S). En L -> bR, Follow(R) contiene Follow(L).</div></td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
 
-            <div class="proof-card">
+            <!-- SELECTOR DE GRAMATICAS PRECONFIGURADAS -->
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
+                <button class="lab-ex-btn active" id="btn-ff-own" onclick="selectFFPreset('p_own')">
+                    <span class="ex-num">PRESET 1 • PROPIA</span>
+                    <span class="ex-name">Listas Delimitadas por Comas</span>
+                    <span class="ex-badge l-attr">LL(1) & SLR(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-ff-ex1" onclick="selectFFPreset('p_ex1')">
+                    <span class="ex-num">PRESET 2 • EJEMPLO 1</span>
+                    <span class="ex-name">Expresiones Aritméticas (Rec. Izq.)</span>
+                    <span class="ex-badge no-l-attr">SLR(1), no LL(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-ff-ex2" onclick="selectFFPreset('p_ex2')">
+                    <span class="ex-num">PRESET 3 • EJEMPLO 2</span>
+                    <span class="ex-name">Gramática con &epsilon; (e)</span>
+                    <span class="ex-badge l-attr">LL(1) & SLR(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-ff-ex3" onclick="selectFFPreset('p_ex3')">
+                    <span class="ex-num">PRESET 4 • EJEMPLO 3</span>
+                    <span class="ex-name">Gramática Ambigua (S -> SS a)</span>
+                    <span class="ex-badge no-l-attr">Ni LL(1) ni SLR(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-ff-ex430" onclick="selectFFPreset('p_ex430')">
+                    <span class="ex-num">PRESET 5 • EJERCICIO 4.30</span>
+                    <span class="ex-name">Expresiones Factorizadas</span>
+                    <span class="ex-badge l-attr">Dragon Book</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-ff-null" onclick="selectFFPreset('p_null')">
+                    <span class="ex-num">PRESET 6 • ANULABLES</span>
+                    <span class="ex-name">Cadena de No Terminales &epsilon;</span>
+                    <span class="ex-badge l-attr">Multi-Epsilon</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-ff-sdd" onclick="selectFFPreset('p_sdd')">
+                    <span class="ex-num">PRESET 7 • SDD</span>
+                    <span class="ex-name">Gramática SDD Oficial (Item 3)</span>
+                    <span class="ex-badge l-attr">Item 3 Oficial</span>
+                </button>
+            </div>
+
+            <!-- ENTRADA DE GRAMATICA Y ACCION -->
+            <div class="proof-card" style="margin-bottom: 24px;">
                 <div class="proof-card-header">
                     <div class="step-meta-group">
-                        <span class="step-num-badge">CLASIFICACIÓN</span>
-                        <h3 class="step-title">Evaluación de Ejemplos del Documento Oficial</h3>
+                        <span class="step-num-badge">ENTRADA DE GRAMÁTICA</span>
+                        <h3 class="step-title" id="ffConfigTitle">Gramática Libre de Contexto (CFG)</h3>
                     </div>
+                    <button class="nav-btn" style="padding: 6px 14px; font-size: 0.75rem;" onclick="resetFFPreset()">↺ Restaurar Preset</button>
                 </div>
                 <div class="proof-card-body">
-                    <table class="editorial-table">
-                        <thead>
-                            <tr>
-                                <th>Ejemplo</th>
-                                <th>Gramática</th>
-                                <th>Condición LL(1)</th>
-                                <th>Condición SLR(1)</th>
-                                <th>Diagnóstico</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Ejemplo 1</strong></td>
-                                <td><code>S -> S+T T | T -> T*F F | F -> (S) i</code></td>
-                                <td><span class="status-badge tag-danger">NO</span></td>
-                                <td><span class="status-badge tag-new">SÍ</span></td>
-                                <td>Grammar is SLR(1). (Recursión izquierda imposibilita LL(1))</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Ejemplo 2</strong></td>
-                                <td><code>S -> AB | A -> aA d | B -> bBc e</code></td>
-                                <td><span class="status-badge tag-new">SÍ</span></td>
-                                <td><span class="status-badge tag-new">SÍ</span></td>
-                                <td>Select a parser (T: for LL(1), B: for SLR(1), Q: quit)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Ejemplo 3</strong></td>
-                                <td><code>S -> SS a</code></td>
-                                <td><span class="status-badge tag-danger">NO</span></td>
-                                <td><span class="status-badge tag-danger">NO</span></td>
-                                <td>Grammar is neither LL(1) nor SLR(1). (Ambigua)</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div style="display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start;">
+                        <div>
+                            <label class="meta-label" for="ffGrammarInput">Definición de Producciones (Formato: n + producciones separadas por espacio, vacía con 'e')</label>
+                            <textarea id="ffGrammarInput" class="input-field" style="width: 100%; height: 110px; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 600; line-height: 1.45;" oninput="onFFGrammarEdited()"></textarea>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px; min-width: 220px;">
+                            <button class="input-btn" style="height: 48px; background: var(--accent-emerald); border-color: var(--border); color: #fff;" onclick="recomputeFF(true)">Calcular FIRST & FOLLOW</button>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.35;">Símbolo inicial 'S'. Terminales en minúsculas/símbolos. 'e' representa &epsilon;.</span>
+                        </div>
+                    </div>
+                    <div id="ffErrorMsg" style="display: none; margin-top: 12px; padding: 10px 14px; background: #fef2f2; border: 1.5px solid var(--accent-red); color: var(--accent-red); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;"></div>
+                </div>
+            </div>
+
+            <!-- CONTROLES DE REPRODUCCION Y TIMELINE -->
+            <div class="proof-card" style="margin-bottom: 24px; border-top: 4px solid var(--accent-emerald);">
+                <div class="proof-card-header" style="flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <button class="transport-btn" title="Paso 0 (Inicial)" onclick="ffStepTo(0)">⏮ Inicio</button>
+                        <button class="transport-btn" title="Paso Anterior" onclick="ffStepPrev()">◀ Anterior</button>
+                        <button class="transport-btn active-play" id="btnFFPlay" title="Auto-Play" onclick="ffTogglePlay()">▶ Auto-Play</button>
+                        <button class="transport-btn" title="Paso Siguiente" onclick="ffStepNext()">▶ Siguiente</button>
+                        <button class="transport-btn" title="Ir al Final (Punto Fijo)" onclick="ffStepEnd()">⏭ Punto Fijo</button>
+                        <div style="display: flex; align-items: center; gap: 6px; margin-left: 10px;">
+                            <span class="meta-label" style="margin-bottom: 0;">Vel:</span>
+                            <select id="ffSpeedSelect" class="input-field" style="padding: 4px 8px; font-size: 0.8rem; width: auto;" onchange="changeFFSpeed(this.value)">
+                                <option value="1500">0.5x</option>
+                                <option value="800" selected>1x</option>
+                                <option value="300">2x</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span id="ffStepBadge" class="step-num-badge" style="font-size: 0.85rem; padding: 6px 12px; background: var(--accent-emerald); color: #fff;">PASO 0 / 0</span>
+                        <span id="ffPhaseBadge" class="status-badge tag-new">FASE: INICIAL</span>
+                    </div>
+                </div>
+                <!-- Barra de Progreso Clickeable -->
+                <div style="background: var(--bg-subtle); padding: 10px 24px; border-bottom: 2px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="meta-label" style="margin-bottom: 0; min-width: 60px;">Timeline:</span>
+                        <input type="range" id="ffTimelineSlider" min="0" max="0" value="0" style="flex: 1; accent-color: var(--accent-emerald); cursor: pointer;" oninput="ffStepTo(parseInt(this.value))">
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUADRICULA DE RESULTADOS Y EXPLICACION PEDAGOGICA -->
+            <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; margin-bottom: 24px;">
+                <!-- TABLA VIVA DE CONJUNTOS -->
+                <div class="proof-card">
+                    <div class="proof-card-header">
+                        <h4 style="font-family: 'JetBrains Mono'; font-size: 0.9rem; text-transform: uppercase;">Estado de Conjuntos en el Paso Actual</h4>
+                        <span class="editorial-tag" style="font-size: 0.7rem;">TERMINALES ASCII &rarr; e &rarr; $</span>
+                    </div>
+                    <div class="proof-card-body" style="padding: 0;">
+                        <table class="editorial-table" style="margin: 0; border: none;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%;">No Terminal</th>
+                                    <th style="width: 37.5%;">FIRST(X)</th>
+                                    <th style="width: 37.5%;">FOLLOW(A)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ffSetsTableBody">
+                                <!-- Inyectado dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="padding: 16px 20px; border-top: 2px solid var(--border); background: var(--bg-subtle);">
+                        <span class="meta-label" style="margin-bottom: 6px;">Formato Oficial (--sets) Generado:</span>
+                        <pre id="ffFormattedSetsOutput" style="background: #ffffff; border: 1.5px solid var(--border); padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin: 0; border-radius: 0;"></pre>
+                    </div>
+                </div>
+
+                <!-- NARRADOR PEDAGOGICO DEL PASO -->
+                <div class="proof-card">
+                    <div class="proof-card-header">
+                        <h4 style="font-family: 'JetBrains Mono'; font-size: 0.9rem; text-transform: uppercase;">Justificación Formal del Paso</h4>
+                        <span id="ffRuleBadge" class="status-badge regular-tag">REGLA APLICADA</span>
+                    </div>
+                    <div class="proof-card-body">
+                        <div id="ffNarratorContent">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 16px; border-top: 1.5px dashed var(--border-light);">
+                            <span class="meta-label">Historial de Pasos Realizados:</span>
+                            <div id="ffStepsList" style="max-height: 220px; overflow-y: auto; border: 1.5px solid var(--border-light); margin-top: 6px;">
+                                <!-- Inyectado dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
+
+        <!-- TAB 2: LABORATORIO INTERACTIVO PARSERS LL(1) Y SLR(1) -->
+        <main id="tab-parsers-lab" class="tab-pane">
+            <!-- HERO DEL LABORATORIO -->
+            <div class="proof-card" style="margin-bottom: 24px; border-left: 6px solid var(--accent-amber);">
+                <div class="proof-card-body" style="padding: 20px 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <span class="editorial-tag" style="margin-bottom: 6px; color: var(--accent-amber); border-color: var(--accent-amber);">ANALIZADORES SINTÁCTICOS • SECCIONES 4.4.3–4.4.4 Y 4.5–4.6</span>
+                            <h2 style="font-family: 'Playfair Display', serif; font-size: 1.85rem; font-weight: 800; margin-bottom: 8px;">
+                                Laboratorio Interactivo de Parsers: LL(1) y SLR(1)
+                            </h2>
+                            <p style="color: var(--text-body); max-width: 860px; font-size: 0.95rem;">
+                                Simula paso a paso el análisis descendente LL(1) predictivo no recursivo (Algoritmo 4.34) y el análisis ascendente SLR(1) shift-reduce con autómata LR(0) (Algoritmo 4.44). Observa en vivo la pila, la entrada restante, las acciones formales y la construcción del árbol sintáctico derivado.
+                            </p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="status-badge tag-new" style="font-size: 0.8rem; background: #fffbeb; color: #b45309; border-color: #d97706;">TOP-DOWN & BOTTOM-UP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SELECTOR DE EJEMPLOS PRECONFIGURADOS -->
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
+                <button class="lab-ex-btn active" id="btn-p-own" onclick="selectParserPreset('p_own')">
+                    <span class="ex-num">PRESET 1 • PROPIA</span>
+                    <span class="ex-name">Listas Delimitadas por Comas</span>
+                    <span class="ex-badge l-attr">LL(1) & SLR(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-p-ex1" onclick="selectParserPreset('p_ex1')">
+                    <span class="ex-num">PRESET 2 • EJEMPLO 1</span>
+                    <span class="ex-name">Expresiones con Precedencia</span>
+                    <span class="ex-badge no-l-attr">SLR(1), no LL(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-p-ex2" onclick="selectParserPreset('p_ex2')">
+                    <span class="ex-num">PRESET 3 • EJEMPLO 2</span>
+                    <span class="ex-name">Gramática con &epsilon; (e)</span>
+                    <span class="ex-badge l-attr">LL(1) & SLR(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-p-ex3" onclick="selectParserPreset('p_ex3')">
+                    <span class="ex-num">PRESET 4 • EJEMPLO 3</span>
+                    <span class="ex-name">Gramática Ambigua (S -> SS a)</span>
+                    <span class="ex-badge no-l-attr">Ni LL(1) ni SLR(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-p-ex465" onclick="selectParserPreset('p_ex465')">
+                    <span class="ex-num">PRESET 5 • EJERCICIO 4.6.5</span>
+                    <span class="ex-name">Gramática LL(1), no SLR(1)</span>
+                    <span class="ex-badge l-attr">Conflicto R/R en SLR(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-p-ex466" onclick="selectParserPreset('p_ex466')">
+                    <span class="ex-num">PRESET 6 • EJERCICIO 4.6.6</span>
+                    <span class="ex-name">Gramática SLR(1), no LL(1)</span>
+                    <span class="ex-badge no-l-attr">Rec. Izq. en LL(1)</span>
+                </button>
+                <button class="lab-ex-btn" id="btn-p-sdd" onclick="selectParserPreset('p_sdd')">
+                    <span class="ex-num">PRESET 7 • SDD OFICIAL</span>
+                    <span class="ex-name">Gramática SDD Ponderada</span>
+                    <span class="ex-badge l-attr">Ambos Parsers</span>
+                </button>
+            </div>
+
+            <!-- ENTRADA Y DIAGNOSTICO FORMAL -->
+            <div class="proof-card" style="margin-bottom: 24px;">
+                <div class="proof-card-header">
+                    <div class="step-meta-group">
+                        <span class="step-num-badge">CONFIGURACIÓN DE ENTRADA</span>
+                        <h3 class="step-title" id="parserConfigTitle">Gramática y Cadena a Analizar</h3>
+                    </div>
+                    <button class="nav-btn" style="padding: 6px 14px; font-size: 0.75rem;" onclick="resetParserPreset()">↺ Restaurar Preset</button>
+                </div>
+                <div class="proof-card-body">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; margin-bottom: 16px;">
+                        <div>
+                            <label class="meta-label" for="parserGrammarInput">Gramática de Entrada</label>
+                            <textarea id="parserGrammarInput" class="input-field" style="width: 100%; height: 95px; font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 600;" oninput="onParserGrammarEdited()"></textarea>
+                        </div>
+                        <div>
+                            <label class="meta-label" for="parserInputString">Cadena a Parsear (usa 'e' para la cadena vacía)</label>
+                            <input type="text" id="parserInputString" class="input-field" style="width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 600; margin-bottom: 10px;" oninput="onParserInputChanged()">
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span class="meta-label" style="margin-bottom: 0;">Cadenas Sugeridas:</span>
+                                <div id="parserPresetsContainer" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BANNER DE CLASIFICACION FORMAL Y SELECCION DE PARSER (SECCION 2.2.2) -->
+                    <div id="parserClassificationBanner" style="padding: 16px 20px; border: 2px solid var(--border); background: var(--bg-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                        <!-- Inyectado dinámicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTROLES DE REPRODUCCION DEL PARSER -->
+            <div class="proof-card" style="margin-bottom: 24px; border-top: 4px solid var(--accent-amber);">
+                <div class="proof-card-header" style="flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <button class="transport-btn" title="Paso 0 (Inicial)" onclick="parserStepTo(0)">⏮ Inicio</button>
+                        <button class="transport-btn" title="Paso Anterior" onclick="parserStepPrev()">◀ Anterior</button>
+                        <button class="transport-btn active-play" id="btnParserPlay" title="Auto-Play" onclick="parserTogglePlay()">▶ Auto-Play</button>
+                        <button class="transport-btn" title="Paso Siguiente" onclick="parserStepNext()">▶ Siguiente</button>
+                        <button class="transport-btn" title="Evaluar Todo" onclick="parserStepEnd()">⏭ Finalizar</button>
+                        <div style="display: flex; align-items: center; gap: 6px; margin-left: 10px;">
+                            <span class="meta-label" style="margin-bottom: 0;">Vel:</span>
+                            <select id="parserSpeedSelect" class="input-field" style="padding: 4px 8px; font-size: 0.8rem; width: auto;" onchange="changeParserSpeed(this.value)">
+                                <option value="1500">0.5x</option>
+                                <option value="800" selected>1x</option>
+                                <option value="300">2x</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span id="parserStepBadge" class="step-num-badge" style="font-size: 0.85rem; padding: 6px 12px; background: var(--accent-amber); color: #fff;">PASO 0 / 0</span>
+                        <span id="parserActionBadge" class="status-badge regular-tag">ESTADO INICIAL</span>
+                    </div>
+                </div>
+                <!-- Barra de Progreso Clickeable -->
+                <div style="background: var(--bg-subtle); padding: 10px 24px; border-bottom: 2px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="meta-label" style="margin-bottom: 0; min-width: 60px;">Timeline:</span>
+                        <input type="range" id="parserTimelineSlider" min="0" max="0" value="0" style="flex: 1; accent-color: var(--accent-amber); cursor: pointer;" oninput="parserStepTo(parseInt(this.value))">
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRID PRINCIPAL DE EJECUCION DEL PARSER -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                <!-- COLUMNA IZQUIERDA: PILA, ENTRADA Y ACCION -->
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <!-- ESTADO DE LA PILA Y ENTRADA -->
+                    <div class="proof-card">
+                        <div class="proof-card-header">
+                            <h4 style="font-family: 'JetBrains Mono'; font-size: 0.9rem; text-transform: uppercase;">Estado de Ejecución del Parser</h4>
+                            <span id="parserModeBadge" class="editorial-tag">LL(1) DESCENTE</span>
+                        </div>
+                        <div class="proof-card-body" id="parserStateDisplay">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                        <!-- VEREDICTO FINAL -->
+                        <div id="parserVerdictBox" style="padding: 14px 20px; border-top: 2px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                            <span class="meta-label" style="margin: 0;">Veredicto Oficial (Sección 2.2.2):</span>
+                            <span id="parserVerdictText" class="status-badge regular-tag" style="font-size: 1.1rem; font-weight: 800; padding: 4px 16px;">EN EVALUACIÓN</span>
+                        </div>
+                    </div>
+
+                    <!-- TABLA DE PARSEO CON RESALTADO EN VIVO -->
+                    <div class="editorial-table-card">
+                        <h4 id="parserTableTitle" style="padding: 14px 20px; border-bottom: 2px solid var(--border); font-family: 'JetBrains Mono'; font-size: 0.85rem; text-transform: uppercase;">Tabla de Análisis</h4>
+                        <div id="parserTableContainer" style="overflow-x: auto; max-height: 280px;">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: EXPLICACION PEDAGOGICA Y ARBOL SINTACTICO DERIVADO -->
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <!-- EXPLICACION PEDAGOGICA DEL PASO -->
+                    <div class="proof-card">
+                        <div class="proof-card-header">
+                            <h4 style="font-family: 'JetBrains Mono'; font-size: 0.9rem; text-transform: uppercase;">Decisión Semántica y Regla Formal</h4>
+                            <span id="parserDecisionBadge" class="status-badge regular-tag">TRANSICIÓN</span>
+                        </div>
+                        <div class="proof-card-body">
+                            <div id="parserExplanationContent">
+                                <!-- Inyectado dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ARBOL SINTACTICO DERIVADO EN TIEMPO REAL (SVG) -->
+                    <div class="proof-card">
+                        <div class="proof-card-header">
+                            <div class="step-meta-group">
+                                <span class="step-num-badge">DERIVACIÓN SINTÁCTICA</span>
+                                <h4 class="step-title" style="font-size: 0.95rem;">Árbol Concreto en Construcción</h4>
+                            </div>
+                            <span class="status-badge start-tag" style="font-size: 0.7rem;">SVG DINÁMICO</span>
+                        </div>
+                        <div class="proof-card-body" style="padding: 12px; background: #ffffff;">
+                            <svg id="parserTreeSvg" style="width: 100%; height: 280px; border: 1.5px solid var(--border-light); background: #fafafa;"></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
 
         <!-- TAB 2: AUTOMATA LR(0) Y TABLAS -->
         <main id="tab-lr0-graph" class="tab-pane">
@@ -714,100 +986,6 @@ R -> ,L e</div>
             </div>
         </main>
 
-        <!-- TAB 3: TRAZAS DE PARSEO PASO A PASO -->
-        <main id="tab-traces" class="tab-pane">
-            <div class="proof-card">
-                <div class="proof-card-header">
-                    <div class="step-meta-group">
-                        <span class="step-num-badge">TRAZA 01</span>
-                        <h3 class="step-title">Cadena Aceptada: <code>b,b$</code> (Parser SLR(1))</h3>
-                    </div>
-                    <span class="status-badge tag-new">ACCEPTED (yes)</span>
-                </div>
-                <div class="proof-card-body">
-                    <table class="proof-grid-table">
-                        <thead>
-                            <tr>
-                                <th>Pila de Estados & Entrada</th>
-                                <th>Acción Ejecutada & Justificación Formal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0]</span><br><span class="math-sub">Entrada: b,b$</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[0, b] = shift 3</div><div class="rule-desc">Desplaza símbolo 'b' y apila estado 3. Entrada avanza a ',b$'.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 3]</span><br><span class="math-sub">Entrada: ,b$</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[3, ,] = shift 5</div><div class="rule-desc">Desplaza símbolo ',' y apila estado 5. Entrada avanza a 'b$'.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 3, 5]</span><br><span class="math-sub">Entrada: b$</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[5, b] = shift 3</div><div class="rule-desc">Desplaza símbolo 'b' y apila estado 3. Entrada avanza a '$'.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 3, 5, 3]</span><br><span class="math-sub">Entrada: $</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[3, $] = reduce R -> e</div><div class="rule-desc">Producción vacía (longitud 0). Se desapilan 0 estados. GOTO[3, R] = 4. Se apila 4.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 3, 5, 3, 4]</span><br><span class="math-sub">Entrada: $</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[4, $] = reduce L -> bR</div><div class="rule-desc">Longitud 2 ('b' y 'R'). Se desapilan 4 y 3. Estado expuesto: 5. GOTO[5, L] = 6. Se apila 6.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 3, 5, 6]</span><br><span class="math-sub">Entrada: $</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[6, $] = reduce R -> ,L</div><div class="rule-desc">Longitud 2 (',' y 'L'). Se desapilan 6 y 5. Estado expuesto: 3. GOTO[3, R] = 4. Se apila 4.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 3, 4]</span><br><span class="math-sub">Entrada: $</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[4, $] = reduce L -> bR</div><div class="rule-desc">Longitud 2. Se desapilan 4 y 3. Estado expuesto: 0. GOTO[0, L] = 2. Se apila 2.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 2]</span><br><span class="math-sub">Entrada: $</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[2, $] = reduce S -> L</div><div class="rule-desc">Longitud 1 ('L'). Se desapila 2. Estado expuesto: 0. GOTO[0, S] = 1. Se apila 1.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 1]</span><br><span class="math-sub">Entrada: $</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[1, $] = accept</div><div class="rule-desc">Símbolo inicial reducido completamente y marcador $ consumido. Cadena válida en el lenguaje.</div></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="proof-card">
-                <div class="proof-card-header">
-                    <div class="step-meta-group">
-                        <span class="step-num-badge">TRAZA 02</span>
-                        <h3 class="step-title">Cadena Rechazada: <code>b,$</code> (Parser SLR(1))</h3>
-                    </div>
-                    <span class="status-badge tag-danger">REJECTED (no)</span>
-                </div>
-                <div class="proof-card-body">
-                    <table class="proof-grid-table">
-                        <thead>
-                            <tr>
-                                <th>Pila de Estados & Entrada</th>
-                                <th>Acción Ejecutada & Diagnóstico</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0]</span><br><span class="math-sub">Entrada: b,$</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[0, b] = shift 3</div><div class="rule-desc">Desplaza símbolo 'b' y apila estado 3. Entrada avanza a ',$'.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 3]</span><br><span class="math-sub">Entrada: ,$</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[3, ,] = shift 5</div><div class="rule-desc">Desplaza símbolo ',' y apila estado 5. Entrada avanza a '$'.</div></td>
-                            </tr>
-                            <tr>
-                                <td class="calc-col"><span class="math-expr">Pila: [0, 3, 5]</span><br><span class="math-sub">Entrada: $</span></td>
-                                <td class="just-col"><div class="rule-title">ACTION[5, $] = ERROR SINTÁCTICO</div><div class="rule-desc">La celda está vacía en la tabla SLR(1). El parser rechaza la cadena e imprime 'no'.</div></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
 
 
         <!-- TAB 4: LABORATORIO SDD INTERACTIVO PASO A PASO -->
@@ -1081,7 +1259,7 @@ R -> ,L e</div>
       e {lexval=e}</div>
                     <div class="meta-label">Orden de Evaluación Topológico:</div>
                     <div style="font-family: 'JetBrains Mono'; font-size: 0.85rem; color: var(--accent-blue); margin-top: 6px;">
-                        R_8.val, 1_2.lexval, +_4.lexval, (_1.lexval, L_16.d, )_12.lexval, e_14.lexval, 0_5.lexval, R_15.val, B_6.val, e_7.lexval, R_15.d, B_13.d, L_9.val, R_15.max_d, L_11.d, R_10.val, R_10.d, B_3.d, L_9.d, B_3.val, B_3.max_d, R_8.d, B_6.d, L_11.val, R_8.max_d, B_6.max_d, B_13.val, L_9.max_d, L_16.val, R_10.max_d, S_17.val, L_11.max_d, B_13.max_d, L_16.max_d, S_17.max_d
+                        e_7.lexval, R_15.val, B_6.val, L_16.d, 1_2.lexval, R_8.val, +_4.lexval, (_1.lexval, e_14.lexval, )_12.lexval, 0_5.lexval, R_15.d, B_13.d, L_9.val, R_15.max_d, L_11.d, R_10.val, R_10.d, B_3.d, L_9.d, B_3.max_d, B_3.val, R_8.d, B_6.d, L_11.val, R_8.max_d, B_6.max_d, B_13.val, L_9.max_d, L_16.val, R_10.max_d, S_17.val, L_11.max_d, B_13.max_d, L_16.max_d, S_17.max_d
                     </div>
                 </div>
             </div>
@@ -1145,15 +1323,19 @@ Ciclo identificado: L_5.val -> S_6.val -> L_5.d -> B_2.d -> B_2.val -> L_5.val</
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             
             const targetPane = document.getElementById(paneId);
-            targetPane.classList.add('active');
-            btn.classList.add('active');
+            if (targetPane) targetPane.classList.add('active');
+            if (btn) btn.classList.add('active');
 
-            if (paneId === 'tab-lr0-graph') {
+            if (paneId === 'tab-ff-lab') {
+                setTimeout(initFFLabIfNeeded, 50);
+            } else if (paneId === 'tab-parsers-lab') {
+                setTimeout(initParserLabIfNeeded, 50);
+            } else if (paneId === 'tab-sdd-lab') {
+                setTimeout(initLabIfNeeded, 50);
+            } else if (paneId === 'tab-lr0-graph') {
                 setTimeout(renderLR0Graph, 50);
             } else if (paneId === 'tab-sdd-eval') {
                 setTimeout(renderDAGGraph, 50);
-            } else if (paneId === 'tab-sdd-lab') {
-                setTimeout(initLabIfNeeded, 50);
             }
         }
 
@@ -2993,9 +3175,1578 @@ function toggleLabTheory() {
 }
 
 
+
+
+
+// =========================================================================
+// 1. LABORATORIO INTERACTIVO: FIRST() Y FOLLOW() (SECCIÓN 4.4.2)
+// =========================================================================
+
+const ffPresets = {
+    p_own: {
+        id: 'p_own',
+        name: 'Gramática Propia (Listas Delimitadas por Comas)',
+        text: "3\nS -> L\nL -> bR\nR -> ,L e",
+        desc: "Gramática propia del proyecto. Modela identificadores 'b' separados por comas. Es tanto LL(1) como SLR(1)."
+    },
+    p_ex1: {
+        id: 'p_ex1',
+        name: 'Ejemplo 1 PDF (Expresiones con Precedencia y Rec. Izquierda)',
+        text: "3\nS -> S+T T\nT -> T*F F\nF -> (S) i",
+        desc: "Gramática clásica de expresiones aritméticas. La recursión izquierda en S y T imposibilita el análisis LL(1), pero es SLR(1)."
+    },
+    p_ex2: {
+        id: 'p_ex2',
+        name: 'Ejemplo 2 PDF (Gramática con Producciones Épsilon)',
+        text: "3\nS -> AB\nA -> aA d\nB -> bBc e",
+        desc: "Gramática con épsilon en B. Muestra cómo First(B) contiene 'e' y cómo Follow(A) hereda los terminales de First(B)."
+    },
+    p_ex3: {
+        id: 'p_ex3',
+        name: 'Ejemplo 3 PDF (Gramática Ambigua)',
+        text: "1\nS -> SS a",
+        desc: "Gramática altamente ambigua. No es LL(1) ni SLR(1). Genera múltiples derivaciones para cadenas con dos o más 'a'."
+    },
+    p_ex430: {
+        id: 'p_ex430',
+        name: 'Ejercicio 4.30 Dragon Book (Expresiones LL(1) Factorizadas)',
+        text: "5\nS -> TA\nA -> +TA e\nT -> FB\nB -> *FB e\nF -> (S) i",
+        desc: "Expresiones aritméticas tras eliminar la recursión por la izquierda. Totalmente analizable con LL(1) y SLR(1)."
+    },
+    p_null: {
+        id: 'p_null',
+        name: 'Cadena de No Terminales Anulables',
+        text: "4\nS -> ABC\nA -> a e\nB -> b e\nC -> c e",
+        desc: "Demuestra la propagación de FIRST a través de múltiples símbolos anulables consecutivos A, B y C hasta First(S)."
+    },
+    p_sdd: {
+        id: 'p_sdd',
+        name: 'Gramática SDD Oficial (Item 3)',
+        text: "4\nS -> L\nL -> BR\nR -> +L e\nB -> (L) 0 1",
+        desc: "Gramática seleccionada para la definición dirigida por la sintaxis. Modela expresiones binarias con ponderación exponencial."
+    }
+};
+
+let currentFFPresetId = 'p_own';
+let ffInitialized = false;
+let ffSteps = [];
+let ffCurrentStep = 0;
+let ffPlayTimer = null;
+let ffPlaySpeed = 800;
+let ffGrammarObj = null;
+
+function parseGrammarJS(text) {
+    const lines = text.trim().split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+    if (lines.length === 0) throw new Error("El texto de la gramática está vacío.");
+    const n = parseInt(lines[0], 10);
+    if (isNaN(n) || n <= 0) throw new Error("La primera línea debe ser un entero positivo n.");
+    const prods = {};
+    const nts = [];
+    for (let i = 1; i <= n && i < lines.length; i++) {
+        const line = lines[i];
+        if (!line.includes("->")) throw new Error("Falta '->' en la línea: " + line);
+        const parts = line.split("->");
+        const head = parts[0].trim();
+        const bodies = parts[1].trim().split(/\s+/).filter(b => b.length > 0);
+        if (!prods[head]) {
+            prods[head] = [];
+            nts.push(head);
+        }
+        bodies.forEach(b => prods[head].push(b));
+    }
+    const allSyms = new Set();
+    Object.entries(prods).forEach(([h, bs]) => {
+        bs.forEach(b => {
+            for (let c of b) allSyms.add(c);
+        });
+    });
+    const ntSet = new Set(nts);
+    const terms = Array.from(allSyms).filter(c => !ntSet.has(c) && c !== 'e' && c !== '$').sort();
+    return { nts, terms, prods, start: nts[0] || 'S' };
+}
+
+function cloneSets(setsObj) {
+    const res = {};
+    for (let [k, set] of Object.entries(setsObj)) {
+        res[k] = new Set(set);
+    }
+    return res;
+}
+
+function formatSetOfficial(set) {
+    if (!set) return "{}";
+    const arr = Array.from(set);
+    const regular = arr.filter(x => x !== 'e' && x !== '$').sort();
+    const res = [...regular];
+    if (set.has && set.has('e')) res.push('e');
+    if (set.has && set.has('$')) res.push('$');
+    return "{" + res.join(", ") + "}";
+}
+
+function computeFirstFollowStepsJS(g) {
+    const steps = [];
+    const first = {};
+    g.terms.forEach(t => first[t] = new Set([t]));
+    first['e'] = new Set(['e']);
+    g.nts.forEach(nt => first[nt] = new Set());
+
+    const follow = {};
+    g.nts.forEach(nt => follow[nt] = new Set());
+
+    function snapshotFirst() {
+        const res = {};
+        for (let nt of g.nts) res[nt] = new Set(first[nt] || []);
+        return res;
+    }
+    function snapshotFollow() {
+        const res = {};
+        for (let nt of g.nts) res[nt] = new Set(follow[nt] || []);
+        return res;
+    }
+
+    // Paso 0: Inicialización
+    steps.push({
+        phase: 'INIT',
+        iter: 0,
+        nt: null,
+        prod: null,
+        addedFirst: [],
+        addedFollow: [],
+        firstSnapshot: snapshotFirst(),
+        followSnapshot: snapshotFollow(),
+        ruleTitle: "Inicialización de Estructuras (Sección 4.4.2)",
+        justification: "Para cada terminal t in V_T, FIRST(t) = {t}. FIRST(e) = {e}. Para cada no terminal A in V_N, FIRST(A) = {} y FOLLOW(A) = {}."
+    });
+
+    // FASE 1: Cálculo Iterativo de FIRST
+    let changed = true;
+    let iter = 1;
+    while (changed) {
+        changed = false;
+        let iterAddedCount = 0;
+
+        for (let head of g.nts) {
+            for (let alt of (g.prods[head] || [])) {
+                if (alt === 'e') {
+                    if (!first[head].has('e')) {
+                        first[head].add('e');
+                        changed = true;
+                        iterAddedCount++;
+                        steps.push({
+                            phase: 'FIRST',
+                            iter: iter,
+                            nt: head,
+                            prod: `${head} -> e`,
+                            addedFirst: ['e'],
+                            addedFollow: [],
+                            firstSnapshot: snapshotFirst(),
+                            followSnapshot: snapshotFollow(),
+                            ruleTitle: `FIRST (Regla 2): ${head} -> e`,
+                            justification: `La producción deriva directamente la cadena vacía ε ('e'). Se añade 'e' a FIRST(${head}).`
+                        });
+                    }
+                } else {
+                    let allNullable = true;
+                    for (let i = 0; i < alt.length; i++) {
+                        const sym = alt[i];
+                        const symFirst = first[sym] || new Set([sym]);
+                        const newToAdd = [];
+                        for (let s of symFirst) {
+                            if (s !== 'e' && !first[head].has(s)) {
+                                first[head].add(s);
+                                newToAdd.push(s);
+                                changed = true;
+                                iterAddedCount++;
+                            }
+                        }
+                        if (newToAdd.length > 0) {
+                            steps.push({
+                                phase: 'FIRST',
+                                iter: iter,
+                                nt: head,
+                                prod: `${head} -> ${alt}`,
+                                addedFirst: newToAdd,
+                                addedFollow: [],
+                                firstSnapshot: snapshotFirst(),
+                                followSnapshot: snapshotFollow(),
+                                ruleTitle: `FIRST (Regla 3): Símbolo '${sym}' en ${head} -> ${alt}`,
+                                justification: `Se agregan los terminales {${newToAdd.join(', ')}} de FIRST(${sym}) a FIRST(${head}).`
+                            });
+                        }
+                        if (!symFirst.has('e')) {
+                            allNullable = false;
+                            break;
+                        }
+                    }
+                    if (allNullable && !first[head].has('e')) {
+                        first[head].add('e');
+                        changed = true;
+                        iterAddedCount++;
+                        steps.push({
+                            phase: 'FIRST',
+                            iter: iter,
+                            nt: head,
+                            prod: `${head} -> ${alt}`,
+                            addedFirst: ['e'],
+                            addedFollow: [],
+                            firstSnapshot: snapshotFirst(),
+                            followSnapshot: snapshotFollow(),
+                            ruleTitle: `FIRST (Regla 3 ε): Todos los símbolos de ${head} -> ${alt} derivan e`,
+                            justification: `Todos los símbolos del cuerpo pueden derivar ε. Se añade 'e' a FIRST(${head}).`
+                        });
+                    }
+                }
+            }
+        }
+        iter++;
+    }
+
+    // FASE 2: Inicialización de FOLLOW (Regla 1)
+    follow[g.start].add('$');
+    steps.push({
+        phase: 'FOLLOW_INIT',
+        iter: 0,
+        nt: g.start,
+        prod: null,
+        addedFirst: [],
+        addedFollow: ['$'],
+        firstSnapshot: snapshotFirst(),
+        followSnapshot: snapshotFollow(),
+        ruleTitle: `FOLLOW (Regla 1): Símbolo Inicial ${g.start}`,
+        justification: `Se añade el marcador de fin de cadena '$' a FOLLOW(${g.start}) por ser el símbolo inicial de la gramática.`
+    });
+
+    function firstOfString(alpha) {
+        if (!alpha || alpha === 'e') return new Set(['e']);
+        const res = new Set();
+        let allNullable = true;
+        for (let c of alpha) {
+            const cFirst = first[c] || new Set([c]);
+            for (let s of cFirst) if (s !== 'e') res.add(s);
+            if (!cFirst.has('e')) {
+                allNullable = false;
+                break;
+            }
+        }
+        if (allNullable) res.add('e');
+        return res;
+    }
+
+    // FASE 3: Cálculo Iterativo de FOLLOW
+    changed = true;
+    iter = 1;
+    while (changed) {
+        changed = false;
+        for (let [head, bodies] of Object.entries(g.prods)) {
+            for (let body of bodies) {
+                if (body === 'e') continue;
+                for (let i = 0; i < body.length; i++) {
+                    const B = body[i];
+                    if (g.nts.includes(B)) {
+                        const beta = body.slice(i + 1);
+                        const betaFirst = firstOfString(beta);
+
+                        // Regla 2 de FOLLOW
+                        const newTerms = [];
+                        for (let s of betaFirst) {
+                            if (s !== 'e' && !follow[B].has(s)) {
+                                follow[B].add(s);
+                                newTerms.push(s);
+                                changed = true;
+                            }
+                        }
+                        if (newTerms.length > 0) {
+                            steps.push({
+                                phase: 'FOLLOW',
+                                iter: iter,
+                                nt: B,
+                                prod: `${head} -> ${body}`,
+                                addedFirst: [],
+                                addedFollow: newTerms,
+                                firstSnapshot: snapshotFirst(),
+                                followSnapshot: snapshotFollow(),
+                                ruleTitle: `FOLLOW (Regla 2): ${head} -> ...${B}${beta ? beta : ''}`,
+                                justification: `FIRST(${beta || 'ε'}) contiene {${newTerms.join(', ')}}. Se añade a FOLLOW(${B}).`
+                            });
+                        }
+
+                        // Regla 3 de FOLLOW
+                        if (betaFirst.has('e') || beta.length === 0) {
+                            const newFromHead = [];
+                            for (let s of follow[head]) {
+                                if (!follow[B].has(s)) {
+                                    follow[B].add(s);
+                                    newFromHead.push(s);
+                                    changed = true;
+                                }
+                            }
+                            if (newFromHead.length > 0) {
+                                steps.push({
+                                    phase: 'FOLLOW',
+                                    iter: iter,
+                                    nt: B,
+                                    prod: `${head} -> ${body}`,
+                                    addedFirst: [],
+                                    addedFollow: newFromHead,
+                                    firstSnapshot: snapshotFirst(),
+                                    followSnapshot: snapshotFollow(),
+                                    ruleTitle: `FOLLOW (Regla 3): ${head} -> ...${B}`,
+                                    justification: `El sufijo tras '${B}' es vacío o deriva ε. Todo FOLLOW(${head}) = {${newFromHead.join(', ')}} se propaga a FOLLOW(${B}).`
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        iter++;
+    }
+
+    // Paso Final: Punto Fijo Alcanzado
+    steps.push({
+        phase: 'FINAL',
+        iter: iter,
+        nt: null,
+        prod: null,
+        addedFirst: [],
+        addedFollow: [],
+        firstSnapshot: snapshotFirst(),
+        followSnapshot: snapshotFollow(),
+        ruleTitle: "Punto Fijo Alcanzado (Convergencia)",
+        justification: "Ninguna producción añade símbolos adicionales a FIRST ni a FOLLOW. Los conjuntos son definitivos y formalmente válidos."
+    });
+
+    // Formatear salida oficial (--sets)
+    const sortedNts = [...g.nts].sort();
+    const setsLines = [];
+    sortedNts.forEach(nt => {
+        setsLines.push(`First(${nt}) = ${formatSetOfficial(first[nt])}`);
+    });
+    sortedNts.forEach(nt => {
+        setsLines.push(`Follow(${nt}) = ${formatSetOfficial(follow[nt])}`);
+    });
+    const formattedSets = setsLines.join("\n");
+
+    return { steps, first, follow, formattedSets, g, firstOfString };
+}
+
+function initFFLabIfNeeded() {
+    if (ffInitialized) return;
+    ffInitialized = true;
+    selectFFPreset('p_own');
+}
+
+function selectFFPreset(presetId) {
+    currentFFPresetId = presetId;
+    const p = ffPresets[presetId];
+    if (!p) return;
+
+    document.querySelectorAll('[id^="btn-ff-"]').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById(`btn-ff-${presetId.replace('p_', '')}`);
+    if (btn) btn.classList.add('active');
+
+    const title = document.getElementById('ffConfigTitle');
+    if (title) title.textContent = `Gramática Seleccionada: ${p.name}`;
+
+    const txt = document.getElementById('ffGrammarInput');
+    if (txt) txt.value = p.text;
+
+    recomputeFF(true);
+}
+
+function resetFFPreset() {
+    selectFFPreset(currentFFPresetId);
+}
+
+function onFFGrammarEdited() {
+    recomputeFF(true);
+}
+
+function recomputeFF(resetToStart = false) {
+    const errorBox = document.getElementById('ffErrorMsg');
+    if (errorBox) errorBox.style.display = 'none';
+
+    try {
+        const text = document.getElementById('ffGrammarInput').value;
+        const g = parseGrammarJS(text);
+        ffGrammarObj = g;
+        const res = computeFirstFollowStepsJS(g);
+        ffSteps = res.steps;
+
+        const slider = document.getElementById('ffTimelineSlider');
+        if (slider) {
+            slider.max = Math.max(0, ffSteps.length - 1);
+            if (resetToStart) slider.value = 0;
+        }
+
+        if (resetToStart) {
+            ffCurrentStep = 0;
+            if (ffPlayTimer) {
+                clearInterval(ffPlayTimer);
+                ffPlayTimer = null;
+                const b = document.getElementById('btnFFPlay');
+                if (b) b.textContent = '▶ Auto-Play';
+            }
+        } else {
+            ffCurrentStep = Math.min(ffCurrentStep, ffSteps.length - 1);
+        }
+
+        renderFFUI();
+    } catch (e) {
+        if (errorBox) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = `Error de Sintaxis en la Gramática: ${e.message}`;
+        }
+    }
+}
+
+function ffStepTo(idx) {
+    if (idx < 0) idx = 0;
+    if (idx >= ffSteps.length) idx = ffSteps.length - 1;
+    ffCurrentStep = idx;
+    const slider = document.getElementById('ffTimelineSlider');
+    if (slider) slider.value = idx;
+    renderFFUI();
+}
+
+function ffStepPrev() {
+    ffStepTo(ffCurrentStep - 1);
+}
+
+function ffStepNext() {
+    if (ffCurrentStep < ffSteps.length - 1) {
+        ffStepTo(ffCurrentStep + 1);
+    } else if (ffPlayTimer) {
+        ffTogglePlay();
+    }
+}
+
+function ffStepEnd() {
+    ffStepTo(ffSteps.length - 1);
+}
+
+function ffTogglePlay() {
+    const btn = document.getElementById('btnFFPlay');
+    if (ffPlayTimer) {
+        clearInterval(ffPlayTimer);
+        ffPlayTimer = null;
+        if (btn) btn.textContent = '▶ Auto-Play';
+    } else {
+        if (ffCurrentStep >= ffSteps.length - 1) ffStepTo(0);
+        if (btn) btn.textContent = '⏸ Pausa';
+        ffPlayTimer = setInterval(ffStepNext, ffPlaySpeed);
+    }
+}
+
+function changeFFSpeed(val) {
+    ffPlaySpeed = parseInt(val, 10);
+    if (ffPlayTimer) {
+        clearInterval(ffPlayTimer);
+        ffPlayTimer = setInterval(ffStepNext, ffPlaySpeed);
+    }
+}
+
+function renderFFUI() {
+    if (!ffSteps || ffSteps.length === 0) return;
+    const step = ffSteps[ffCurrentStep];
+    const total = ffSteps.length - 1;
+
+    // Badges
+    const badge = document.getElementById('ffStepBadge');
+    if (badge) badge.textContent = `PASO ${ffCurrentStep} / ${total}`;
+
+    const phaseBadge = document.getElementById('ffPhaseBadge');
+    if (phaseBadge) {
+        if (step.phase === 'INIT') phaseBadge.textContent = 'FASE: INICIAL';
+        else if (step.phase === 'FIRST') phaseBadge.textContent = `FASE: FIRST (Iteración ${step.iter})`;
+        else if (step.phase === 'FOLLOW_INIT') phaseBadge.textContent = 'FASE: FOLLOW (Regla 1)';
+        else if (step.phase === 'FOLLOW') phaseBadge.textContent = `FASE: FOLLOW (Iteración ${step.iter})`;
+        else phaseBadge.textContent = 'FASE: PUNTO FIJO COMPLETO';
+    }
+
+    // Tabla de conjuntos
+    const tbody = document.getElementById('ffSetsTableBody');
+    if (tbody) {
+        tbody.innerHTML = '';
+        const nts = Object.keys(step.firstSnapshot || {});
+        nts.forEach(nt => {
+            const tr = document.createElement('tr');
+            const isTarget = (step.nt === nt);
+            if (isTarget) tr.style.background = '#fef3c7';
+
+            const fSet = step.firstSnapshot ? step.firstSnapshot[nt] : null;
+            const folSet = step.followSnapshot ? step.followSnapshot[nt] : null;
+
+            const fFormatted = formatSetOfficial(fSet);
+            const folFormatted = formatSetOfficial(folSet);
+
+            tr.innerHTML = `
+                <td style="font-weight: 700; font-family: 'JetBrains Mono';">${nt}</td>
+                <td style="font-family: 'JetBrains Mono'; color: var(--accent-blue);">${fFormatted}</td>
+                <td style="font-family: 'JetBrains Mono'; color: var(--accent-emerald);">${folFormatted}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Formato oficial --sets acumulado o final
+    const preOutput = document.getElementById('ffFormattedSetsOutput');
+    if (preOutput) {
+        const sortedNts = Object.keys(step.firstSnapshot || {}).sort();
+        const lines = [];
+        sortedNts.forEach(nt => lines.push(`First(${nt}) = ${formatSetOfficial(step.firstSnapshot ? step.firstSnapshot[nt] : null)}`));
+        sortedNts.forEach(nt => lines.push(`Follow(${nt}) = ${formatSetOfficial(step.followSnapshot ? step.followSnapshot[nt] : null)}`));
+        preOutput.textContent = lines.join("\n");
+    }
+
+    // Narrador pedagógico
+    const ruleBadge = document.getElementById('ffRuleBadge');
+    if (ruleBadge) ruleBadge.textContent = step.ruleTitle || 'REGLA FORMAL';
+
+    const narrator = document.getElementById('ffNarratorContent');
+    if (narrator) {
+        narrator.innerHTML = `
+            <div style="margin-bottom: 12px;">
+                <div style="font-weight: 700; font-size: 1rem; color: var(--text-main); margin-bottom: 4px;">${step.ruleTitle}</div>
+                <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.45;">${step.justification}</div>
+            </div>
+            ${step.prod ? `<div style="font-family: 'JetBrains Mono'; font-size: 0.85rem; padding: 6px 10px; background: var(--bg-subtle); border-left: 3px solid var(--accent-blue); margin-bottom: 10px;">Producción analizada: <strong>${step.prod}</strong></div>` : ''}
+            ${step.addedFirst.length > 0 ? `<div style="font-size: 0.85rem; color: var(--accent-blue);">Símbolos añadidos a FIRST(${step.nt}): <strong>{${step.addedFirst.join(', ')}}</strong></div>` : ''}
+            ${step.addedFollow.length > 0 ? `<div style="font-size: 0.85rem; color: var(--accent-emerald);">Símbolos añadidos a FOLLOW(${step.nt}): <strong>{${step.addedFollow.join(', ')}}</strong></div>` : ''}
+        `;
+    }
+
+    // Lista de pasos
+    const list = document.getElementById('ffStepsList');
+    if (list) {
+        list.innerHTML = ffSteps.map((st, idx) => `
+            <div class="kahn-step-item ${idx === ffCurrentStep ? 'active' : ''}" onclick="ffStepTo(${idx})">
+                <span>Paso ${idx}: ${st.ruleTitle}</span>
+                <span style="color: var(--text-muted); font-size: 0.75rem;">${st.nt ? st.nt : ''}</span>
+            </div>
+        `).join('');
+    }
+}
+
+
+
+// =========================================================================
+// 2. LABORATORIO INTERACTIVO: PARSERS LL(1) Y SLR(1)
+// =========================================================================
+
+const parserPresets = {
+    p_own: {
+        id: 'p_own',
+        name: 'Gramática Propia (Ambos Parsers)',
+        text: "3\nS -> L\nL -> bR\nR -> ,L e",
+        defaultInput: 'b,b',
+        presets: ['b,b', 'b,', 'b', 'b,b,b']
+    },
+    p_ex1: {
+        id: 'p_ex1',
+        name: 'Ejemplo 1 PDF (SLR(1), no LL(1))',
+        text: "3\nS -> S+T T\nT -> T*F F\nF -> (S) i",
+        defaultInput: 'i+i',
+        presets: ['i+i', '(i)', '(i+i)*i)', 'i*i+i']
+    },
+    p_ex2: {
+        id: 'p_ex2',
+        name: 'Ejemplo 2 PDF (Ambos Parsers)',
+        text: "3\nS -> AB\nA -> aA d\nB -> bBc e",
+        defaultInput: 'adbc',
+        presets: ['d', 'adbc', 'a', 'aadbbcc']
+    },
+    p_ex3: {
+        id: 'p_ex3',
+        name: 'Ejemplo 3 PDF (Ni LL(1) ni SLR(1))',
+        text: "1\nS -> SS a",
+        defaultInput: 'a',
+        presets: ['a', 'aa', 'b']
+    },
+    p_ex465: {
+        id: 'p_ex465',
+        name: 'Ejercicio 4.6.5 (LL(1), no SLR(1))',
+        text: "3\nS -> AaAb BbBa\nA -> e\nB -> e",
+        defaultInput: 'ab',
+        presets: ['ab', 'ba', 'a']
+    },
+    p_ex466: {
+        id: 'p_ex466',
+        name: 'Ejercicio 4.6.6 (SLR(1), no LL(1))',
+        text: "2\nS -> SA A\nA -> a",
+        defaultInput: 'aa',
+        presets: ['a', 'aa', 'aaa']
+    },
+    p_sdd: {
+        id: 'p_sdd',
+        name: 'Gramática SDD Oficial (Item 3)',
+        text: "4\nS -> L\nL -> BR\nR -> +L e\nB -> (L) 0 1",
+        defaultInput: '(1+0)',
+        presets: ['(1+0)', '0', '1', '((1+0)+(1))', '1++0']
+    }
+};
+
+let currentParserPresetId = 'p_own';
+let parserInitialized = false;
+let currentParserType = 'slr1'; // 'll1' o 'slr1'
+let parserSteps = [];
+let parserCurrentStep = 0;
+let parserPlayTimer = null;
+let parserPlaySpeed = 800;
+let parserGrammarObj = null;
+let parserFFObj = null;
+let parserLL1Obj = null;
+let parserSLR1Obj = null;
+
+function buildLL1JS(g, ff) {
+    const table = {};
+    g.nts.forEach(nt => table[nt] = {});
+    let isLL1 = true;
+    const conflicts = [];
+
+    for (let head of g.nts) {
+        for (let body of (g.prods[head] || [])) {
+            const fBody = ff.firstOfString(body);
+            for (let a of fBody) {
+                if (a !== 'e') {
+                    if (!table[head][a]) table[head][a] = [];
+                    table[head][a].push({ head, body });
+                    if (table[head][a].length > 1) {
+                        isLL1 = false;
+                        conflicts.push(`Conflicto M[${head}, ${a}]: ${table[head][a].map(p => `${p.head}->${p.body}`).join(', ')}`);
+                    }
+                }
+            }
+            if (fBody.has('e')) {
+                for (let b of ff.follow[head]) {
+                    if (!table[head][b]) table[head][b] = [];
+                    table[head][b].push({ head, body });
+                    if (table[head][b].length > 1) {
+                        isLL1 = false;
+                        conflicts.push(`Conflicto M[${head}, ${b}]: ${table[head][b].map(p => `${p.head}->${p.body}`).join(', ')}`);
+                    }
+                }
+            }
+        }
+    }
+    return { table, isLL1, conflicts };
+}
+
+function buildSLR1JS(g, ff) {
+    function itemKey(head, body, pos) { return `${head}##${body}##${pos}`; }
+    function parseItem(k) {
+        const parts = k.split('##');
+        return { head: parts[0], body: parts[1], pos: parseInt(parts[2], 10) };
+    }
+
+    function closure(itemSet) {
+        const res = new Set(itemSet);
+        let changed = true;
+        while (changed) {
+            changed = false;
+            for (let k of Array.from(res)) {
+                const item = parseItem(k);
+                if (item.pos < item.body.length) {
+                    const B = item.body[item.pos];
+                    if (g.nts.includes(B)) {
+                        for (let alt of (g.prods[B] || [])) {
+                            const altBody = (alt === 'e') ? '' : alt;
+                            const nk = itemKey(B, altBody, 0);
+                            if (!res.has(nk)) {
+                                res.add(nk);
+                                changed = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    function goto(itemSet, X) {
+        const moved = new Set();
+        for (let k of itemSet) {
+            const item = parseItem(k);
+            if (item.pos < item.body.length && item.body[item.pos] === X) {
+                moved.add(itemKey(item.head, item.body, item.pos + 1));
+            }
+        }
+        return closure(moved);
+    }
+
+    function setKey(s) {
+        return Array.from(s).sort().join('|');
+    }
+
+    const startItem = itemKey("S'", g.start, 0);
+    const i0 = closure(new Set([startItem]));
+    const C = [i0];
+    const keyToIdx = new Map();
+    keyToIdx.set(setKey(i0), 0);
+    const worklist = [i0];
+
+    const symbols = g.nts.concat(g.terms);
+
+    while (worklist.length > 0) {
+        const I = worklist.shift();
+        for (let X of symbols) {
+            const J = goto(I, X);
+            if (J.size > 0) {
+                const k = setKey(J);
+                if (!keyToIdx.has(k)) {
+                    const newIdx = C.length;
+                    keyToIdx.set(k, newIdx);
+                    C.push(J);
+                    worklist.push(J);
+                }
+            }
+        }
+    }
+
+    const actionTable = {};
+    const gotoTable = {};
+    let isSLR1 = true;
+    const conflicts = [];
+
+    for (let i = 0; i < C.length; i++) {
+        actionTable[i] = {};
+        gotoTable[i] = {};
+        const I = C[i];
+
+        for (let k of I) {
+            const item = parseItem(k);
+            if (item.pos < item.body.length) {
+                const a = item.body[item.pos];
+                if (g.terms.includes(a)) {
+                    const J = goto(I, a);
+                    const j = keyToIdx.get(setKey(J));
+                    if (!actionTable[i][a]) actionTable[i][a] = [];
+                    const act = { type: 'shift', target: j };
+                    if (!actionTable[i][a].some(x => x.type === 'shift' && x.target === j)) {
+                        actionTable[i][a].push(act);
+                    }
+                }
+            } else {
+                if (item.head === "S'") {
+                    if (!actionTable[i]['$']) actionTable[i]['$'] = [];
+                    actionTable[i]['$'].push({ type: 'accept' });
+                } else {
+                    const prodStr = item.body === '' ? 'e' : item.body;
+                    for (let a of ff.follow[item.head]) {
+                        if (!actionTable[i][a]) actionTable[i][a] = [];
+                        const act = { type: 'reduce', head: item.head, body: prodStr, len: item.body.length };
+                        actionTable[i][a].push(act);
+                    }
+                }
+            }
+        }
+
+        for (let A of g.nts) {
+            const J = goto(I, A);
+            if (J.size > 0) {
+                const j = keyToIdx.get(setKey(J));
+                gotoTable[i][A] = j;
+            }
+        }
+
+        for (let [sym, acts] of Object.entries(actionTable[i])) {
+            if (acts.length > 1) {
+                isSLR1 = false;
+                conflicts.push(`Conflicto en Estado ${i}, Símbolo '${sym}': ${acts.map(a => a.type === 'shift' ? `s${a.target}` : `r ${a.head}->${a.body}`).join(' / ')}`);
+            }
+        }
+    }
+
+    return { C, actionTable, gotoTable, isSLR1, conflicts, parseItem };
+}
+
+function simulateLL1TraceJS(g, ll1, inputStr) {
+    const tokens = (inputStr === 'e' ? '' : inputStr) + '$';
+    let ip = 0;
+    let nodeCounter = 0;
+
+    const rootNode = { id: ++nodeCounter, symbol: g.start, children: [], parent: null };
+    const stack = [{ sym: '$', node: null }, { sym: g.start, node: rootNode }];
+    const steps = [];
+    let matched = '';
+
+    while (stack.length > 0) {
+        const topItem = stack[stack.length - 1];
+        const top = topItem.sym;
+        const topNode = topItem.node;
+        const cur = tokens[ip];
+
+        if (top === '$' && cur === '$') {
+            steps.push({
+                stepNum: steps.length + 1,
+                matched,
+                stack: stack.map(x => x.sym),
+                input: tokens.slice(ip),
+                lookahead: cur,
+                action: 'accept',
+                actionType: 'accept',
+                highlightCell: null,
+                ruleTitle: 'Aceptación Formal (Algoritmo 4.34)',
+                desc: `Pila vacía ('$') y marcador de fin alcanzado ('$'). La cadena '${inputStr}' pertenece al lenguaje.`,
+                rootNode,
+                isFinal: true,
+                verdict: 'yes'
+            });
+            return { success: true, steps };
+        }
+
+        if (top === cur) {
+            steps.push({
+                stepNum: steps.length + 1,
+                matched,
+                stack: stack.map(x => x.sym),
+                input: tokens.slice(ip),
+                lookahead: cur,
+                action: `match ${cur}`,
+                actionType: 'match',
+                highlightCell: null,
+                ruleTitle: `Emparejamiento de Terminal '${cur}'`,
+                desc: `El terminal en el tope de la pila coincide con el símbolo de entrada actual '${cur}'. Se desapila y se avanza el puntero de entrada.`,
+                rootNode,
+                isFinal: false,
+                verdict: null
+            });
+            stack.pop();
+            matched += cur;
+            ip++;
+        } else if (g.terms.includes(top) || top === '$') {
+            steps.push({
+                stepNum: steps.length + 1,
+                matched,
+                stack: stack.map(x => x.sym),
+                input: tokens.slice(ip),
+                lookahead: cur,
+                action: 'error',
+                actionType: 'error',
+                highlightCell: null,
+                ruleTitle: 'Error Sintáctico (Desajuste)',
+                desc: `Se esperaba el terminal '${top}' pero se encontró '${cur}'. La cadena no puede ser derivada por la gramática.`,
+                rootNode,
+                isFinal: true,
+                verdict: 'no'
+            });
+            return { success: false, steps };
+        } else {
+            const entries = ll1.table[top]?.[cur] || [];
+            if (entries.length === 0) {
+                steps.push({
+                    stepNum: steps.length + 1,
+                    matched,
+                    stack: stack.map(x => x.sym),
+                    input: tokens.slice(ip),
+                    lookahead: cur,
+                    action: 'error',
+                    actionType: 'error',
+                    highlightCell: { head: top, terminal: cur },
+                    ruleTitle: `Error Sintáctico: M[${top}, ${cur}] vacía`,
+                    desc: `No existe producción en la celda predictiva M[${top}, ${cur}]. El analizador LL(1) rechaza la cadena.`,
+                    rootNode,
+                    isFinal: true,
+                    verdict: 'no'
+                });
+                return { success: false, steps };
+            }
+
+            const prod = entries[0];
+            steps.push({
+                stepNum: steps.length + 1,
+                matched,
+                stack: stack.map(x => x.sym),
+                input: tokens.slice(ip),
+                lookahead: cur,
+                action: `output ${prod.head} -> ${prod.body}`,
+                actionType: 'output',
+                highlightCell: { head: top, terminal: cur },
+                ruleTitle: `Expansión Predictiva M[${top}, ${cur}]`,
+                desc: `La tabla dictamina aplicar ${prod.head} -> ${prod.body}. Se desapila '${top}' y se apilan los símbolos del cuerpo en orden inverso.`,
+                rootNode,
+                isFinal: false,
+                verdict: null
+            });
+
+            stack.pop();
+
+            if (prod.body === 'e') {
+                const epsNode = { id: ++nodeCounter, symbol: 'e', children: [], parent: topNode };
+                if (topNode) topNode.children.push(epsNode);
+            } else {
+                const childNodes = [];
+                for (let i = 0; i < prod.body.length; i++) {
+                    const cSym = prod.body[i];
+                    const cNode = { id: ++nodeCounter, symbol: cSym, children: [], parent: topNode };
+                    childNodes.push(cNode);
+                    if (topNode) topNode.children.push(cNode);
+                }
+                for (let i = prod.body.length - 1; i >= 0; i--) {
+                    stack.push({ sym: prod.body[i], node: childNodes[i] });
+                }
+            }
+        }
+    }
+    return { success: false, steps };
+}
+
+function simulateSLR1TraceJS(g, slr1, inputStr) {
+    const tokens = (inputStr === 'e' ? '' : inputStr) + '$';
+    let ip = 0;
+    let nodeCounter = 0;
+
+    const stateStack = [0];
+    const symbolStack = [];
+    const nodeStack = [];
+    const steps = [];
+
+    while (true) {
+        const curState = stateStack[stateStack.length - 1];
+        const lookahead = tokens[ip];
+        const acts = slr1.actionTable[curState]?.[lookahead] || [];
+
+        if (acts.length === 0) {
+            steps.push({
+                stepNum: steps.length + 1,
+                stateStack: [...stateStack],
+                symbolStack: [...symbolStack],
+                input: tokens.slice(ip),
+                lookahead,
+                action: 'error',
+                actionType: 'error',
+                highlightCell: { state: curState, terminal: lookahead },
+                ruleTitle: `Error Sintáctico: ACTION[${curState}, ${lookahead}] vacía`,
+                desc: `El autómata LR(0) no tiene transición de desplazamiento ni de reducción en el Estado ${curState} para el lookahead '${lookahead}'.`,
+                nodes: [...nodeStack],
+                isFinal: true,
+                verdict: 'no'
+            });
+            return { success: false, steps };
+        }
+
+        const act = acts[0];
+        if (act.type === 'shift') {
+            steps.push({
+                stepNum: steps.length + 1,
+                stateStack: [...stateStack],
+                symbolStack: [...symbolStack],
+                input: tokens.slice(ip),
+                lookahead,
+                action: `shift to ${act.target}`,
+                actionType: 'shift',
+                highlightCell: { state: curState, terminal: lookahead },
+                ruleTitle: `Desplazamiento (Shift): Estado ${curState} con '${lookahead}'`,
+                desc: `Se desplaza el terminal '${lookahead}' a la pila y el autómata transiciona al Estado ${act.target}.`,
+                nodes: [...nodeStack],
+                isFinal: false,
+                verdict: null
+            });
+            stateStack.push(act.target);
+            symbolStack.push(lookahead);
+            nodeStack.push({ id: ++nodeCounter, symbol: lookahead, children: [] });
+            ip++;
+        } else if (act.type === 'reduce') {
+            steps.push({
+                stepNum: steps.length + 1,
+                stateStack: [...stateStack],
+                symbolStack: [...symbolStack],
+                input: tokens.slice(ip),
+                lookahead,
+                action: `reduce by ${act.head} -> ${act.body}`,
+                actionType: 'reduce',
+                highlightCell: { state: curState, terminal: lookahead },
+                ruleTitle: `Reducción (Reduce): ${act.head} -> ${act.body}`,
+                desc: `Se reduce el handle '${act.body}' a la cabeza ${act.head}. Longitud ${act.len}. Se desapilan ${act.len} estados y se consulta la tabla GOTO.`,
+                nodes: [...nodeStack],
+                isFinal: false,
+                verdict: null
+            });
+
+            const childrenPopped = [];
+            if (act.len === 0) {
+                childrenPopped.push({ id: ++nodeCounter, symbol: 'e', children: [] });
+            } else {
+                for (let i = 0; i < act.len; i++) {
+                    stateStack.pop();
+                    symbolStack.pop();
+                    childrenPopped.push(nodeStack.pop());
+                }
+                childrenPopped.reverse();
+            }
+
+            const parentNode = { id: ++nodeCounter, symbol: act.head, children: childrenPopped };
+            nodeStack.push(parentNode);
+
+            const topState = stateStack[stateStack.length - 1];
+            const nextState = slr1.gotoTable[topState]?.[act.head];
+            if (nextState === undefined) {
+                steps.push({
+                    stepNum: steps.length + 1,
+                    stateStack: [...stateStack],
+                    symbolStack: [...symbolStack],
+                    input: tokens.slice(ip),
+                    lookahead,
+                    action: 'error',
+                    actionType: 'error',
+                    highlightCell: null,
+                    ruleTitle: `Error en GOTO[${topState}, ${act.head}]`,
+                    desc: `No existe transición GOTO para el no terminal ${act.head} desde el estado ${topState}.`,
+                    nodes: [...nodeStack],
+                    isFinal: true,
+                    verdict: 'no'
+                });
+                return { success: false, steps };
+            }
+
+            stateStack.push(nextState);
+            symbolStack.push(act.head);
+        } else if (act.type === 'accept') {
+            steps.push({
+                stepNum: steps.length + 1,
+                stateStack: [...stateStack],
+                symbolStack: [...symbolStack],
+                input: tokens.slice(ip),
+                lookahead,
+                action: 'accept',
+                actionType: 'accept',
+                highlightCell: { state: curState, terminal: '$' },
+                ruleTitle: 'Aceptación Formal (Algoritmo 4.44)',
+                desc: `El autómata alcanza el estado de aceptación S' -> S· con marcador de fin '$'. Cadena aceptada (yes).`,
+                nodes: [...nodeStack],
+                isFinal: true,
+                verdict: 'yes'
+            });
+            return { success: true, steps };
+        }
+    }
+}
+
+function initParserLabIfNeeded() {
+    if (parserInitialized) return;
+    parserInitialized = true;
+    selectParserPreset('p_own');
+}
+
+function selectParserPreset(presetId) {
+    currentParserPresetId = presetId;
+    const p = parserPresets[presetId];
+    if (!p) return;
+
+    document.querySelectorAll('[id^="btn-p-"]').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById(`btn-p-${presetId.replace('p_', '')}`);
+    if (btn) btn.classList.add('active');
+
+    const title = document.getElementById('parserConfigTitle');
+    if (title) title.textContent = `Configuración de Entrada: ${p.name}`;
+
+    const txt = document.getElementById('parserGrammarInput');
+    if (txt) txt.value = p.text;
+
+    const inStr = document.getElementById('parserInputString');
+    if (inStr) inStr.value = p.defaultInput;
+
+    const presetsBox = document.getElementById('parserPresetsContainer');
+    if (presetsBox) {
+        presetsBox.innerHTML = '';
+        p.presets.forEach(pr => {
+            const b = document.createElement('button');
+            b.className = 'preset-btn';
+            b.textContent = pr;
+            b.onclick = () => applyParserStringPreset(pr);
+            presetsBox.appendChild(b);
+        });
+    }
+
+    recomputeParser(true);
+}
+
+function applyParserStringPreset(str) {
+    const inStr = document.getElementById('parserInputString');
+    if (inStr) inStr.value = str;
+    recomputeParser(true);
+}
+
+function resetParserPreset() {
+    selectParserPreset(currentParserPresetId);
+}
+
+function onParserGrammarEdited() {
+    recomputeParser(true);
+}
+
+function onParserInputChanged() {
+    recomputeParser(true);
+}
+
+function setParserType(type) {
+    currentParserType = type;
+    recomputeParser(false);
+}
+
+function recomputeParser(resetToStart = false) {
+    try {
+        const text = document.getElementById('parserGrammarInput').value;
+        const inputStr = document.getElementById('parserInputString').value.trim() || 'e';
+        const g = parseGrammarJS(text);
+        const ff = computeFirstFollowStepsJS(g);
+        const ll1 = buildLL1JS(g, ff);
+        const slr1 = buildSLR1JS(g, ff);
+
+        parserGrammarObj = g;
+        parserFFObj = ff;
+        parserLL1Obj = ll1;
+        parserSLR1Obj = slr1;
+
+        // Banner de Clasificación
+        renderClassificationBanner(ll1, slr1);
+
+        // Si la gramática es LL(1) pero no SLR(1), forzar LL(1)
+        if (ll1.isLL1 && !slr1.isSLR1) currentParserType = 'll1';
+        // Si es SLR(1) pero no LL(1), forzar SLR(1)
+        if (slr1.isSLR1 && !ll1.isLL1) currentParserType = 'slr1';
+
+        // Ejecutar simulación
+        let simRes = null;
+        if (currentParserType === 'll1') {
+            if (ll1.isLL1) {
+                simRes = simulateLL1TraceJS(g, ll1, inputStr);
+            } else {
+                simRes = { success: false, steps: [{
+                    stepNum: 1, matched: '', stack: [], input: inputStr + '$', lookahead: '', action: 'error', actionType: 'error',
+                    ruleTitle: 'Gramática no es LL(1)', desc: `No se puede analizar con LL(1): ${ll1.conflicts.join('; ')}`, isFinal: true, verdict: 'no', rootNode: null
+                }]};
+            }
+        } else {
+            if (slr1.isSLR1) {
+                simRes = simulateSLR1TraceJS(g, slr1, inputStr);
+            } else {
+                simRes = { success: false, steps: [{
+                    stepNum: 1, stateStack: [0], symbolStack: [], input: inputStr + '$', lookahead: '', action: 'error', actionType: 'error',
+                    ruleTitle: 'Gramática no es SLR(1)', desc: `No se puede analizar con SLR(1): ${slr1.conflicts.join('; ')}`, isFinal: true, verdict: 'no', nodes: []
+                }]};
+            }
+        }
+
+        parserSteps = simRes.steps;
+        const slider = document.getElementById('parserTimelineSlider');
+        if (slider) {
+            slider.max = Math.max(0, parserSteps.length - 1);
+            if (resetToStart) slider.value = 0;
+        }
+
+        if (resetToStart) {
+            parserCurrentStep = 0;
+            if (parserPlayTimer) {
+                clearInterval(parserPlayTimer);
+                parserPlayTimer = null;
+                const b = document.getElementById('btnParserPlay');
+                if (b) b.textContent = '▶ Auto-Play';
+            }
+        } else {
+            parserCurrentStep = Math.min(parserCurrentStep, parserSteps.length - 1);
+        }
+
+        renderParserUI();
+    } catch (e) {
+        console.error("Error en parser lab:", e);
+    }
+}
+
+function renderClassificationBanner(ll1, slr1) {
+    const banner = document.getElementById('parserClassificationBanner');
+    if (!banner) return;
+
+    if (ll1.isLL1 && slr1.isSLR1) {
+        banner.innerHTML = `
+            <div>
+                <span class="status-badge tag-new" style="margin-bottom: 4px;">CASO 1: AMBOS PARSERS VÁLIDOS</span>
+                <div style="font-weight: 700; font-size: 1.05rem; color: var(--text-main);">The grammar is both SLR(1) and LL(1).</div>
+                <div style="font-size: 0.85rem; color: var(--text-body);">Selecciona el analizador con el que deseas procesar la cadena:</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button class="transport-btn ${currentParserType === 'll1' ? 'active-play' : ''}" onclick="setParserType('ll1')">T: Parser LL(1) (Top-Down)</button>
+                <button class="transport-btn ${currentParserType === 'slr1' ? 'active-play' : ''}" onclick="setParserType('slr1')">B: Parser SLR(1) (Bottom-Up)</button>
+            </div>
+        `;
+    } else if (ll1.isLL1 && !slr1.isSLR1) {
+        banner.innerHTML = `
+            <div>
+                <span class="status-badge l-attr" style="margin-bottom: 4px;">CASO 2: LL(1) VÁLIDO</span>
+                <div style="font-weight: 700; font-size: 1.05rem; color: var(--accent-blue);">Grammar is LL(1).</div>
+                <div style="font-size: 0.85rem; color: var(--text-body);">No es SLR(1) debido a: ${slr1.conflicts[0] || 'conflicto en tabla'}.</div>
+            </div>
+            <div>
+                <span class="editorial-tag" style="background: #eff6ff;">Analizando con LL(1)</span>
+            </div>
+        `;
+    } else if (slr1.isSLR1 && !ll1.isLL1) {
+        banner.innerHTML = `
+            <div>
+                <span class="status-badge no-l-attr" style="margin-bottom: 4px;">CASO 3: SLR(1) VÁLIDO</span>
+                <div style="font-weight: 700; font-size: 1.05rem; color: var(--accent-amber);">Grammar is SLR(1).</div>
+                <div style="font-size: 0.85rem; color: var(--text-body);">No es LL(1) debido a: ${ll1.conflicts[0] || 'recursión izquierda / prefijos comunes'}.</div>
+            </div>
+            <div>
+                <span class="editorial-tag" style="background: #fffbeb;">Analizando con SLR(1)</span>
+            </div>
+        `;
+    } else {
+        banner.innerHTML = `
+            <div>
+                <span class="status-badge tag-danger" style="margin-bottom: 4px;">CASO 4: NI LL(1) NI SLR(1)</span>
+                <div style="font-weight: 700; font-size: 1.05rem; color: var(--accent-red);">Grammar is neither LL(1) nor SLR(1).</div>
+                <div style="font-size: 0.85rem; color: var(--text-body);">La gramática presenta ambigüedad o colisiones insolubles en ambas tablas de análisis.</div>
+            </div>
+            <div>
+                <span class="status-badge tag-danger">NO PARSEABLE</span>
+            </div>
+        `;
+    }
+}
+
+function parserStepTo(idx) {
+    if (idx < 0) idx = 0;
+    if (idx >= parserSteps.length) idx = parserSteps.length - 1;
+    parserCurrentStep = idx;
+    const slider = document.getElementById('parserTimelineSlider');
+    if (slider) slider.value = idx;
+    renderParserUI();
+}
+
+function parserStepPrev() {
+    parserStepTo(parserCurrentStep - 1);
+}
+
+function parserStepNext() {
+    if (parserCurrentStep < parserSteps.length - 1) {
+        parserStepTo(parserCurrentStep + 1);
+    } else if (parserPlayTimer) {
+        parserTogglePlay();
+    }
+}
+
+function parserStepEnd() {
+    parserStepTo(parserSteps.length - 1);
+}
+
+function parserTogglePlay() {
+    const btn = document.getElementById('btnParserPlay');
+    if (parserPlayTimer) {
+        clearInterval(parserPlayTimer);
+        parserPlayTimer = null;
+        if (btn) btn.textContent = '▶ Auto-Play';
+    } else {
+        if (parserCurrentStep >= parserSteps.length - 1) parserStepTo(0);
+        if (btn) btn.textContent = '⏸ Pausa';
+        parserPlayTimer = setInterval(parserStepNext, parserPlaySpeed);
+    }
+}
+
+function changeParserSpeed(val) {
+    parserPlaySpeed = parseInt(val, 10);
+    if (parserPlayTimer) {
+        clearInterval(parserPlayTimer);
+        parserPlayTimer = setInterval(parserStepNext, parserPlaySpeed);
+    }
+}
+
+function renderParserUI() {
+    if (!parserSteps || parserSteps.length === 0) return;
+    const step = parserSteps[parserCurrentStep];
+    const total = parserSteps.length - 1;
+
+    // Badges
+    const badge = document.getElementById('parserStepBadge');
+    if (badge) badge.textContent = `PASO ${parserCurrentStep} / ${total}`;
+
+    const actionBadge = document.getElementById('parserActionBadge');
+    if (actionBadge) {
+        actionBadge.textContent = step.action ? step.action.toUpperCase() : 'INICIAL';
+        if (step.actionType === 'accept') {
+            actionBadge.className = 'status-badge tag-new';
+        } else if (step.actionType === 'error') {
+            actionBadge.className = 'status-badge tag-danger';
+        } else {
+            actionBadge.className = 'status-badge regular-tag';
+        }
+    }
+
+    const modeBadge = document.getElementById('parserModeBadge');
+    if (modeBadge) {
+        modeBadge.textContent = currentParserType === 'll1' ? 'PARSER LL(1) DESCENDENTE' : 'PARSER SLR(1) ASCENDENTE';
+    }
+
+    // Estado de la pila y entrada
+    const stateDisplay = document.getElementById('parserStateDisplay');
+    if (stateDisplay) {
+        if (currentParserType === 'll1') {
+            const stackArr = step.stack || [];
+            const stackReversed = [...stackArr].reverse();
+            stateDisplay.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <span class="meta-label">Pila de Símbolos ($ en la base):</span>
+                        <div style="display: flex; gap: 6px; font-family: 'JetBrains Mono'; font-size: 1.05rem; font-weight: 700; padding: 10px; background: var(--bg-subtle); border: 1.5px solid var(--border);">
+                            ${stackReversed.map((s, i) => `<span style="padding: 2px 8px; background: ${i === 0 ? '#fef3c7' : '#ffffff'}; border: 1px solid var(--border);">${s}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <span class="meta-label">Lookahead y Entrada Restante:</span>
+                        <div style="font-family: 'JetBrains Mono'; font-size: 1.05rem; font-weight: 700; padding: 10px; background: var(--bg-subtle); border: 1.5px solid var(--border);">
+                            <span style="color: var(--accent-blue);">${step.matched}</span><span style="background: #bfdbfe; padding: 0 4px;">${step.lookahead}</span><span>${step.input.slice(1)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            const stStack = step.stateStack || [];
+            const symStack = step.symbolStack || [];
+            stateDisplay.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <span class="meta-label">Pila de Estados:</span>
+                        <div style="font-family: 'JetBrains Mono'; font-size: 1.05rem; font-weight: 700; padding: 10px; background: var(--bg-subtle); border: 1.5px solid var(--border);">
+                            [${stStack.join(', ')}]
+                        </div>
+                    </div>
+                    <div>
+                        <span class="meta-label">Pila de Símbolos:</span>
+                        <div style="font-family: 'JetBrains Mono'; font-size: 1.05rem; font-weight: 700; padding: 10px; background: var(--bg-subtle); border: 1.5px solid var(--border);">
+                            [${symStack.join(', ')}]
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <span class="meta-label">Lookahead y Entrada Restante:</span>
+                    <div style="font-family: 'JetBrains Mono'; font-size: 1.05rem; font-weight: 700; padding: 10px; background: var(--bg-subtle); border: 1.5px solid var(--border);">
+                        <span style="background: #fde68a; padding: 0 6px;">${step.lookahead}</span><span>${step.input.slice(1)}</span>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    // Veredicto oficial
+    const verdictText = document.getElementById('parserVerdictText');
+    const verdictBox = document.getElementById('parserVerdictBox');
+    if (verdictText && verdictBox) {
+        const lastStep = parserSteps[parserSteps.length - 1];
+        if (step.isFinal) {
+            if (step.verdict === 'yes') {
+                verdictText.textContent = 'yes (CADENA ACEPTADA)';
+                verdictText.className = 'status-badge tag-new';
+                verdictBox.style.background = '#ecfdf5';
+            } else {
+                verdictText.textContent = 'no (CADENA RECHAZADA)';
+                verdictText.className = 'status-badge tag-danger';
+                verdictBox.style.background = '#fef2f2';
+            }
+        } else {
+            verdictText.textContent = 'EN EVALUACIÓN';
+            verdictText.className = 'status-badge regular-tag';
+            verdictBox.style.background = 'var(--bg-subtle)';
+        }
+    }
+
+    // Tabla de parseo con celda activa resaltada
+    renderParserTable(step);
+
+    // Explicación pedagógica
+    const explanationContent = document.getElementById('parserExplanationContent');
+    if (explanationContent) {
+        explanationContent.innerHTML = `
+            <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text-main);">${step.ruleTitle}</div>
+            <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.45; margin-bottom: 12px;">${step.desc}</div>
+            <div style="font-family: 'JetBrains Mono'; font-size: 0.85rem; padding: 8px 12px; background: var(--bg-subtle); border-left: 3px solid var(--accent-amber);">
+                Acción formal ejecutada: <strong>${step.action}</strong>
+            </div>
+        `;
+    }
+
+    // Dibujar árbol sintáctico derivado en SVG
+    renderParserTreeSVG(step);
+}
+
+function renderParserTable(step) {
+    const container = document.getElementById('parserTableContainer');
+    const title = document.getElementById('parserTableTitle');
+    if (!container) return;
+
+    if (currentParserType === 'll1') {
+        if (title) title.textContent = "Tabla Predictiva LL(1) M[A, a] (con celda activa resaltada)";
+        if (!parserLL1Obj) return;
+
+        const g = parserGrammarObj;
+        const columns = [...g.terms, '$'];
+        let html = '<table class="editorial-table" style="margin: 0;"><thead><tr><th>No Terminal</th>';
+        columns.forEach(c => html += `<th>${c}</th>`);
+        html += '</tr></thead><tbody>';
+
+        g.nts.forEach(nt => {
+            html += `<tr><td><strong>${nt}</strong></td>`;
+            columns.forEach(c => {
+                const prods = parserLL1Obj.table[nt]?.[c] || [];
+                const prodStr = prods.map(p => `${p.head} -> ${p.body}`).join(' / ');
+                const isActive = (step.highlightCell && step.highlightCell.head === nt && step.highlightCell.terminal === c);
+                html += `<td style="${isActive ? 'background: #fef08a; font-weight: 700; border: 2px solid var(--accent-amber);' : ''}">${prodStr}</td>`;
+            });
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    } else {
+        if (title) title.textContent = "Tabla de Análisis SLR(1) (ACTION y GOTO con celda activa resaltada)";
+        if (!parserSLR1Obj) return;
+
+        const g = parserGrammarObj;
+        const terms = [...g.terms, '$'];
+        const nts = [...g.nts];
+
+        let html = '<table class="editorial-table" style="margin: 0;"><thead><tr><th>Estado</th>';
+        terms.forEach(t => html += `<th>${t}</th>`);
+        nts.forEach(nt => html += `<th>${nt}</th>`);
+        html += '</tr></thead><tbody>';
+
+        for (let i = 0; i < parserSLR1Obj.C.length; i++) {
+            const isRowActive = (step.highlightCell && step.highlightCell.state === i);
+            html += `<tr style="${isRowActive ? 'background: #fef9c3;' : ''}"><td><strong>${i}</strong></td>`;
+
+            terms.forEach(t => {
+                const acts = parserSLR1Obj.actionTable[i]?.[t] || [];
+                const actStr = acts.map(a => a.type === 'shift' ? `s${a.target}` : (a.type === 'reduce' ? `r ${a.head}->${a.body}` : 'acc')).join(' / ');
+                const isCellActive = (isRowActive && step.highlightCell.terminal === t);
+                html += `<td style="${isCellActive ? 'background: #fde047; font-weight: 700; border: 2px solid var(--accent-amber);' : ''}">${actStr}</td>`;
+            });
+
+            nts.forEach(nt => {
+                const target = parserSLR1Obj.gotoTable[i]?.[nt];
+                html += `<td>${target !== undefined ? target : ''}</td>`;
+            });
+
+            html += '</tr>';
+        }
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    }
+}
+
+function renderParserTreeSVG(step) {
+    const svg = document.getElementById('parserTreeSvg');
+    if (!svg) return;
+    svg.innerHTML = '';
+
+    const width = svg.clientWidth || 460;
+    const height = 280;
+
+    let treeRoots = [];
+    if (currentParserType === 'll1') {
+        if (step.rootNode) treeRoots = [step.rootNode];
+    } else {
+        if (step.nodes) treeRoots = step.nodes;
+    }
+
+    if (treeRoots.length === 0) {
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', width / 2);
+        text.setAttribute('y', height / 2);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-family', 'Inter');
+        text.setAttribute('font-size', '13');
+        text.setAttribute('fill', '#94a3b8');
+        text.textContent = 'El árbol sintáctico se construirá a medida que avance el análisis...';
+        svg.appendChild(text);
+        return;
+    }
+
+    // Posicionamiento de nodos
+    function getLeafCount(node) {
+        if (!node.children || node.children.length === 0) return 1;
+        return node.children.reduce((acc, c) => acc + getLeafCount(c), 0);
+    }
+
+    let totalLeaves = treeRoots.reduce((acc, r) => acc + getLeafCount(r), 0);
+    let currentLeafIdx = 0;
+
+    const coords = new Map();
+
+    function assignPositions(node, depth, ySpacing, xSpacing) {
+        const y = 35 + depth * ySpacing;
+        if (!node.children || node.children.length === 0) {
+            const x = 30 + (currentLeafIdx + 0.5) * xSpacing;
+            currentLeafIdx++;
+            coords.set(node.id, { x, y, symbol: node.symbol });
+            return x;
+        } else {
+            const childXs = node.children.map(c => assignPositions(c, depth + 1, ySpacing, xSpacing));
+            const x = (childXs[0] + childXs[childXs.length - 1]) / 2;
+            coords.set(node.id, { x, y, symbol: node.symbol });
+            return x;
+        }
+    }
+
+    const xSpacing = Math.max(36, (width - 60) / Math.max(1, totalLeaves));
+    const ySpacing = 50;
+
+    treeRoots.forEach(root => assignPositions(root, 0, ySpacing, xSpacing));
+
+    // Dibujar aristas
+    function drawEdges(node) {
+        if (!node.children) return;
+        const pCoord = coords.get(node.id);
+        node.children.forEach(c => {
+            const cCoord = coords.get(c.id);
+            if (pCoord && cCoord) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', pCoord.x);
+                line.setAttribute('y1', pCoord.y);
+                line.setAttribute('x2', cCoord.x);
+                line.setAttribute('y2', cCoord.y);
+                line.setAttribute('stroke', '#0f172a');
+                line.setAttribute('stroke-width', '1.5');
+                svg.appendChild(line);
+            }
+            drawEdges(c);
+        });
+    }
+
+    treeRoots.forEach(r => drawEdges(r));
+
+    // Dibujar nodos
+    coords.forEach((coord, id) => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const isNT = /^[A-Z]$/.test(coord.symbol);
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', coord.x);
+        circle.setAttribute('cy', coord.y);
+        circle.setAttribute('r', isNT ? '15' : '13');
+        circle.setAttribute('fill', isNT ? '#eff6ff' : '#ffffff');
+        circle.setAttribute('stroke', isNT ? '#1e40af' : '#0f172a');
+        circle.setAttribute('stroke-width', '2');
+        g.appendChild(circle);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', coord.x);
+        text.setAttribute('y', coord.y + 5);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-family', 'JetBrains Mono');
+        text.setAttribute('font-size', isNT ? '12' : '11');
+        text.setAttribute('font-weight', '700');
+        text.setAttribute('fill', isNT ? '#1e40af' : '#0f172a');
+        text.textContent = coord.symbol;
+        g.appendChild(text);
+
+        svg.appendChild(g);
+    });
+}
+
+
         window.onload = function() {
+            initFFLabIfNeeded();
+            initParserLabIfNeeded();
             initLabIfNeeded();
-            // Renderizado inicial
         };
     </script>
 </body>
